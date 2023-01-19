@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  dynamo:
-    image: amazon/dynamodb-local:latest
-    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /data --port 7777
-    volumes:
-      - ./db/dynamo:/data
-    ports:
-      - 7777:7777
+    dynamo:
+        image: amazon/dynamodb-local:latest
+        command: -jar DynamoDBLocal.jar -sharedDb -dbPath /data --port 7777
+        volumes:
+            - ./db/dynamo:/data
+        ports:
+            - 7777:7777

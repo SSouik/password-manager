@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import DynamoDBClient from './client';
 
-const passwordTable = require('./tables/password.json');
 const clientTable = require('./tables/client.json');
+const passwordTable = require('./tables/password.json');
 
 // Create password table
 DynamoDBClient.createTable(passwordTable);

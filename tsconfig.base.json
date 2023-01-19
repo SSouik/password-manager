@@ -1,27 +1,25 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2017", "dom"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@password-manager:api:providers": ["apps/password-manager-api/src/providers"],
-      "@password-manager:api:providers/*": ["apps/password-manager-api/src/providers/*"],
-      "@password-manager:dynamodb-client": [
-        "libs/dynamodb-client/src/index.ts"
-      ],
-      "@password-manager:types": ["libs/types/src/index.ts"]
-    }
-  },
-  "exclude": ["node_modules", "tmp"]
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "es2015",
+        "module": "esnext",
+        "lib": ["es2017", "dom"],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@password-manager:api:providers": ["apps/password-manager-api/src/providers"],
+            "@password-manager:api:providers/*": ["apps/password-manager-api/src/providers/*"],
+            "@password-manager:dynamodb-client": ["libs/dynamodb-client/src/index.ts"],
+            "@password-manager:types": ["libs/types/src/index.ts"]
+        }
+    },
+    "exclude": ["node_modules", "tmp"]
 }

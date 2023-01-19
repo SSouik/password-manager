@@ -1,14 +1,14 @@
 {
-  "extends": ["../../.eslintrc"],
-  "ignorePatterns": ["!**/*"],
-  "overrides": [
-    {
-        "files": ["**/*.ts"],
-        "parserOptions": { "project": ["apps/password-manager-api/tsconfig.app.json"] }
-    },
-    {
-        "files": ["jest.config.ts", "**/*spec.ts"],
-        "parserOptions": { "project": ["apps/password-manager-api/tsconfig.spec.json"] }
-    }
-  ]
+    "extends": ["../../.eslintrc"],
+    "ignorePatterns": ["!**/*"],
+    "overrides": [
+        {
+            "files": ["**/*.ts"],
+            "parserOptions": { "project": ["apps/password-manager-api/tsconfig.app.json"] }
+        },
+        {
+            "files": ["jest.config.ts", "**/*spec.ts"],
+            "parserOptions": { "project": ["apps/password-manager-api/tsconfig.spec.json"] }
+        }
+    ]
 }

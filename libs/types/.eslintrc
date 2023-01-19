@@ -1,10 +1,10 @@
 {
-  "extends": ["../../.eslintrc"],
-  "ignorePatterns": ["!**/*"],
-  "overrides": [
-    {
-        "files": ["**/*.ts"],
-        "parserOptions": { "project": ["libs/types/tsconfig.lib.json"] }
-    }
-  ]
+    "extends": ["../../.eslintrc"],
+    "ignorePatterns": ["!**/*"],
+    "overrides": [
+        {
+            "files": ["**/*.ts"],
+            "parserOptions": { "project": ["libs/types/tsconfig.lib.json"] }
+        }
+    ]
 }

@@ -3,11 +3,11 @@ import { DynamoDBClient, DynamoDBConnection } from '@password-manager:dynamodb-c
 
 export const DYNAMODB_CLIENT: InjectionToken = 'DynamoDBClient';
 
-export default <FactoryProvider> {
+export default <FactoryProvider>{
     provide: DYNAMODB_CLIENT,
     useFactory: () => {
         // Update to use a dynamic config
-        const config = <DynamoDBConnection> {
+        const config = <DynamoDBConnection>{
             region: 'us-east-2',
             endpoint: 'http://localhost:7777',
             tablePrefix: 'local.',

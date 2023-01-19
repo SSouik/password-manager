@@ -1,5 +1,19 @@
-import { CreateTableCommand, CreateTableCommandInput, CreateTableCommandOutput, DeleteTableCommand, DeleteTableCommandOutput, DynamoDBClient as AWSDynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { GetCommandInput, GetCommandOutput, GetCommand, PutCommandInput, PutCommandOutput, PutCommand } from '@aws-sdk/lib-dynamodb';
+import {
+    CreateTableCommand,
+    CreateTableCommandInput,
+    CreateTableCommandOutput,
+    DeleteTableCommand,
+    DeleteTableCommandOutput,
+    DynamoDBClient as AWSDynamoDBClient,
+} from '@aws-sdk/client-dynamodb';
+import {
+    GetCommandInput,
+    GetCommandOutput,
+    GetCommand,
+    PutCommandInput,
+    PutCommandOutput,
+    PutCommand,
+} from '@aws-sdk/lib-dynamodb';
 
 import { IDynamoDBClient, DynamoDBConnection } from './types';
 
@@ -14,7 +28,7 @@ export class DynamoDBClient implements IDynamoDBClient {
     }
 
     public get(table: string, input: GetCommandInput): Promise<GetCommandOutput> {
-        const params = <GetCommandInput> {
+        const params = <GetCommandInput>{
             ...input,
             TableName: this.buildTableName(table),
         };
@@ -25,7 +39,7 @@ export class DynamoDBClient implements IDynamoDBClient {
     }
 
     public save<T>(table: string, data: T): Promise<PutCommandOutput> {
-        const params = <PutCommandInput> {
+        const params = <PutCommandInput>{
             TableName: this.buildTableName(table),
             Item: JSON.parse(JSON.stringify(data)),
         };
@@ -37,10 +51,12 @@ export class DynamoDBClient implements IDynamoDBClient {
 
     public createTable(tableConfig: CreateTableCommandInput): Promise<CreateTableCommandOutput> {
         const tableName = this.buildTableName(String(tableConfig.TableName));
-        return this.dynamoDBClient.send(new CreateTableCommand({
-            ...tableConfig,
-            TableName: tableName,
-        }));
+        return this.dynamoDBClient.send(
+            new CreateTableCommand({
+                ...tableConfig,
+                TableName: tableName,
+            }),
+        );
     }
 
     public deleteTable(table: string): Promise<DeleteTableCommandOutput> {

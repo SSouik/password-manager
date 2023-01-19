@@ -1,59 +1,56 @@
 {
-  "root": true,
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "plugins": ["@nrwl/nx", "import"],
-  "rules": {
-    "no-console": "error",
-    "no-shadow": "error",
-    "no-useless-constructor": "off",
-    "no-empty-function": "off",
-    "@typescript-eslint/no-useless-constructor": "error",
-    "@typescript-eslint/no-empty-function": ["error", { "allow": ["private-constructors"] }],
-    "@typescript-eslint/no-shadow": "error",
-    "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/dot-notation": "off",
-    "@typescript-eslint/explicit-member-accessibility": [
-        "off",
+    "root": true,
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "plugins": ["@nrwl/nx", "import"],
+    "rules": {
+        "no-console": "error",
+        "no-shadow": "error",
+        "no-useless-constructor": "off",
+        "no-empty-function": "off",
+        "@typescript-eslint/no-useless-constructor": "error",
+        "@typescript-eslint/no-empty-function": ["error", { "allow": ["private-constructors"] }],
+        "@typescript-eslint/no-shadow": "error",
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/explicit-member-accessibility": [
+            "off",
+            {
+                "accessibility": "explicit"
+            }
+        ],
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                "selector": "interface",
+                "format": ["PascalCase"],
+                "custom": {
+                    "regex": "^I[A-Z]",
+                    "match": true
+                }
+            }
+        ],
+        "import/order": [
+            "error",
+            {
+                "groups": ["builtin", "external", "internal", "sibling", "parent", "index"],
+                "newlines-between": "always",
+                "alphabetize": {
+                    "order": "asc",
+                    "caseInsensitive": true
+                }
+            }
+        ],
+        "quotes": ["error", "single"]
+    },
+    "overrides": [
         {
-            "accessibility": "explicit"
-        }
-    ],
-    "@typescript-eslint/naming-convention": [
-        "error",
-        {
-            "selector": "interface",
-            "format": ["PascalCase"],
-            "custom": {
-                "regex": "^I[A-Z]",
-                "match": true
+            "files": ["*.spec.ts"],
+            "rules": {
+                "@typescript-eslint/explicit-member-accessibility": "off",
+                "@typescript-eslint/no-empty-function": "off"
             }
         }
-    ],
-    "import/order": [
-        "error",
-        {
-            "groups": ["builtin", "external", "internal", "sibling", "parent", "index"],
-            "newlines-between": "always",
-            "alphabetize": {
-                "order": "asc",
-                "caseInsensitive": true
-            }
-        }
-    ],
-    "quotes": ["error", "single"]
-  },
-  "overrides": [
-    {
-        "files": ["*.spec.ts"],
-        "rules": {
-            "@typescript-eslint/explicit-member-accessibility": "off",
-            "@typescript-eslint/no-empty-function": "off"
-        }
-    }
-  ]
+    ]
 }
