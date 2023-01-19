@@ -1,0 +1,25 @@
+{
+    "TableName": "Client",
+    "KeySchema": [{ "AttributeName": "clientId", "KeyType": "HASH" }],
+    "AttributeDefinitions": [
+        { "AttributeName": "clientId", "AttributeType": "S" },
+        { "AttributeName": "login", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": 2,
+        "WriteCapacityUnits": 2
+    },
+    "GlobalSecondaryIndexes": [
+        {
+            "IndexName": "LoginIndex",
+            "ProvisionedThroughput": {
+                "ReadCapacityUnits": 2,
+                "WriteCapacityUnits": 2
+            },
+            "KeySchema": [{ "AttributeName": "login", "KeyType": "HASH" }],
+            "Projection": {
+                "ProjectionType": "ALL"
+            }
+        }
+    ]
+}
