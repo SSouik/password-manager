@@ -1,6 +1,7 @@
-import { GetCommandInput, GetCommandOutput, GetCommand, PutCommandInput, PutCommandOutput, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { IDynamoDBClient, DynamoDBConnection } from "./types";
-import { CreateTableCommand, CreateTableCommandInput, CreateTableCommandOutput, DeleteTableCommand, DeleteTableCommandOutput, DynamoDBClient as AWSDynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { CreateTableCommand, CreateTableCommandInput, CreateTableCommandOutput, DeleteTableCommand, DeleteTableCommandOutput, DynamoDBClient as AWSDynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { GetCommandInput, GetCommandOutput, GetCommand, PutCommandInput, PutCommandOutput, PutCommand } from '@aws-sdk/lib-dynamodb';
+
+import { IDynamoDBClient, DynamoDBConnection } from './types';
 
 export class DynamoDBClient implements IDynamoDBClient {
     private readonly dynamoDBClient: AWSDynamoDBClient;

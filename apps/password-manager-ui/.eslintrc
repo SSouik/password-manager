@@ -1,0 +1,14 @@
+{
+  "extends": ["../../.eslintrc"],
+  "ignorePatterns": ["**/*.html"],
+  "overrides": [
+    {
+        "files": ["**/*.ts"],
+        "parserOptions": { "project": ["apps/password-manager-ui/tsconfig.app.json"] }
+    },
+    {
+        "files": ["jest.config.ts", "test-setup.ts", "**/*spec.ts"],
+        "parserOptions": { "project": ["apps/password-manager-ui/tsconfig.spec.json"] }
+    }
+  ]
+}

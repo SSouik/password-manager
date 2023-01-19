@@ -1,9 +1,0 @@
-{
-  "name": "@password-manager/dynamodb-client",
-  "version": "0.0.1",
-  "type": "commonjs",
-  "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.252.0",
-    "@aws-sdk/lib-dynamodb": "^3.252.0"
-  }
-}

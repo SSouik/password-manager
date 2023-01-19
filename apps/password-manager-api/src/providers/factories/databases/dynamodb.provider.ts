@@ -1,4 +1,4 @@
-import { FactoryProvider, InjectionToken } from "@nestjs/common";
+import { FactoryProvider, InjectionToken } from '@nestjs/common';
 import { DynamoDBClient, DynamoDBConnection } from '@password-manager:dynamodb-client';
 
 export const DYNAMODB_CLIENT: InjectionToken = 'DynamoDBClient';

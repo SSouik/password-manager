@@ -1,0 +1,10 @@
+{
+  "extends": ["plugin:cypress/recommended", "../../.eslintrc"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+        "files": ["**/*.ts"],
+        "parserOptions": { "project": ["apps/password-manager-ui-e2e/tsconfig.json"] }
+    }
+  ]
+}

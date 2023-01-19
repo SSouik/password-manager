@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import Providers from '@password-manager:api:providers';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import Providers from '@password-manager:api:providers';
 
 @Module({
   imports: [],
