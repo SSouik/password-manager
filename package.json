@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "ng": "nx"
+    "ng": "nx",
+    "dynamo:admin": "set DYNAMO_ENDPOINT=http://localhost:7777 && dynamodb-admin -p 8080",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down"
   },
   "private": true,
   "dependencies": {
@@ -48,6 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "cypress": "^12.2.0",
+    "dynamodb-admin": "^4.5.0",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
