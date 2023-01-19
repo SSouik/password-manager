@@ -1,11 +1,11 @@
 import { GetCommandInput, GetCommandOutput, GetCommand, PutCommandInput, PutCommandOutput, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { IDynamoDBClient, IDynamoDBConnection } from "./types";
+import { IDynamoDBClient, DynamoDBConnection } from "./types";
 import { CreateTableCommand, CreateTableCommandInput, CreateTableCommandOutput, DeleteTableCommand, DeleteTableCommandOutput, DynamoDBClient as AWSDynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 export class DynamoDBClient implements IDynamoDBClient {
     private readonly dynamoDBClient: AWSDynamoDBClient;
 
-    constructor(private readonly dynamoDBConnection: IDynamoDBConnection) {
+    constructor(private readonly dynamoDBConnection: DynamoDBConnection) {
         this.dynamoDBClient = new AWSDynamoDBClient({
             region: dynamoDBConnection.region,
             endpoint: dynamoDBConnection.endpoint,

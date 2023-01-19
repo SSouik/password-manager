@@ -1,2 +1,2 @@
 export * from './IDynamoDBClient';
-export * from './IDynamoDBConnection';
+export * from '../DynamoDBConnection';
