@@ -15,6 +15,7 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
+            "@password-manager/config": ["libs/config/src/index.ts"],
             "@password-manager:api:providers": ["apps/password-manager-api/src/providers"],
             "@password-manager:api:providers/*": ["apps/password-manager-api/src/providers/*"],
             "@password-manager:dynamodb-client": ["libs/dynamodb-client/src/index.ts"],

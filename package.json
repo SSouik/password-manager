@@ -4,7 +4,7 @@
     "license": "MIT",
     "scripts": {
         "ng": "nx",
-        "lint": "nx run-many --target=lint --projects=password-manager-api,password-manager-ui,password-manager-ui-e2e,dynamodb-client,types --parallel",
+        "lint": "nx run-many --target=lint --projects=password-manager-api,password-manager-ui,password-manager-ui-e2e,dynamodb-client,types,config --parallel",
         "lint:fix": "yarn lint --fix",
         "lint:api": "nx lint --project=password-manager-api",
         "lint:api:fix": "yarn lint:api --fix",
@@ -16,6 +16,8 @@
         "lint:dynamodb-client:fix": "yarn lint:dynamodb-client --fix",
         "lint:types": "nx lint --project=types",
         "lint:types:fix": "yarn lint:types --fix",
+        "lint:config": "nx lint --project=config",
+        "lint:config:fix": "yarn lint:config --fix",
         "format:check": "nx format:check --all",
         "format:write": "nx format:write --all",
         "dynamo:admin": "set DYNAMO_ENDPOINT=http://localhost:7777 && dynamodb-admin -p 8080",
@@ -24,7 +26,8 @@
         "dynamo:data:create": "ts-node ./data/create-sample-data.ts",
         "docker:build": "docker-compose build",
         "docker:up": "docker-compose up",
-        "docker:down": "docker-compose down"
+        "docker:down": "docker-compose down",
+        "test:config": "ts-node test.ts --project tsconfig.base.json"
     },
     "private": true,
     "dependencies": {
@@ -74,6 +77,7 @@
         "@typescript-eslint/eslint-plugin": "^5.36.1",
         "@typescript-eslint/parser": "^5.36.1",
         "cypress": "^12.2.0",
+        "dotenv": "^16.0.3",
         "dynamodb-admin": "^4.5.0",
         "eslint": "~8.15.0",
         "eslint-config-prettier": "8.1.0",
