@@ -4,6 +4,8 @@
     "license": "MIT",
     "scripts": {
         "ng": "nx",
+        "test:config": "nx test --project=password-manager-config",
+        "test:config:coverage": "yarn test:config --codeCoverage",
         "lint": "nx run-many --target=lint --projects=password-manager-api,password-manager-ui,password-manager-ui-e2e,dynamodb-client,types,config --parallel",
         "lint:fix": "yarn lint --fix",
         "lint:api": "nx lint --project=password-manager-api",
@@ -16,7 +18,7 @@
         "lint:dynamodb-client:fix": "yarn lint:dynamodb-client --fix",
         "lint:types": "nx lint --project=types",
         "lint:types:fix": "yarn lint:types --fix",
-        "lint:config": "nx lint --project=config",
+        "lint:config": "nx lint --project=password-manager-config",
         "lint:config:fix": "yarn lint:config --fix",
         "format:check": "nx format:check --all",
         "format:write": "nx format:write --all",
@@ -26,8 +28,7 @@
         "dynamo:data:create": "ts-node ./data/create-sample-data.ts",
         "docker:build": "docker-compose build",
         "docker:up": "docker-compose up",
-        "docker:down": "docker-compose down",
-        "test:config": "ts-node test.ts --project tsconfig.base.json"
+        "docker:down": "docker-compose down"
     },
     "private": true,
     "dependencies": {

@@ -1,4 +1,4 @@
-# config
+# password-manager-config
 
 This library was generated with [Nx](https://nx.dev).
 

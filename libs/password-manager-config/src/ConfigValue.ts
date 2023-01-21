@@ -23,6 +23,6 @@ export class ConfigValue<T> {
     }
 
     public getValue(): Optional<T[keyof T]> {
-        return this.value ?? this.initialValue as Optional<T[keyof T]>;
+        return this.value ?? (this.initialValue as Optional<T[keyof T]>);
     }
 }

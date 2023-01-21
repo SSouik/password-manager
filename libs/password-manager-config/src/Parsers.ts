@@ -17,15 +17,7 @@ export class Parsers {
         }
 
         try {
-            const val = JSON.parse(value.toLowerCase());
-
-            // return false if the provided value is not
-            // a valid boolean
-            if (typeof val !== 'boolean' && typeof val !== 'number') {
-                return false;
-            }
-
-            return Boolean(val);
+            return Boolean(JSON.parse(value.toLowerCase()));
         } catch (error) {
             return false;
         }
