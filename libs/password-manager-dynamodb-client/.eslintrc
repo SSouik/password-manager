@@ -4,11 +4,11 @@
     "overrides": [
         {
             "files": ["**/*.ts"],
-            "parserOptions": { "project": ["libs/dynamodb-client/tsconfig.lib.json"] }
+            "parserOptions": { "project": ["libs/password-manager-dynamodb-client/tsconfig.lib.json"] }
         },
         {
             "files": ["jest.config.ts", "**/*spec.ts"],
-            "parserOptions": { "project": ["libs/dynamodb-client/tsconfig.spec.json"] }
+            "parserOptions": { "project": ["libs/password-manager-dynamodb-client/tsconfig.spec.json"] }
         }
     ]
 }

@@ -1,31 +1,31 @@
 {
-    "name": "dynamodb-client",
+    "name": "password-manager-dynamodb-client",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/dynamodb-client/src",
+    "sourceRoot": "libs/password-manager-dynamodb-client/src",
     "projectType": "library",
     "targets": {
         "build": {
             "executor": "@nrwl/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/libs/dynamodb-client",
-                "main": "libs/dynamodb-client/src/index.ts",
-                "tsConfig": "libs/dynamodb-client/tsconfig.lib.json",
-                "assets": ["libs/dynamodb-client/*.md"]
+                "outputPath": "dist/libs/password-manager-dynamodb-client",
+                "main": "libs/password-manager-dynamodb-client/src/index.ts",
+                "tsConfig": "libs/password-manager-dynamodb-client/tsconfig.lib.json",
+                "assets": ["libs/password-manager-dynamodb-client/*.md"]
             }
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["libs/dynamodb-client/**/*.ts"]
+                "lintFilePatterns": ["libs/password-manager-dynamodb-client/**/*.ts"]
             }
         },
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
             "options": {
-                "jestConfig": "libs/dynamodb-client/jest.config.ts",
+                "jestConfig": "libs/password-manager-dynamodb-client/jest.config.ts",
                 "passWithNoTests": true
             }
         }
