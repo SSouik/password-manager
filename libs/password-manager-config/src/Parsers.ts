@@ -1,7 +1,5 @@
-import { Optional } from '@password-manager:types';
-
 export class Parsers {
-    public static parseNumber(value: Optional<string>): Optional<number> {
+    public static parseNumber(value: string | undefined): number | undefined {
         if (value === undefined || isNaN(+value)) {
             return undefined;
         }
@@ -9,7 +7,7 @@ export class Parsers {
         return +value;
     }
 
-    public static parseBoolean(value: Optional<string>): Optional<boolean> {
+    public static parseBoolean(value: string | undefined): boolean | undefined {
         // If the value is undefined, return undefined
         // So that if a default value is provided, it can be used
         if (value === undefined) {
@@ -23,7 +21,7 @@ export class Parsers {
         }
     }
 
-    public static parseArray<T>(value: Optional<string>): Optional<Array<T>> {
+    public static parseArray<T>(value: string | undefined): Array<T> {
         try {
             if (value === undefined) {
                 return [];

@@ -1,11 +1,9 @@
-import { Optional } from '@password-manager:types';
+export class ConfigValue<T, K extends keyof T> {
+    private value: T[K] | undefined;
 
-export class ConfigValue<T> {
-    private value: Optional<T[keyof T]>;
+    constructor(private initialValue: string | undefined) {}
 
-    constructor(private initialValue: Optional<string>) {}
-
-    public withDefaultValue(value: T[keyof T]): ConfigValue<T> {
+    public withDefaultValue(value: T[K]): ConfigValue<T, K> {
         if (this.initialValue === undefined && this.value === undefined) {
             this.value = value;
         }
@@ -13,7 +11,7 @@ export class ConfigValue<T> {
         return this;
     }
 
-    public parse(parser: (value: Optional<string>) => Optional<T[keyof T]>): ConfigValue<T> {
+    public parse(parser: (value: string | undefined) => T[K] | undefined): ConfigValue<T, K> {
         // Default value has not been set, need to parse
         if (this.value === undefined) {
             this.value = parser(this.initialValue);
@@ -22,7 +20,7 @@ export class ConfigValue<T> {
         return this;
     }
 
-    public getValue(): Optional<T[keyof T]> {
-        return this.value ?? (this.initialValue as Optional<T[keyof T]>);
+    public getValue(): T[K] | undefined {
+        return this.value ?? (this.initialValue as T[K] | undefined);
     }
 }
