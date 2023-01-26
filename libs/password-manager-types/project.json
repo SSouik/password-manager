@@ -1,24 +1,24 @@
 {
-    "name": "types",
+    "name": "password-manager-types",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/types/src",
+    "sourceRoot": "libs/password-manager-types/src",
     "projectType": "library",
     "targets": {
         "build": {
             "executor": "@nrwl/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/libs/types",
-                "main": "libs/types/src/index.ts",
-                "tsConfig": "libs/types/tsconfig.lib.json",
-                "assets": ["libs/types/*.md"]
+                "outputPath": "dist/libs/password-manager-types",
+                "main": "libs/password-manager-types/src/index.ts",
+                "tsConfig": "libs/password-manager-types/tsconfig.lib.json",
+                "assets": ["libs/password-manager-types/*.md"]
             }
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["libs/types/**/*.ts"]
+                "lintFilePatterns": ["libs/password-manager-types/**/*.ts"]
             }
         }
     },
