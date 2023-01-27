@@ -4,6 +4,7 @@
     "license": "MIT",
     "scripts": {
         "ng": "nx",
+        "start:api": "nx serve --project=password-manager-api",
         "test:config": "nx test --project=password-manager-config",
         "test:config:coverage": "yarn test:config --codeCoverage",
         "test:dynamodb-client": "nx test --project=password-manager-dynamodb-client",

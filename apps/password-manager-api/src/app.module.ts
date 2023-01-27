@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
+import Controllers from '@password-manager:api:controllers';
 import Providers from '@password-manager:api:providers';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 
 @Module({
     imports: [],
-    controllers: [AppController],
-    providers: [AppService, ...Providers],
+    controllers: Controllers,
+    providers: [...Providers],
 })
 export class AppModule {}
