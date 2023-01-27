@@ -13,7 +13,6 @@
                 "outputPath": "dist/apps/password-manager-api",
                 "main": "apps/password-manager-api/src/main.ts",
                 "tsConfig": "apps/password-manager-api/tsconfig.app.json",
-                "assets": ["apps/password-manager-api/src/assets"],
                 "webpackConfig": "apps/password-manager-api/webpack.config.js"
             },
             "configurations": {

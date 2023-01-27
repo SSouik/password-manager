@@ -1,11 +1,11 @@
 import { FactoryProvider, InjectionToken } from '@nestjs/common';
-import { DynamoDBClient, DynamoDBConnection } from '@password-manager:dynamodb-client';
+import { DynamoDBClient, DynamoDBConnection, IDynamoDBClient } from '@password-manager:dynamodb-client';
 
 export const DYNAMODB_CLIENT: InjectionToken = 'DynamoDBClient';
 
 export default <FactoryProvider>{
     provide: DYNAMODB_CLIENT,
-    useFactory: () => {
+    useFactory: (): IDynamoDBClient => {
         // Update to use a dynamic config
         const config = <DynamoDBConnection>{
             region: 'us-east-2',

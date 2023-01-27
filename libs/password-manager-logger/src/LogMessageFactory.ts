@@ -9,7 +9,7 @@ export class LogMessageFactory implements ILogMessageFactory {
     constructor(defaults?: Partial<LogMessage>) {
         this.message = <LogMessage>{
             CommitSha: '',
-            TraceID: uuid(),
+            TraceID: '',
             Region: 'us-east-1',
             UserIP: '',
             UserAgent: '',
