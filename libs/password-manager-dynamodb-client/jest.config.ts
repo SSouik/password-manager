@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: 'dynamodb-client',
+    displayName: 'password-manager-dynamodb-client',
     preset: '../../jest.preset.js',
     globals: {
         'ts-jest': {

@@ -6,6 +6,8 @@
         "ng": "nx",
         "test:config": "nx test --project=password-manager-config",
         "test:config:coverage": "yarn test:config --codeCoverage",
+        "test:dynamodb-client": "nx test --project=password-manager-dynamodb-client",
+        "test:dynamodb-client:coverage": "yarn test:dynamodb-client --codeCoverage",
         "test:logger": "nx test --project=password-manager-logger",
         "test:logger:coverage": "yarn test:logger --codeCoverage",
         "lint": "nx run-many --target=lint --projects=password-manager-api,password-manager-ui,password-manager-ui-e2e,password-manager-dynamodb-client,password-manager-types,password-manager-config,password-manager-logger --parallel",
