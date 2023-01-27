@@ -19,6 +19,7 @@
             "@password-manager:api:providers/*": ["apps/password-manager-api/src/providers/*"],
             "@password-manager:config": ["libs/password-manager-config/src/index.ts"],
             "@password-manager:dynamodb-client": ["libs/password-manager-dynamodb-client/src/index.ts"],
+            "@password-manager:logger": ["libs/password-manager-logger/src/index.ts"],
             "@password-manager:types": ["libs/password-manager-types/src/index.ts"]
         }
     },

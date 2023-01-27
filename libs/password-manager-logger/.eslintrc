@@ -1,0 +1,19 @@
+{
+    "extends": ["../../.eslintrc"],
+    "ignorePatterns": ["!**/*"],
+    "rules": {
+        "no-shadow": "off",
+        "no-console": "off",
+        "@typescript-eslint/no-explicit-any": "off"
+    },
+    "overrides": [
+        {
+            "files": ["**/*.ts"],
+            "parserOptions": { "project": ["libs/password-manager-logger/tsconfig.lib.json"] }
+        },
+        {
+            "files": ["jest.config.ts", "**/*spec.ts"],
+            "parserOptions": { "project": ["libs/password-manager-logger/tsconfig.spec.json"] }
+        }
+    ]
+}
