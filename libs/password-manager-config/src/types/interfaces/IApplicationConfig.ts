@@ -4,5 +4,5 @@ import { ConfigValue } from '../../ConfigValue';
 
 export interface IApplicationConfig<T, K> {
     map(configKey: keyof T, environmentKey: keyof K): ConfigValue<T, keyof T>;
-    get(configKey: keyof T): Optional<T[keyof T]>;
+    get<CK extends keyof T>(configKey: CK): Optional<T[CK]>;
 }

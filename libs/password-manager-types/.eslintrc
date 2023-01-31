@@ -1,6 +1,9 @@
 {
     "extends": ["../../.eslintrc"],
     "ignorePatterns": ["!**/*"],
+    "rules": {
+        "no-shadow": "off"
+    },
     "overrides": [
         {
             "files": ["**/*.ts"],
