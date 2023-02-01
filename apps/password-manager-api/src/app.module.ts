@@ -1,11 +1,18 @@
+import { join } from 'path';
+
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import Controllers from '@password-manager:api:controllers';
 import { LoggerContextMiddleware, TraceIdMiddleware } from '@password-manager:api:middleware';
 import Providers from '@password-manager:api:providers';
 import Services from '@password-manager:api:services';
 
 @Module({
-    imports: [],
+    imports: [
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'password-manager-ui'),
+        }),
+    ],
     controllers: Controllers,
     providers: [...Providers, ...Services],
 })
