@@ -1,18 +1,19 @@
 import { FactoryProvider, InjectionToken } from '@nestjs/common';
+import { AppConfig } from '@password-manager:api:config';
+import { IAppConfigService } from '@password-manager:api:interfaces';
+import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
 import { DynamoDBClient, DynamoDBConnection, IDynamoDBClient } from '@password-manager:dynamodb-client';
 
 export const DYNAMODB_CLIENT: InjectionToken = 'DynamoDBClient';
 
 export default <FactoryProvider>{
     provide: DYNAMODB_CLIENT,
-    useFactory: (): IDynamoDBClient => {
-        // Update to use a dynamic config
-        const config = <DynamoDBConnection>{
-            region: 'us-east-2',
-            endpoint: 'http://localhost:7777',
-            tablePrefix: 'local.',
-        };
-
-        return new DynamoDBClient(config);
+    useFactory: (appConfigService: IAppConfigService<AppConfig>): IDynamoDBClient => {
+        return new DynamoDBClient(<DynamoDBConnection>{
+            region: appConfigService.get('region'),
+            endpoint: appConfigService.get('dynamodbEndpoint'),
+            tablePrefix: `${appConfigService.getEnvironment()}.`,
+        });
     },
+    inject: [APP_CONFIG_SERVICE],
 };
