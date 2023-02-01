@@ -5,9 +5,9 @@ import { IAppConfigService } from '@password-manager:api:interfaces';
 import { LOGGER } from '@password-manager:api:providers';
 import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
 import { ILogger } from '@password-manager:logger';
-import { HealthCheckResponse } from '@password-manager:types';
+import { APIUrlsEnum, HealthCheckResponse } from '@password-manager:types';
 
-@Controller('healthcheck')
+@Controller(APIUrlsEnum.HealthCheck)
 @UseInterceptors(PasswordManagerResponseInterceptor<HealthCheckResponse>)
 export class HealthCheckController {
     // Inject in the instance of Logger (found in providers/factories/logger/logger.provider.ts)
