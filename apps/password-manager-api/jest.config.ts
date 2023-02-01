@@ -11,6 +11,17 @@ export default {
     transform: {
         '^.+\\.[tj]s$': 'ts-jest',
     },
-    moduleFileExtensions: ['ts', 'js', 'html'],
+    moduleFileExtensions: ['ts', 'js'],
     coverageDirectory: '../../coverage/apps/password-manager-api',
+    coverageThreshold: {
+        global: {
+            branches: 100,
+            functions: 100,
+            lines: 100,
+            statements: -1,
+        },
+    },
+    coverageReporters: ['lcov', 'clover', 'json'],
+    collectCoverageFrom: ['src/**/*.ts', '!src/**/*.config.ts', '!src/**/*.provider.ts'],
+    coveragePathIgnorePatterns: ['index.ts', 'app.module.ts', 'main.ts'],
 };

@@ -12,4 +12,15 @@ export default {
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
     coverageDirectory: '../../coverage/libs/password-manager-crypto',
+    coverageThreshold: {
+        global: {
+            branches: 100,
+            functions: 100,
+            lines: 100,
+            statements: -1,
+        },
+    },
+    coverageReporters: ['lcov', 'clover', 'json'],
+    collectCoverageFrom: ['src/**/*.ts'],
+    coveragePathIgnorePatterns: ['index.ts'],
 };
