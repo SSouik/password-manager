@@ -1,0 +1,17 @@
+{
+    "extends": ["../../.eslintrc"],
+    "ignorePatterns": ["!**/*"],
+    "rules": {
+        "no-shadow": "off"
+    },
+    "overrides": [
+        {
+            "files": ["**/*.ts"],
+            "parserOptions": { "project": ["libs/password-manager-crypto/tsconfig.lib.json"] }
+        },
+        {
+            "files": ["jest.config.ts", "**/*spec.ts"],
+            "parserOptions": { "project": ["libs/password-manager-crypto/tsconfig.spec.json"] }
+        }
+    ]
+}
