@@ -19,6 +19,8 @@
             "@password-manager:api:config/*": ["apps/password-manager-api/src/config/*"],
             "@password-manager:api:controllers": ["apps/password-manager-api/src/controllers"],
             "@password-manager:api:controllers/*": ["apps/password-manager-api/src/controllers/*"],
+            "@password-manager:api:interceptors": ["apps/password-manager-api/src/interceptors"],
+            "@password-manager:api:interceptors/*": ["apps/password-manager-api/src/interceptors/*"],
             "@password-manager:api:interfaces": ["apps/password-manager-api/src/types/interfaces"],
             "@password-manager:api:interfaces/*": ["apps/password-manager-api/src/types/interfaces/*"],
             "@password-manager:api:middleware": ["apps/password-manager-api/src/middleware"],
