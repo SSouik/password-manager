@@ -1,7 +1,10 @@
+import { EnvironmentEnum } from '@password-manager:types';
+
 import { LogLevelEnum, LogPropertyEnum } from './enums';
 
 export type LogMessage = {
     LogLevel: LogLevelEnum;
+    Environment: EnvironmentEnum;
     [LogPropertyEnum.ID]: string;
     [LogPropertyEnum.TimeStamp]: string;
     [LogPropertyEnum.CommitSha]: string;

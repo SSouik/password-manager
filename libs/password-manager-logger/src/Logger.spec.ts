@@ -1,3 +1,5 @@
+import { EnvironmentEnum } from '@password-manager:types';
+
 import { Logger } from './Logger';
 import { LogMessageFactory } from './LogMessageFactory';
 import { ILogger, LogLevelEnum, LogMessage } from './types';
@@ -10,7 +12,7 @@ describe('Logger Tests', () => {
             console[level] = jest.fn();
         });
 
-        logger = new Logger(new LogMessageFactory());
+        logger = new Logger(new LogMessageFactory({ Environment: EnvironmentEnum.Local }));
     });
 
     afterEach(() => {
@@ -26,6 +28,7 @@ describe('Logger Tests', () => {
                 expect(console[level]).toBeCalledWith(<LogMessage>{
                     ID: expect.anything(),
                     LogLevel: level,
+                    Environment: EnvironmentEnum.Local,
                     TimeStamp: expect.anything(),
                     CommitSha: expect.anything(),
                     TraceID: expect.anything(),
@@ -44,6 +47,7 @@ describe('Logger Tests', () => {
                 expect(console[level]).toBeCalledWith(<LogMessage>{
                     ID: expect.anything(),
                     LogLevel: level,
+                    Environment: EnvironmentEnum.Local,
                     TimeStamp: expect.anything(),
                     CommitSha: expect.anything(),
                     TraceID: expect.anything(),

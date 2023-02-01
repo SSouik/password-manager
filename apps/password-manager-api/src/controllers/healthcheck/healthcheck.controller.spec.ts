@@ -26,7 +26,7 @@ describe('HealthCheckController Tests', () => {
     });
 
     it('Retruns a 200', () => {
-        const actual = controller.handler();
+        const actual = controller.handler('123');
 
         expect(mockLogger.info).toBeCalledTimes(1);
         expect(mockLogger.info).toBeCalledWith('In the health check controller');
@@ -37,5 +37,6 @@ describe('HealthCheckController Tests', () => {
 
         expect(actual.statusCode).toBe(HttpStatus.OK);
         expect(actual.environment).toBe(EnvironmentEnum.Local);
+        expect(actual.traceId).toBe('123');
     });
 });
