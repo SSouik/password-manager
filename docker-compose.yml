@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+    password-manager:
+      build:
+        context: . # Execution context (. means directory that you are executing docker-compose)
+        dockerfile: Dockerfile # Path to the dockerfile to build and serve
+        target: dev # Layer in the dockerfile to target
+      ports:
+        - 3333:3333 # Map port 3333 on local machine (left side) to port 3333 in the docker image (right side)
+      volumes:
+        - .:/app # mount all files from the current directory (local machine) to /app on the docker image (working directory on the docker image)
+      depends_on:
+        - dynamo
+ 
     dynamo:
         image: amazon/dynamodb-local:latest
         command: -jar DynamoDBLocal.jar -sharedDb -dbPath /data --port 7777

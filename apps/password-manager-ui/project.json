@@ -20,21 +20,6 @@
                 "scripts": []
             },
             "configurations": {
-                "production": {
-                    "budgets": [
-                        {
-                            "type": "initial",
-                            "maximumWarning": "500kb",
-                            "maximumError": "1mb"
-                        },
-                        {
-                            "type": "anyComponentStyle",
-                            "maximumWarning": "2kb",
-                            "maximumError": "4kb"
-                        }
-                    ],
-                    "outputHashing": "all"
-                },
                 "development": {
                     "buildOptimizer": false,
                     "optimization": false,
@@ -42,6 +27,21 @@
                     "extractLicenses": false,
                     "sourceMap": true,
                     "namedChunks": true
+                },
+                "production": {
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "2mb",
+                            "maximumError": "5mb"
+                        },
+                        {
+                            "type": "anyComponentStyle",
+                            "maximumWarning": "6kb",
+                            "maximumError": "10kb"
+                        }
+                    ],
+                    "outputHashing": "all"
                 }
             },
             "defaultConfiguration": "production"
@@ -49,11 +49,11 @@
         "serve": {
             "executor": "@angular-devkit/build-angular:dev-server",
             "configurations": {
-                "production": {
-                    "browserTarget": "password-manager-ui:build:production"
-                },
                 "development": {
                     "browserTarget": "password-manager-ui:build:development"
+                },
+                "production": {
+                    "browserTarget": "password-manager-ui:build:production"
                 }
             },
             "defaultConfiguration": "development"

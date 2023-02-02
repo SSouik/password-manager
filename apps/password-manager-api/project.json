@@ -16,12 +16,18 @@
                 "webpackConfig": "apps/password-manager-api/webpack.config.js"
             },
             "configurations": {
+                "development": {
+                    "optimization": false,
+                    "extractLicenses": false,
+                    "inspect": true
+                },
                 "production": {
                     "optimization": true,
                     "extractLicenses": true,
                     "inspect": false
                 }
-            }
+            },
+            "defaultConfiguration": "production"
         },
         "serve": {
             "executor": "@nrwl/js:node",
@@ -29,10 +35,14 @@
                 "buildTarget": "password-manager-api:build"
             },
             "configurations": {
+                "development": {
+                    "buildTarget": "password-manager-api:build:development"
+                },
                 "production": {
                     "buildTarget": "password-manager-api:build:production"
                 }
-            }
+            },
+            "defaultConfiguration": "development"
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
