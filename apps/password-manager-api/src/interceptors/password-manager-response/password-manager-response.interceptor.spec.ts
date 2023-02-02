@@ -41,7 +41,11 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
         jest.resetAllMocks();
     });
 
-    it('Intercepts the response and adds metadata to it', async () => {
+    it('Intercepts the response and adds metadata to it with the client ID', async () => {
+        mockRequest.params = {
+            clientId: '123',
+        };
+
         const response = await firstValueFrom(await interceptor.intercept(mockExecutionContext, mockCallHandler));
 
         expect(mockResponse.setHeader).toBeCalledTimes(3);
@@ -50,7 +54,29 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
         expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version', '0.0.1');
 
         expect(response).toStrictEqual({
-            clientId: 'id',
+            clientId: '123',
+            metadata: {
+                requestTraceId: 'trace-id',
+                timestamp: mockTimestamp,
+                version: '0.0.1',
+            },
+            foo: 'foo',
+            bar: 123,
+        });
+    });
+
+    it('Intercepts the response and adds metadata to it with no client ID', async () => {
+        mockRequest.params = {};
+
+        const response = await firstValueFrom(await interceptor.intercept(mockExecutionContext, mockCallHandler));
+
+        expect(mockResponse.setHeader).toBeCalledTimes(3);
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id', 'trace-id');
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-response-timestamp', mockTimestamp);
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version', '0.0.1');
+
+        expect(response).toStrictEqual({
+            clientId: null,
             metadata: {
                 requestTraceId: 'trace-id',
                 timestamp: mockTimestamp,

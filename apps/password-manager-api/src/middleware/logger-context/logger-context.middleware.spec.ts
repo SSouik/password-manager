@@ -13,6 +13,7 @@ describe('LoggerContextMiddleware Tests', () => {
 
     beforeEach(() => {
         mockLogMessageFactory.setProperty = jest.fn().mockReturnThis();
+        mockLogMessageFactory.setContext = jest.fn().mockReturnThis();
 
         mockRequest.ip = 'ip';
         mockRequest.header = jest.fn().mockReturnValueOnce('trace-id').mockReturnValueOnce('user-agent');
@@ -26,12 +27,19 @@ describe('LoggerContextMiddleware Tests', () => {
     });
 
     it('Adds the trace ID, user agent, and environment to log message factory', () => {
+        mockRequest.params = {
+            clientId: '123',
+        };
+
         middleware.use(mockRequest, mockResponse, mockNextHandler);
 
         expect(mockLogMessageFactory.setProperty).toBeCalledTimes(3);
         expect(mockLogMessageFactory.setProperty).toHaveBeenNthCalledWith(1, LogPropertyEnum.UserIP, 'ip');
         expect(mockLogMessageFactory.setProperty).toHaveBeenNthCalledWith(2, LogPropertyEnum.UserAgent, 'user-agent');
         expect(mockLogMessageFactory.setProperty).toHaveBeenNthCalledWith(3, LogPropertyEnum.TraceID, 'trace-id');
+
+        expect(mockLogMessageFactory.setContext).toBeCalledTimes(1);
+        expect(mockLogMessageFactory.setContext).toBeCalledWith('clientId', '123');
 
         expect(mockNextHandler).toBeCalledTimes(1);
     });

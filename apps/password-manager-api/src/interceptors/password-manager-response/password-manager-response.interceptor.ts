@@ -13,6 +13,8 @@ export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T,
         const request = httpContext.getRequest<Request>();
         const response = httpContext.getResponse<Response>();
 
+        // This is assuming that the client ID is available in every route
+        const clientId = request.params.clientId ?? null;
         const traceId = request.header('x-request-trace-id');
         const timestamp = new Date().toISOString();
         const version = '0.0.1'; // update to use config
@@ -28,7 +30,7 @@ export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T,
             map((res: T) => {
                 return <PasswordManagerResponse>{
                     ...res,
-                    clientId: 'id', // update to use client id found in the route or auth token when that is available
+                    clientId: clientId,
                     metadata: {
                         requestTraceId: traceId,
                         timestamp: timestamp,

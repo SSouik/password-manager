@@ -15,6 +15,7 @@ export class LoggerContextMiddleware implements NestMiddleware<Request, Response
         res: Response<any, Record<string, any>>,
         next: (error?: any) => void,
     ) {
+        const clientId = req.params.clientId ?? null;
         const traceId = req.header('x-request-trace-id');
         const userAgent = req.header('user-agent');
 
@@ -23,7 +24,8 @@ export class LoggerContextMiddleware implements NestMiddleware<Request, Response
         this.logMessageFactory
             .setProperty(LogPropertyEnum.UserIP, req.ip)
             .setProperty(LogPropertyEnum.UserAgent, userAgent)
-            .setProperty(LogPropertyEnum.TraceID, traceId);
+            .setProperty(LogPropertyEnum.TraceID, traceId)
+            .setContext('clientId', clientId);
 
         return next();
     }
