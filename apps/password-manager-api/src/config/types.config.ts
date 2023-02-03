@@ -2,6 +2,7 @@ import { EnvironmentEnum } from '@password-manager:types';
 
 export type AppConfig = {
     // App
+    version: string;
     environment: EnvironmentEnum;
     region: string;
     commitSha: string;
@@ -13,6 +14,7 @@ export type AppConfig = {
 
 export type AppEnvironment = {
     // App
+    VERSION: string;
     ENVIRONMENT: string;
     REGION: string;
     COMMIT_SHA: string;

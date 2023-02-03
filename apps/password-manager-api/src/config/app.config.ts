@@ -9,6 +9,11 @@ dotenv.config();
 const config = new ApplicationConfig<AppConfig, AppEnvironment>(process.env);
 
 // App
+config.map('version', 'VERSION').parse(() => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    return require('../../../../package.json').version;
+});
+
 config
     .map('environment', 'ENVIRONMENT')
     .withDefaultValue(EnvironmentEnum.Local)

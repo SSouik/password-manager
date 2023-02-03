@@ -1,10 +1,15 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { Inject, CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { AppConfig } from '@password-manager:api:config';
+import { IAppConfigService } from '@password-manager:api:interfaces';
+import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
 import { PasswordManagerResponse } from '@password-manager:types';
 import { Request, Response } from 'express';
 import { map, Observable } from 'rxjs';
 
 @Injectable()
 export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T, PasswordManagerResponse> {
+    constructor(@Inject(APP_CONFIG_SERVICE) private readonly appConfigService: IAppConfigService<AppConfig>) {}
+
     public intercept(
         context: ExecutionContext,
         next: CallHandler<T>,
@@ -17,7 +22,7 @@ export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T,
         const clientId = request.params.clientId ?? null;
         const traceId = request.header('x-request-trace-id');
         const timestamp = new Date().toISOString();
-        const version = '0.0.1'; // update to use config
+        const version = this.appConfigService.get('version');
 
         // Set response headers for each request
         response

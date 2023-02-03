@@ -1,5 +1,6 @@
 import { CallHandler, ExecutionContext } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
+import { AppConfigService } from '@password-manager:api:services';
 import { Request, Response } from 'express';
 import { firstValueFrom, of } from 'rxjs';
 
@@ -11,6 +12,7 @@ type TestType = {
 };
 
 describe('PasswordManagerResponseInterceptor Tests', () => {
+    const mockAppConfigService = AppConfigService.prototype;
     const mockTimestamp = '2023-02-01T17:20:01.700Z';
     const mockRequest = {} as Request;
     const mockResponse = {} as Response;
@@ -34,7 +36,7 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
             }),
         );
 
-        interceptor = new PasswordManagerResponseInterceptor<TestType>();
+        interceptor = new PasswordManagerResponseInterceptor<TestType>(mockAppConfigService);
     });
 
     afterEach(() => {
@@ -45,6 +47,8 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
         mockRequest.params = {
             clientId: '123',
         };
+
+        mockAppConfigService.get = jest.fn().mockReturnValue('0.0.1');
 
         const response = await firstValueFrom(await interceptor.intercept(mockExecutionContext, mockCallHandler));
 
@@ -67,6 +71,8 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
 
     it('Intercepts the response and adds metadata to it with no client ID', async () => {
         mockRequest.params = {};
+
+        mockAppConfigService.get = jest.fn().mockReturnValue('0.0.1');
 
         const response = await firstValueFrom(await interceptor.intercept(mockExecutionContext, mockCallHandler));
 
