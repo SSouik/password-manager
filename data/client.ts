@@ -1,6 +1,6 @@
-import { DynamoDBClient } from '../libs/dynamodb-client/src';
+import { DynamoDBClient, DynamoDBConnection } from '../libs/password-manager-dynamodb-client/src';
 
-const client = new DynamoDBClient({
+const client = new DynamoDBClient(<DynamoDBConnection>{
     tablePrefix: 'local.',
     region: 'us-east-2',
     endpoint: 'http://localhost:7777',

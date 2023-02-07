@@ -28,6 +28,6 @@ config.map('commitSha', 'COMMIT_SHA').withDefaultValue('commitSha');
 config.map('encryptionKey', 'ENCRYPTION_KEY');
 
 // DynamoDB
-config.map('dynamodbEndpoint', 'DYNAMODB_ENDPOINT').withDefaultValue('http://localhost:7777');
+config.map('dynamodbEndpoint', 'DYNAMODB_ENDPOINT').withDefaultValue('http://dynamo:7777');
 
 export const appConfig = config;

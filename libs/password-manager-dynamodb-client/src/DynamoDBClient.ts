@@ -13,6 +13,9 @@ import {
     PutCommandInput,
     PutCommandOutput,
     PutCommand,
+    QueryCommandInput,
+    QueryCommandOutput,
+    QueryCommand,
 } from '@aws-sdk/lib-dynamodb';
 
 import { IDynamoDBClient, DynamoDBConnection } from './types';
@@ -24,6 +27,7 @@ export class DynamoDBClient implements IDynamoDBClient {
         this.dynamoDBClient = new AWSDynamoDBClient({
             region: dynamoDBConnection.region,
             endpoint: dynamoDBConnection.endpoint,
+            credentials: dynamoDBConnection.credentials,
         });
     }
 
@@ -34,6 +38,17 @@ export class DynamoDBClient implements IDynamoDBClient {
         };
 
         const command = new GetCommand(params);
+
+        return this.dynamoDBClient.send(command);
+    }
+
+    public query(table: string, input: QueryCommandInput): Promise<QueryCommandOutput> {
+        const params = <QueryCommandInput>{
+            ...input,
+            TableName: this.buildTableName(table),
+        };
+
+        const command = new QueryCommand(params);
 
         return this.dynamoDBClient.send(command);
     }

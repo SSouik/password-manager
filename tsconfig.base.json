@@ -27,6 +27,8 @@
             "@password-manager:api:middleware/*": ["apps/password-manager-api/src/middleware/*"],
             "@password-manager:api:providers": ["apps/password-manager-api/src/providers"],
             "@password-manager:api:providers/*": ["apps/password-manager-api/src/providers/*"],
+            "@password-manager:api:repositories": ["apps/password-manager-api/src/repositories"],
+            "@password-manager:api:repositories/*": ["apps/password-manager-api/src/repositories/*"],
             "@password-manager:api:services": ["apps/password-manager-api/src/services"],
             "@password-manager:api:services/*": ["apps/password-manager-api/src/services/*"],
             "@password-manager:api:types": ["apps/password-manager-api/src/types"],

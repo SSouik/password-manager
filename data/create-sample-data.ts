@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 
 import DynamoDBClient from './client';
 
-import { Client, Password } from '../libs/types/src';
+import { Client, Password } from '../libs/password-manager-types/src';
 
 const clientId = uuid();
 

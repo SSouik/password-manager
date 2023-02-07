@@ -14,6 +14,7 @@ describe('DynamoDBClient Tests', () => {
             region: 'us-west-1',
             endpoint: 'endpoint',
             tablePrefix: 'test.',
+            credentials: { accessKeyId: 'key', secretAccessKey: 'secretKey' },
         });
     });
 
@@ -28,6 +29,17 @@ describe('DynamoDBClient Tests', () => {
                 Key: {
                     key: 'value',
                 },
+            });
+
+            expect(awsDynamoDBClientSpy).toBeCalledTimes(1);
+        });
+    });
+
+    describe('Query', () => {
+        it('Builds the QueryCommand and sends it', async () => {
+            await client.query('Table', {
+                TableName: 'Table',
+                IndexName: 'Index',
             });
 
             expect(awsDynamoDBClientSpy).toBeCalledTimes(1);
