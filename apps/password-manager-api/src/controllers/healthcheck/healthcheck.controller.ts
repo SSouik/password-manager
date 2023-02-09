@@ -1,6 +1,5 @@
-import { Controller, Inject, HttpCode, Get, HttpStatus, UseInterceptors } from '@nestjs/common';
+import { Controller, Inject, HttpCode, Get, HttpStatus } from '@nestjs/common';
 import { AppConfig } from '@password-manager:api:config';
-import { PasswordManagerResponseInterceptor } from '@password-manager:api:interceptors';
 import { IAppConfigService } from '@password-manager:api:interfaces';
 import { LOGGER } from '@password-manager:api:providers';
 import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
@@ -8,7 +7,6 @@ import { ILogger } from '@password-manager:logger';
 import { APIUrlsEnum, HealthCheckResponse } from '@password-manager:types';
 
 @Controller(APIUrlsEnum.HealthCheck)
-@UseInterceptors(PasswordManagerResponseInterceptor<HealthCheckResponse>)
 export class HealthCheckController {
     // Inject in the instance of Logger (found in providers/factories/logger/logger.provider.ts)
     constructor(

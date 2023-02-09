@@ -1,4 +1,5 @@
-import { Inject, CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { Inject, CallHandler, ExecutionContext, Injectable, NestInterceptor, ClassProvider } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppConfig } from '@password-manager:api:config';
 import { IAppConfigService } from '@password-manager:api:interfaces';
 import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
@@ -46,3 +47,9 @@ export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T,
         );
     }
 }
+
+// This is a global interceptor
+export default <ClassProvider>{
+    provide: APP_INTERCEPTOR,
+    useClass: PasswordManagerResponseInterceptor,
+};
