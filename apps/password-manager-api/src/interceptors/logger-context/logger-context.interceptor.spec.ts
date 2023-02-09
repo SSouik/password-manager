@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { CallHandler, ExecutionContext, HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { AppConfigService } from '@password-manager:api:services';
 import { LogMessageFactory, LogPropertyEnum } from '@password-manager:logger';
 import { Request, Response } from 'express';
 
-import { LoggerContextMiddleware } from './logger-context.middleware';
+import { LoggerContextInterceptor } from './logger-context.interceptor';
 
-describe('LoggerContextMiddleware Tests', () => {
+describe('LoggerContextInterceptor Tests', () => {
     const mockAppConfigService = AppConfigService.prototype;
     const mockLogMessageFactory = LogMessageFactory.prototype;
     const mockRequest = {} as Request;
     const mockResponse = {} as Response;
-    let mockNextHandler: (error?: any) => void;
-    let middleware: LoggerContextMiddleware;
+    const mockHttpContext = {} as HttpArgumentsHost;
+    const mockExecutionContext = {} as ExecutionContext;
+    const mockCallHandler = {} as CallHandler;
+    let interceptor: LoggerContextInterceptor;
 
     beforeEach(() => {
         mockAppConfigService.get = jest.fn().mockReturnValue('0.0.1');
@@ -21,9 +24,13 @@ describe('LoggerContextMiddleware Tests', () => {
 
         mockRequest.ip = 'ip';
         mockRequest.header = jest.fn().mockReturnValueOnce('trace-id').mockReturnValueOnce('user-agent');
-        mockNextHandler = jest.fn();
+        mockCallHandler.handle = jest.fn();
 
-        middleware = new LoggerContextMiddleware(mockAppConfigService, mockLogMessageFactory);
+        mockHttpContext.getRequest = jest.fn().mockReturnValue(mockRequest);
+        mockHttpContext.getResponse = jest.fn().mockReturnValue(mockResponse);
+        mockExecutionContext.switchToHttp = jest.fn().mockReturnValue(mockHttpContext);
+
+        interceptor = new LoggerContextInterceptor(mockAppConfigService, mockLogMessageFactory);
     });
 
     afterEach(() => {
@@ -35,7 +42,7 @@ describe('LoggerContextMiddleware Tests', () => {
             clientId: '123',
         };
 
-        middleware.use(mockRequest, mockResponse, mockNextHandler);
+        interceptor.intercept(mockExecutionContext, mockCallHandler);
 
         expect(mockLogMessageFactory.setProperty).toBeCalledTimes(3);
         expect(mockLogMessageFactory.setProperty).toHaveBeenNthCalledWith(1, LogPropertyEnum.UserIP, 'ip');
@@ -46,13 +53,13 @@ describe('LoggerContextMiddleware Tests', () => {
         expect(mockLogMessageFactory.setContext).toHaveBeenNthCalledWith(1, 'clientId', '123');
         expect(mockLogMessageFactory.setContext).toHaveBeenNthCalledWith(2, 'app', { version: '0.0.1' });
 
-        expect(mockNextHandler).toBeCalledTimes(1);
+        expect(mockCallHandler.handle).toBeCalledTimes(1);
     });
 
     it('Adds the trace ID, user agent, IP address along with the client id as null when it does not exist to the log message factory', () => {
         mockRequest.params = {};
 
-        middleware.use(mockRequest, mockResponse, mockNextHandler);
+        interceptor.intercept(mockExecutionContext, mockCallHandler);
 
         expect(mockLogMessageFactory.setProperty).toBeCalledTimes(3);
         expect(mockLogMessageFactory.setProperty).toHaveBeenNthCalledWith(1, LogPropertyEnum.UserIP, 'ip');
@@ -63,6 +70,6 @@ describe('LoggerContextMiddleware Tests', () => {
         expect(mockLogMessageFactory.setContext).toHaveBeenNthCalledWith(1, 'clientId', null);
         expect(mockLogMessageFactory.setContext).toHaveBeenNthCalledWith(2, 'app', { version: '0.0.1' });
 
-        expect(mockNextHandler).toBeCalledTimes(1);
+        expect(mockCallHandler.handle).toBeCalledTimes(1);
     });
 });
