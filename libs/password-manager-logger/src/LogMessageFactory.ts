@@ -1,3 +1,4 @@
+import { EnvironmentEnum } from '@password-manager:types';
 import { v4 as uuid } from 'uuid';
 
 import { ILogMessageFactory, LogLevelEnum, LogPropertyEnum } from './types';
@@ -8,6 +9,11 @@ export class LogMessageFactory implements ILogMessageFactory {
 
     constructor(defaults?: Partial<LogMessage>) {
         this.message = <LogMessage>{
+            ID: '',
+            TimeStamp: '',
+            Environment: EnvironmentEnum.Local,
+            LogLevel: LogLevelEnum.Info,
+            Message: '',
             CommitSha: '',
             TraceID: '',
             Region: 'us-east-1',

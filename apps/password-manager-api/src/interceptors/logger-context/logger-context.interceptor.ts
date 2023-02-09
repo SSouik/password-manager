@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable, Inject, NestInterceptor, CallHandler, ExecutionContext, ClassProvider, Scope } from '@nestjs/common';
+import {
+    Injectable,
+    Inject,
+    NestInterceptor,
+    CallHandler,
+    ExecutionContext,
+    ClassProvider,
+    Scope,
+} from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppConfig } from '@password-manager:api:config';
 import { IAppConfigService } from '@password-manager:api:interfaces';
