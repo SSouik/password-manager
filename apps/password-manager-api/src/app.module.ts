@@ -12,7 +12,7 @@ import Services from '@password-manager:api:services';
 @Module({
     imports: [
         ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '..', 'password-manager-ui'),
+            rootPath: join(__dirname, '../../..', 'dist/apps/password-manager-ui'),
         }),
     ],
     controllers: Controllers,

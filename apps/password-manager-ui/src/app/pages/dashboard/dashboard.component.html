@@ -1,0 +1,18 @@
+<div>
+  <h1>{{ message }}</h1>
+  <ul>
+    <li *ngFor="let password of passwords">
+      <span>{{ password.passwordId }}</span
+      ><br />
+      <span>{{ password.name }}</span
+      ><br />
+      <span>{{ password.website }}</span
+      ><br />
+      <span>{{ password.login }}</span
+      ><br />
+      <span>{{ password.value }}</span
+      ><br />
+      <span>{{ password.clientId }}</span>
+    </li>
+  </ul>
+</div>
