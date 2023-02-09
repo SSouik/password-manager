@@ -7,14 +7,11 @@ jest.mock('crypto', () => ({
     createCipheriv: () => ({
         update: (val: string) => Buffer.from(val),
         final: () => Buffer.from(''),
-        getAuthTag: () => Buffer.from('auth-tag'),
     }),
     createDecipheriv: () => ({
-        setAuthTag: jest.fn(),
         update: () => Buffer.from(''),
         final: () => Buffer.from(value),
     }),
-    randomBytes: (size: number) => Buffer.alloc(size),
 }));
 
 describe('Crypto Tests', () => {
@@ -22,8 +19,9 @@ describe('Crypto Tests', () => {
 
     beforeEach(() => {
         crypto = Crypto.create()
-            .withAlgorithm(AlgorithmEnum.AES256GCM)
+            .withAlgorithm(AlgorithmEnum.AES256CTR)
             .withSecret('x5VTQ70CmmbYD1PYq4N2ZkZKNZ22reyK')
+            .withInitializationVector('y5huf869j+PPQ4uGNDjz9Q==')
             .withEncoding(EncodingEnum.Base64);
     });
 

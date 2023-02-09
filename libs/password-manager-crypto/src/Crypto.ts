@@ -7,14 +7,12 @@ export class Crypto {
     private secret: string;
     private encoding: EncodingEnum;
     private initializationVector: Buffer;
-    private authTag: Buffer;
 
     constructor() {
-        this.algorithm = AlgorithmEnum.AES128CCM;
+        this.algorithm = AlgorithmEnum.AES256CTR;
         this.secret = '';
         this.encoding = EncodingEnum.Hex;
-        this.initializationVector = crypto.randomBytes(12);
-        this.authTag = Buffer.from('');
+        this.initializationVector = Buffer.from('');
     }
 
     public static create(): Crypto {
@@ -36,30 +34,21 @@ export class Crypto {
         return this;
     }
 
+    public withInitializationVector(vector: string): Crypto {
+        this.initializationVector = Buffer.from(vector);
+        return this;
+    }
+
     public encrypt(value: string): string {
-        const cipher = crypto.createCipheriv(
-            this.algorithm as crypto.CipherCCMTypes,
-            Buffer.from(this.secret),
-            this.initializationVector,
-            { authTagLength: 16 },
-        );
+        const cipher = crypto.createCipheriv(this.algorithm, Buffer.from(this.secret), this.initializationVector);
 
         const encryptedValue = Buffer.concat([cipher.update(value), cipher.final()]);
-
-        this.authTag = cipher.getAuthTag();
 
         return encryptedValue.toString(this.encoding);
     }
 
     public decrypt(value: string): string {
-        const decipher = crypto.createDecipheriv(
-            this.algorithm as crypto.CipherCCMTypes,
-            Buffer.from(this.secret),
-            this.initializationVector,
-            { authTagLength: 16 },
-        );
-
-        decipher.setAuthTag(this.authTag);
+        const decipher = crypto.createDecipheriv(this.algorithm, Buffer.from(this.secret), this.initializationVector);
 
         const decryptedValue = Buffer.concat([decipher.update(Buffer.from(value, this.encoding)), decipher.final()]);
 

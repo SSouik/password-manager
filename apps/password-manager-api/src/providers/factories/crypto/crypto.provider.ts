@@ -10,8 +10,9 @@ export default <FactoryProvider>{
     provide: CRYPTO,
     useFactory: (appConfigService: IAppConfigService<AppConfig>): Crypto => {
         return Crypto.create()
-            .withAlgorithm(AlgorithmEnum.AES256GCM)
+            .withAlgorithm(AlgorithmEnum.AES256CTR)
             .withSecret(appConfigService.get('encryptionKey'))
+            .withInitializationVector(appConfigService.get('initializationVector'))
             .withEncoding(EncodingEnum.Base64);
     },
     inject: [APP_CONFIG_SERVICE],

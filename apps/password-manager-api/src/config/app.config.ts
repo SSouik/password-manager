@@ -25,7 +25,10 @@ config.map('region', 'REGION').withDefaultValue('us-west-1');
 
 config.map('commitSha', 'COMMIT_SHA').withDefaultValue('commitSha');
 
+// Crypto
 config.map('encryptionKey', 'ENCRYPTION_KEY');
+
+config.map('initializationVector', 'INITIALIZATION_VECTOR');
 
 // DynamoDB
 config.map('dynamodbEndpoint', 'DYNAMODB_ENDPOINT').withDefaultValue('http://dynamo:7777');

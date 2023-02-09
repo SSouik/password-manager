@@ -1,15 +1,19 @@
 import { HttpException, HttpStatus, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
 import { PasswordRepository } from '@password-manager:api:repositories';
+import { Crypto } from '@password-manager:crypto';
 import { Password } from '@password-manager:types';
 
 import { GetPasswordsController } from './get-passwords.controller';
 
 describe('GetPasswordsController Tests', () => {
     const mockPasswordRepository = PasswordRepository.prototype;
+    const mockCrypto = Crypto.prototype;
     let controller: GetPasswordsController;
 
     beforeEach(() => {
-        controller = new GetPasswordsController(mockPasswordRepository);
+        mockCrypto.decrypt = jest.fn().mockReturnValue('password');
+
+        controller = new GetPasswordsController(mockPasswordRepository, mockCrypto);
     });
 
     afterEach(() => {

@@ -3,6 +3,7 @@
 import { v4 as uuid } from 'uuid';
 
 import DynamoDBClient from './client';
+import Crypto from './crypto';
 
 import { Client, Password } from '../libs/password-manager-types/src';
 
@@ -11,7 +12,7 @@ const clientId = uuid();
 const client = <Client>{
     clientId: clientId,
     login: 'local',
-    password: 'P@ssword123', // should be encrypted
+    password: Crypto.encrypt('P@ssword123'),
 };
 
 const password1 = <Password>{
@@ -19,7 +20,7 @@ const password1 = <Password>{
     name: 'Password 1',
     website: 'https://foo.com',
     login: 'login',
-    value: 'P@ssword123',
+    value: Crypto.encrypt('P@ssword123'),
     clientId: clientId,
 };
 
@@ -28,7 +29,7 @@ const password2 = <Password>{
     name: 'Password 1',
     website: 'https://foo.com',
     login: 'login',
-    value: 'P@ssword123',
+    value: Crypto.encrypt('P@ssword123'),
     clientId: clientId,
 };
 
