@@ -1,0 +1,47 @@
+.pm--Header {
+    display: flex;
+    flex-direction: row;
+}
+
+.pm--Header-Logo {
+    font-size: 2rem;
+}
+
+.pm--Header-Links {
+    display: flex;
+    flex-direction: flex;
+    margin-left: auto;
+}
+
+ul {
+    display: flex;
+    padding: 0;
+
+    li {
+        display: inline-flex;
+        margin-right: 4px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .pm--Header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .pm--Header-Logo {
+        margin-bottom: 12px;
+    }
+
+    .pm--Header-Links {
+        margin-left: unset;
+    }
+
+    .pm--Vertical-Divider--gray300 {
+        height: unset;
+    }
+}

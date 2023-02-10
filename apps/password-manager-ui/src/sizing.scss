@@ -1,0 +1,71 @@
+/***** Margin and Padding *****/
+$pm-sizes-map: (
+    '1': 4px,
+    '2': 8px,
+    '3': 12px,
+    '4': 16px,
+    '5': 20px,
+    '6': 24px,
+    '7': 28px,
+    '8': 32px,
+);
+
+@each $size, $pixels in $pm-sizes-map {
+    /* Margins */
+    .pm--m#{$size} {
+        margin: $pixels;
+    }
+
+    .pm--mv#{$size} {
+        margin: $pixels auto;
+    }
+
+    .pm--mh#{$size} {
+        margin: auto $pixels;
+    }
+
+    .pm--mt#{$size} {
+        margin-top: $pixels;
+    }
+
+    .pm--mb#{$size} {
+        margin-bottom: $pixels;
+    }
+
+    .pm--ml#{$size} {
+        margin-left: $pixels;
+    }
+
+    .pm--mr#{$size} {
+        margin-right: $pixels;
+    }
+
+    /* Padding */
+    .pm--p#{$size} {
+        padding: $pixels;
+    }
+
+    .pm--pv#{$size} {
+        padding: $pixels auto;
+    }
+
+    .pm--ph#{$size} {
+        padding: auto $pixels;
+    }
+
+    .pm--pt#{$size} {
+        padding-top: $pixels;
+    }
+
+    .pm--pb#{$size} {
+        padding-bottom: $pixels;
+    }
+
+    .pm--pl#{$size} {
+        padding-left: $pixels;
+    }
+
+    .pm--pr#{$size} {
+        padding-right: $pixels;
+    }
+}

@@ -1,0 +1,65 @@
+$pm-color-primary: #256eff;
+$pm-color-secondary: #d36582;
+$pm-color-terinary: #00ffc5;
+$pm-color-black: #232c33;
+$pm-color-white: #fcfcfc;
+
+$pm-gray-map: (
+    '100': #f3f5f7,
+    '200': #e7eaee,
+    '300': #dbdfe6,
+    '400': #ced3dc,
+    '500': #c2ccd6,
+    '600': #b6c2ce,
+    '700': #a9b8c6,
+);
+
+.pm--Color-Primary {
+    color: $pm-color-primary;
+}
+
+.pm--Color-Secondary {
+    color: $pm-color-secondary;
+}
+
+.pm--Color-Terinary {
+    color: $pm-color-terinary;
+}
+
+.pm--Color-Black {
+    color: $pm-color-black;
+}
+
+.pm--Color-White {
+    color: $pm-color-white;
+}
+
+.pm--BackgroundColor-Primary {
+    background-color: $pm-color-primary;
+}
+
+.pm--BackgroundColor-Secondary {
+    background-color: $pm-color-secondary;
+}
+
+.pm--BackgroundColor-Terinary {
+    background-color: $pm-color-terinary;
+}
+
+.pm--BackgroundColor-Black {
+    background-color: $pm-color-black;
+}
+
+.pm--BackgroundColor-White {
+    background-color: $pm-color-white;
+}
+
+@each $weight, $color in $pm-gray-map {
+    .pm--Color-Gray#{$weight} {
+        color: $color;
+    }
+
+    .pm--BackgroundColor-Gray#{$weight} {
+        background-color: $color;
+    }
+}

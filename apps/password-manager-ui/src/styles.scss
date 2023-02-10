@@ -1,1 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'colors';
+@import 'sizing';
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+/***** Vertical Divider *****/
+.pm--Vertical-Divider {
+    border-left: 1px solid $pm-color-black;
+    height: 100%;
+    margin: 0 8px;
+}
+
+.pm--Vertical-Divider--primary {
+    border-left: 1px solid $pm-color-primary;
+    height: 100%;
+    margin: 0 8px;
+}
+
+.pm--Vertical-Divider--secondary {
+    border-left: 1px solid $pm-color-secondary;
+    height: 100%;
+    margin: 0 8px;
+}
+
+.pm--Vertical-Divider--terinary {
+    border-left: 1px solid $pm-color-terinary;
+    height: 100%;
+    margin: 0 8px;
+}
+
+@each $weight, $color in $pm-gray-map {
+    .pm--Vertical-Divider--gray#{$weight} {
+        border-left: 1px solid $color;
+        height: 100%;
+        margin: 0 8px;
+    }
+}
+
+/***** Generic/Common *****/
+.pm--Text-Center {
+    text-align: center;
+}

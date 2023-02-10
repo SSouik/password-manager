@@ -37,7 +37,11 @@
             "@password-manager:crypto": ["libs/password-manager-crypto/src/index.ts"],
             "@password-manager:dynamodb-client": ["libs/password-manager-dynamodb-client/src/index.ts"],
             "@password-manager:logger": ["libs/password-manager-logger/src/index.ts"],
-            "@password-manager:types": ["libs/password-manager-types/src/index.ts"]
+            "@password-manager:types": ["libs/password-manager-types/src/index.ts"],
+            "@password-manager:ui:components": ["apps/password-manager-ui/src/app/components"],
+            "@password-manager:ui:components/*": ["apps/password-manager-ui/src/app/components/*"],
+            "@password-manager:ui:pages": ["apps/password-manager-ui/src/app/pages"],
+            "@password-manager:ui:pages/*": ["apps/password-manager-ui/src/app/pages/*"]
         }
     },
     "exclude": ["node_modules", "tmp"]
