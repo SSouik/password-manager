@@ -1,13 +1,6 @@
-import { Route } from '@angular/router';
+import { Routes } from '@angular/router';
 
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-
-export const appRoutes: Array<Route> = [
-    {
-        path: 'dashboard',
-        pathMatch: 'full',
-        component: DashboardComponent,
-    },
+export default <Routes>[
     {
         path: '**',
         pathMatch: 'full',

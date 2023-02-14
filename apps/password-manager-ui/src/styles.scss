@@ -10,6 +10,12 @@ body {
     margin: 0;
 }
 
+/***** Page/Layout *****/
+.pm--Container {
+    padding: 32px;
+    margin: 0 auto;
+}
+
 /***** Vertical Divider *****/
 .pm--Vertical-Divider {
     border-left: 1px solid $pm-color-black;

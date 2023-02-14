@@ -41,7 +41,13 @@
             "@password-manager:ui:components": ["apps/password-manager-ui/src/app/components"],
             "@password-manager:ui:components/*": ["apps/password-manager-ui/src/app/components/*"],
             "@password-manager:ui:pages": ["apps/password-manager-ui/src/app/pages"],
-            "@password-manager:ui:pages/*": ["apps/password-manager-ui/src/app/pages/*"]
+            "@password-manager:ui:pages/*": ["apps/password-manager-ui/src/app/pages/*"],
+            "@password-manager:ui:pages:app-container": ["apps/password-manager-ui/src/app/pages/app-container"],
+            "@password-manager:ui:pages:app-container/*": ["apps/password-manager-ui/src/app/pages/app-container/*"],
+            "@password-manager:ui:pages:auth": ["apps/password-manager-ui/src/app/pages/auth"],
+            "@password-manager:ui:pages:auth/*": ["apps/password-manager-ui/src/app/pages/auth/*"],
+            "@password-manager:ui:pages:registration": ["apps/password-manager-ui/src/app/pages/registration"],
+            "@password-manager:ui:pages:registration/*": ["apps/password-manager-ui/src/app/pages/registration/*"]
         }
     },
     "exclude": ["node_modules", "tmp"]

@@ -28,12 +28,11 @@ export default {
         },
     },
     coverageReporters: ['lcov', 'clover', 'json'],
-    collectCoverageFrom: ['src/**/*.ts'],
+    collectCoverageFrom: ['src/**/*.ts', '!src/**/*.module.ts', '!src/**/*.routes.ts'],
     coveragePathIgnorePatterns: [
         'main.ts',
         'polyfills.ts',
         'test-setup.ts',
-        'app.module.ts',
         'index.ts',
         'environment.ts',
         'environment.*.ts',

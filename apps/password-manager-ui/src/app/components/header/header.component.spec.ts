@@ -15,7 +15,7 @@ describe('HeaderComponent Tests', () => {
         component = fixture.componentInstance;
     });
 
-    it('Should create the HeaderComponent', () => {
+    it('Should create the Header Component', () => {
         expect(component).toBeTruthy();
     });
 });
