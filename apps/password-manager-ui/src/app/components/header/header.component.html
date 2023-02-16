@@ -1,25 +1,47 @@
-<nav class="pm--Header pm--BackgroundColor-Primary pm--p5">
-  <div class="pm--Header-Logo pm--Color-Gray300">Password Manager</div>
+<nav>
+  <mat-toolbar class="pm--Header-Desktop" color="primary">
+    <span class="pm--Header-Logo"><a href="/dashboard" rel="noopener noreferrer">Password Manager</a></span>
 
-  <div class="pm--Header-Links">
-    <ul>
-      <li>
-        <button>Foo bar</button>
-      </li>
-      <li>
-        <button>Foo bar</button>
-      </li>
-    </ul>
+    <div class="pm--Header-Links">
+      <ul *ngIf="links.length">
+        <li *ngFor="let link of links">
+          <a mat-flat-button color="accent" [href]="link.href" rel="noopener noreferrer">{{ link.label }}</a>
+        </li>
+      </ul>
 
-    <div class="pm--Vertical-Divider--gray300"></div>
+      <div *ngIf="links.length" class="pm--Vertical-Divider--gray300"></div>
 
-    <ul>
-      <li>
-        <button>Foo bar</button>
-      </li>
-      <li>
-        <button>Foo bar</button>
-      </li>
-    </ul>
-  </div>
+      <ul>
+        <li>
+          <a mat-flat-button href="/login" rel="noopener noreferrer">Sign In</a>
+        </li>
+      </ul>
+    </div>
+  </mat-toolbar>
+
+  <mat-toolbar class="pm--Header-Mobile" color="primary">
+    <mat-toolbar-row
+      ><span class="pm--Header-Logo"
+        ><a href="/dashboard" rel="noopener noreferrer">Password Manager</a></span
+      ></mat-toolbar-row
+    >
+
+    <mat-toolbar-row>
+      <div class="pm--Header-Links">
+        <ul *ngIf="links.length">
+          <li *ngFor="let link of links">
+            <a mat-flat-button color="accent" [href]="link.href" rel="noopener noreferrer">{{ link.label }}</a>
+          </li>
+        </ul>
+
+        <div *ngIf="links.length" class="pm--Vertical-Divider--gray300"></div>
+
+        <ul>
+          <li>
+            <a mat-flat-button href="/login" rel="noopener noreferrer">Sign In</a>
+          </li>
+        </ul>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
 </nav>

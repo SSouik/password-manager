@@ -1,6 +1,9 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
 $pm-color-primary: #256eff;
-$pm-color-secondary: #d36582;
-$pm-color-terinary: #00ffc5;
+$pm-color-secondary: #ff256e;
 $pm-color-black: #232c33;
 $pm-color-white: #fcfcfc;
 
@@ -14,16 +17,81 @@ $pm-gray-map: (
     '700': #a9b8c6,
 );
 
+$pm-primary-palette: (
+    50: #e2f2ff,
+    100: #badeff,
+    200: #8bc9ff,
+    300: #53b4ff,
+    400: #1fa2ff,
+    500: #0091ff,
+    600: #1181ff,
+    700: #256eff,
+    800: #2d5aec,
+    900: #3635cc,
+    contrast: (
+        50: $pm-color-black,
+        100: $pm-color-black,
+        200: $pm-color-black,
+        300: $pm-color-white,
+        400: $pm-color-white,
+        500: $pm-color-white,
+        600: $pm-color-white,
+        700: $pm-color-white,
+        800: $pm-color-white,
+        900: $pm-color-white,
+    ),
+);
+
+$pm-secondary-palette: (
+    50: #ffe3eb,
+    100: #ffb9cc,
+    200: #ff8aab,
+    300: #ff5688,
+    400: #ff256e,
+    500: #fd0054,
+    600: #ec0052,
+    700: #d6004f,
+    800: #c3004d,
+    900: #9e004a,
+    contrast: (
+        50: $pm-color-black,
+        100: $pm-color-black,
+        200: $pm-color-black,
+        300: $pm-color-white,
+        400: $pm-color-white,
+        500: $pm-color-white,
+        600: $pm-color-white,
+        700: $pm-color-white,
+        800: $pm-color-white,
+        900: $pm-color-white,
+    ),
+);
+
+/***** Material Theme *****/
+// https://material.angular.io/guide/theming#defining-a-theme
+$pm-primary: mat.define-palette($pm-primary-palette, 500);
+$pm-secondary: mat.define-palette($pm-secondary-palette, 400);
+
+$pm-light-theme: mat.define-light-theme(
+    (
+        color: (
+            primary: $pm-primary,
+            accent: $pm-secondary,
+        ),
+        typography: mat.define-typography-config(),
+        density: 0,
+    )
+);
+
+@include mat.core-theme($pm-light-theme);
+@include mat.all-component-themes($pm-light-theme);
+
 .pm--Color-Primary {
     color: $pm-color-primary;
 }
 
 .pm--Color-Secondary {
     color: $pm-color-secondary;
-}
-
-.pm--Color-Terinary {
-    color: $pm-color-terinary;
 }
 
 .pm--Color-Black {
@@ -40,10 +108,6 @@ $pm-gray-map: (
 
 .pm--BackgroundColor-Secondary {
     background-color: $pm-color-secondary;
-}
-
-.pm--BackgroundColor-Terinary {
-    background-color: $pm-color-terinary;
 }
 
 .pm--BackgroundColor-Black {

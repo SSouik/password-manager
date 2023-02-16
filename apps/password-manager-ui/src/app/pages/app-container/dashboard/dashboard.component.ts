@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { GetPasswordsResponse, Password } from '@password-manager:types';
+import { HeaderLinks } from '@password-manager:ui:types';
 
 @Component({
     selector: 'password-manager-dashboard',
@@ -8,6 +9,8 @@ import { GetPasswordsResponse, Password } from '@password-manager:types';
     styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+    public headerLinks: Array<HeaderLinks> = [{ label: 'Create Password', href: '/create-password' }];
+
     public message = '';
     public passwords: Array<Password> = [];
 

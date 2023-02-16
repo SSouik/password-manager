@@ -1,10 +1,16 @@
-.pm--Header {
-    display: flex;
-    flex-direction: row;
+@import '../../../colors.scss';
+
+.pm--Header-Mobile {
+    display: none;
 }
 
 .pm--Header-Logo {
-    font-size: 2rem;
+    font-size: 1.5rem;
+
+    a {
+        color: $pm-color-white;
+        text-decoration: none;
+    }
 }
 
 .pm--Header-Links {
@@ -13,13 +19,17 @@
     margin-left: auto;
 }
 
+.pm--Vertical-Divider--gray300 {
+    margin: 18px 24px;
+}
+
 ul {
     display: flex;
     padding: 0;
 
     li {
         display: inline-flex;
-        margin-right: 4px;
+        margin-right: 12px;
 
         &:last-child {
             margin-right: 0;
@@ -28,20 +38,19 @@ ul {
 }
 
 @media screen and (max-width: 768px) {
-    .pm--Header {
-        flex-direction: column;
-        align-items: center;
+    .pm--Header-Desktop {
+        display: none;
     }
 
-    .pm--Header-Logo {
-        margin-bottom: 12px;
-    }
+    .pm--Header-Mobile {
+        display: block;
 
-    .pm--Header-Links {
-        margin-left: unset;
-    }
+        .pm--Header-Logo {
+            margin: 0 auto;
+        }
 
-    .pm--Vertical-Divider--gray300 {
-        height: unset;
+        .pm--Header-Links {
+            margin-right: auto;
+        }
     }
 }
