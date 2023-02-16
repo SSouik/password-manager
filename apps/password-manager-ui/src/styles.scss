@@ -12,8 +12,19 @@ body {
 
 /***** Page/Layout *****/
 .pm--Container {
-    padding: 32px;
+    padding: 64px;
     margin: 0 auto;
+}
+
+.pm--Container-Spotlight {
+    padding: 128px 300px;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 1080px) {
+    .pm--Container-Spotlight {
+        padding: 64px 24px;
+    }
 }
 
 /***** Vertical Divider *****/

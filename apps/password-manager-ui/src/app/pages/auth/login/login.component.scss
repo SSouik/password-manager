@@ -1,0 +1,22 @@
+.pm--Login-Title {
+    display: flex;
+    justify-content: center;
+}
+
+.pm--Login-Form {
+    text-align: center;
+
+    .pm--Login-Form--field {
+        width: 80%;
+    }
+
+    .pm--Login-Form--actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        
+        .pm--Login-Form--action {
+            width: 80%;
+        }
+    }
+}

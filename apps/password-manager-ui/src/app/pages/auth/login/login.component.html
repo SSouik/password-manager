@@ -1,3 +1,24 @@
-<password-manager-header></password-manager-header>
-
-<div>Login page</div>
+<div class="pm--Container-Spotlight">
+    <mat-card>
+        <mat-card-header class="pm--Login-Title"><mat-card-title>Welcome to Password Manager!</mat-card-title><mat-card-subtitle>Please enter your username and password.</mat-card-subtitle></mat-card-header>
+        <div class="pm--Login-Form pm--mt8">
+            <mat-card-content>
+                <mat-form-field class="pm--Login-Form--field">
+                    <mat-label>Username</mat-label>
+                    <input matInput placeholder="Username">
+                  </mat-form-field>
+                  <mat-form-field class="pm--Login-Form--field">
+                    <mat-label>Password</mat-label>
+                    <input matInput placeholder="P@ssword123">
+                  </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions class="pm--Login-Form--actions pm--mb8">
+                <button mat-raised-button class="pm--Login-Form--action" color="primary">Login</button>
+            </mat-card-actions>
+            <mat-card-footer>
+                <a mat-button class="pm--mr5" color="accent">Forgot username or password?</a>
+                <a mat-button color="accent">Don't have an account? Create one</a>
+            </mat-card-footer>
+        </div>
+      </mat-card>
+</div>
