@@ -1,0 +1,59 @@
+{
+    "extends": ["stylelint-config-standard", "stylelint-config-standard-scss"],
+    "rules": {
+        "alpha-value-notation": "number",
+        "at-rule-empty-line-before": [
+            "always",
+            {
+                "except": ["first-nested", "after-same-name"],
+                "ignore": ["after-comment", "blockless-after-blockless"]
+            }
+        ],
+        "at-rule-no-unknown": [
+            true,
+            {
+                "ignoreAtRules": [
+                    "use",
+                    "function",
+                    "if",
+                    "each",
+                    "include",
+                    "mixin",
+                    "else",
+                    "return",
+                    "warn",
+                    "while",
+                    "extend"
+                ]
+            }
+        ],
+        "color-named": "never",
+        "color-no-invalid-hex": true,
+        "color-hex-length": "short",
+        "color-function-notation": "legacy",
+        "font-family-name-quotes": "always-where-recommended",
+        "font-weight-notation": "named-where-possible",
+        "function-calc-no-unspaced-operator": true,
+        "max-nesting-depth": 4,
+        "no-descending-specificity": null,
+        "property-no-vendor-prefix": true,
+        "rule-empty-line-before": [
+            "always",
+            {
+                "except": ["first-nested", "after-single-line-comment"],
+                "ignore": ["after-comment"]
+            }
+        ],
+        "selector-class-pattern": "^(pm--)?([A-z0-9][a-z0-9]+)+(-([A-z0-9][a-z0-9]+-?))",
+        "selector-not-notation": "complex",
+        "selector-pseudo-element-no-unknown": [
+            true,
+            {
+                "ignorePseudoElements": ["ng-deep"]
+            }
+        ],
+        "value-no-vendor-prefix": true,
+        "scss/at-mixin-pattern": "^[A-Z][a-z]+(?:[A-Z][a-z]+)*$",
+        "scss/at-rule-conditional-no-parentheses": null
+    }
+}

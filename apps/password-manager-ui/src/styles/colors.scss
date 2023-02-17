@@ -1,12 +1,11 @@
 @use '@angular/material' as mat;
 
-@include mat.core();
+@include mat.core;
 
 $pm-color-primary: #256eff;
 $pm-color-secondary: #ff256e;
 $pm-color-black: #232c33;
 $pm-color-white: #fcfcfc;
-
 $pm-gray-map: (
     '100': #f3f5f7,
     '200': #e7eaee,
@@ -16,7 +15,6 @@ $pm-gray-map: (
     '600': #b6c2ce,
     '700': #a9b8c6,
 );
-
 $pm-primary-palette: (
     50: #e2f2ff,
     100: #badeff,
@@ -41,7 +39,6 @@ $pm-primary-palette: (
         900: $pm-color-white,
     ),
 );
-
 $pm-secondary-palette: (
     50: #ffe3eb,
     100: #ffb9cc,
@@ -71,7 +68,6 @@ $pm-secondary-palette: (
 // https://material.angular.io/guide/theming#defining-a-theme
 $pm-primary: mat.define-palette($pm-primary-palette, 500);
 $pm-secondary: mat.define-palette($pm-secondary-palette, 400);
-
 $pm-light-theme: mat.define-light-theme(
     (
         color: (

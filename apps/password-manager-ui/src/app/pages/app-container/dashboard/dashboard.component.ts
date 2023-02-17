@@ -6,7 +6,6 @@ import { HeaderLinks } from '@password-manager:ui:types';
 @Component({
     selector: 'password-manager-dashboard',
     templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
     public headerLinks: Array<HeaderLinks> = [{ label: 'Create Password', href: '/app/create-password' }];

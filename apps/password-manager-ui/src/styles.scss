@@ -1,18 +1,18 @@
-@import './styles/colors.scss';
-@import './styles/forms.scss';
-@import './styles/sizing.scss';
+@import './styles/colors';
+@import './styles/forms';
+@import './styles/sizing';
 
 * {
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: Roboto, sans-serif;
     margin: 0;
 }
 
 /***** Page/Layout *****/
-.pm--Container {
+.pm--Container-Main {
     height: 100vh;
     padding: 64px;
     margin: 0 auto;
