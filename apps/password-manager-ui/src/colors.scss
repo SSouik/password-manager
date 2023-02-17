@@ -103,19 +103,19 @@ $pm-light-theme: mat.define-light-theme(
 }
 
 .pm--BackgroundColor-Primary {
-    background-color: $pm-color-primary;
+    background-color: $pm-color-primary !important;
 }
 
 .pm--BackgroundColor-Secondary {
-    background-color: $pm-color-secondary;
+    background-color: $pm-color-secondary !important;
 }
 
 .pm--BackgroundColor-Black {
-    background-color: $pm-color-black;
+    background-color: $pm-color-black !important;
 }
 
 .pm--BackgroundColor-White {
-    background-color: $pm-color-white;
+    background-color: $pm-color-white !important;
 }
 
 @each $weight, $color in $pm-gray-map {
@@ -124,6 +124,6 @@ $pm-light-theme: mat.define-light-theme(
     }
 
     .pm--BackgroundColor-Gray#{$weight} {
-        background-color: $color;
+        background-color: $color !important;
     }
 }

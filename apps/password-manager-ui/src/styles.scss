@@ -12,12 +12,14 @@ body {
 
 /***** Page/Layout *****/
 .pm--Container {
+    height: 100vh;
     padding: 64px;
     margin: 0 auto;
 }
 
 .pm--Container-Spotlight {
-    padding: 128px 300px;
+    height: 100vh;
+    padding: 64px 300px;
     margin: 0 auto;
 }
 
