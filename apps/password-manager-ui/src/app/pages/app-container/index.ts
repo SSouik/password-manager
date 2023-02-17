@@ -1,3 +1,4 @@
+import { CreatePasswordComponent } from './create-password/create-password.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
-export default [DashboardComponent];
+export default [CreatePasswordComponent, DashboardComponent];

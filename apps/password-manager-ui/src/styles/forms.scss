@@ -1,0 +1,22 @@
+.pm--Form-Title {
+    display: flex;
+    justify-content: center;
+}
+
+.pm--Form-Content {
+    text-align: center;
+
+    .pm--Form-Field {
+        width: 80%;
+    }
+
+    .pm--Form-Actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .pm--Form-Action {
+            width: 80%;
+        }
+    }
+}

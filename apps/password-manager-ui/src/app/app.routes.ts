@@ -4,6 +4,6 @@ export default <Routes>[
     {
         path: '**',
         pathMatch: 'full',
-        redirectTo: 'dashboard',
+        redirectTo: 'app/dashboard',
     },
 ];
