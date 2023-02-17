@@ -1,0 +1,57 @@
+<password-manager-header></password-manager-header>
+
+<div class="pm--Container-Spotlight">
+  <mat-card class="pm--BackgroundColor-Gray100">
+    <mat-card-header class="pm--Form-Title"
+      ><mat-card-title class="pm--Text-Center"
+        ><img src="/assets/images/password-manager-logo.png" height="150px" width="150px" /></mat-card-title
+      ><mat-card-subtitle class="pm--Text-Center"
+        >Creating an account is easy. Follow the steps below to create one and begin managing your passwords with
+        ease.</mat-card-subtitle
+      ></mat-card-header
+    >
+    <mat-card-content class="pm--Form-Title">
+      <mat-stepper class="pm--BackgroundColor-Gray100" labelPosition="bottom" #stepper>
+        <mat-step label="Username">
+          <form class="pm--Form-Content pm--Text-Center pm--mt8">
+            <mat-form-field class="pm--Form-Field">
+              <mat-label>Username</mat-label>
+              <input matInput required placeholder="Username" />
+            </mat-form-field>
+            <div>
+              <button mat-raised-button matStepperNext color="primary">Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step label="Security Question">
+          <form class="pm--Form-Content pm--Text-Center pm-mt8">
+            <mat-form-field class="pm--Form-Field">
+              <mat-label>Security Question</mat-label>
+              <input matInput required placeholder="Where were you born?" />
+            </mat-form-field>
+            <div>
+              <button mat-raised-button matStepperPrevious class="pm--mr5" color="accent">Back</button>
+              <button mat-raised-button matStepperNext color="primary">Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step label="Password">
+          <form class="pm--Form-Content pm--Text-Center pm-mt8">
+            <mat-form-field class="pm--Form-Field">
+              <mat-label>Password</mat-label>
+              <input matInput required placeholder="P@ssword123" />
+            </mat-form-field>
+            <mat-form-field class="pm--Form-Field">
+              <mat-label>Confirm Password</mat-label>
+              <input matInput required placeholder="P@ssword123" />
+            </mat-form-field>
+            <div>
+              <button mat-raised-button matStepperPrevious class="pm--mr5" color="accent">Back</button>
+              <button mat-raised-button matStepperNext color="primary">Submit</button>
+            </div>
+          </form>
+        </mat-step>
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>

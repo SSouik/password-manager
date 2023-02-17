@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { AppComponentsModule } from '@password-manager:ui:components/app-components.module';
 import { AppContainerModule } from '@password-manager:ui:pages:app-container/app-container.module';
@@ -17,6 +18,7 @@ import AppRoutes from './app.routes';
         AuthModule,
         AppContainerModule,
         BrowserModule,
+        BrowserAnimationsModule,
         HttpClientModule,
     ],
     providers: [],

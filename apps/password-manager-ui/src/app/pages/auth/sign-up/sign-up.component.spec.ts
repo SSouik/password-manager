@@ -1,23 +1,23 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderComponent } from './header.component';
+import { SignUpComponent } from './sign-up.component';
 
-describe('HeaderComponent Tests', () => {
-    let component: HeaderComponent;
-    let fixture: ComponentFixture<HeaderComponent>;
+describe('SignUpComponent Test', () => {
+    let component: SignUpComponent;
+    let fixture: ComponentFixture<SignUpComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [HeaderComponent],
+            declarations: [SignUpComponent],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(HeaderComponent);
+        fixture = TestBed.createComponent(SignUpComponent);
         component = fixture.componentInstance;
     });
 
-    it('Should create the Header Component', () => {
+    it('Should create the Sign Up Component Page', () => {
         expect(component).toBeTruthy();
     });
 });
