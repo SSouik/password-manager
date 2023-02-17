@@ -6,6 +6,10 @@ export type AppConfig = {
     environment: EnvironmentEnum;
     region: string;
     commitSha: string;
+    appUrl: URL;
+
+    // JWT
+    jwtSecret: string;
 
     // Crypto
     encryptionKey: string;
@@ -21,6 +25,10 @@ export type AppEnvironment = {
     ENVIRONMENT: string;
     REGION: string;
     COMMIT_SHA: string;
+    APP_URL: string;
+
+    // JWT
+    JWT_SECRET: string;
 
     // Crypto
     ENCRYPTION_KEY: string;

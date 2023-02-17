@@ -25,6 +25,14 @@ config.map('region', 'REGION').withDefaultValue('us-west-1');
 
 config.map('commitSha', 'COMMIT_SHA').withDefaultValue('commitSha');
 
+config
+    .map('appUrl', 'APP_URL')
+    .withDefaultValue(new URL('https://test.passwordmanager.com'))
+    .parse((value: string | undefined) => new URL(value));
+
+// JWT
+config.map('jwtSecret', 'JWT_SECRET');
+
 // Crypto
 config.map('encryptionKey', 'ENCRYPTION_KEY');
 

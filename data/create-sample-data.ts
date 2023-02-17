@@ -13,6 +13,10 @@ const client = <Client>{
     clientId: clientId,
     login: 'local',
     password: Crypto.encrypt('P@ssword123'),
+    verification: {
+        question: 'What is the name of your cat?',
+        answer: Crypto.encrypt('Quavo'),
+    },
 };
 
 const password1 = <Password>{
