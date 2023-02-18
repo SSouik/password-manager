@@ -16,7 +16,7 @@ export class AppConfigService implements IAppConfigService<AppConfig> {
         return this.appConfig.get('environment');
     }
 
-    get<K extends keyof AppConfig>(key: K): AppConfig[K] | undefined {
+    public get<K extends keyof AppConfig>(key: K): AppConfig[K] | undefined {
         return this.appConfig.get(key);
     }
 }
