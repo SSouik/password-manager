@@ -2,7 +2,7 @@ import { Inject, CallHandler, ExecutionContext, Injectable, NestInterceptor, Cla
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppConfig } from '@password-manager:api:config';
 import { IAppConfigService } from '@password-manager:api:interfaces';
-import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
+import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
 import { PasswordManagerResponse } from '@password-manager:types';
 import { Request, Response } from 'express';
 import { map, Observable } from 'rxjs';

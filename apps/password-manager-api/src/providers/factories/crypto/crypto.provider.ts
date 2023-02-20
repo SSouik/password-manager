@@ -1,7 +1,7 @@
 import { FactoryProvider, InjectionToken } from '@nestjs/common';
 import { AppConfig } from '@password-manager:api:config';
 import { IAppConfigService } from '@password-manager:api:interfaces';
-import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
+import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
 import { AlgorithmEnum, Crypto, EncodingEnum } from '@password-manager:crypto';
 
 export const CRYPTO: InjectionToken = 'Crypto';

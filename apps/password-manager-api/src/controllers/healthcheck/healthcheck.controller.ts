@@ -2,7 +2,7 @@ import { Controller, Inject, HttpCode, Get, HttpStatus } from '@nestjs/common';
 import { AppConfig } from '@password-manager:api:config';
 import { IAppConfigService } from '@password-manager:api:interfaces';
 import { LOGGER } from '@password-manager:api:providers';
-import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
+import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
 import { ILogger } from '@password-manager:logger';
 import { APIUrlsEnum, HealthCheckResponse } from '@password-manager:types';
 

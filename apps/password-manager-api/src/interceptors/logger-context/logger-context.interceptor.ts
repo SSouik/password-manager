@@ -12,7 +12,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppConfig } from '@password-manager:api:config';
 import { IAppConfigService } from '@password-manager:api:interfaces';
 import { LOG_MESSAGE_FACTORY } from '@password-manager:api:providers';
-import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
+import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
 import { ILogMessageFactory, LogPropertyEnum } from '@password-manager:logger';
 import { Request } from 'express';
 import { Observable } from 'rxjs';

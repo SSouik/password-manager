@@ -2,7 +2,7 @@ import { Controller, HttpCode, Get, Param, Inject } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { IPasswordRepository } from '@password-manager:api:interfaces';
 import { CRYPTO } from '@password-manager:api:providers';
-import { PASSWORD_REPOSITORY } from '@password-manager:api:repositories';
+import { PASSWORD_REPOSITORY } from '@password-manager:api:repositories/password/password.repository';
 import { Crypto } from '@password-manager:crypto';
 import { APIUrlsEnum, GetPasswordsResponse } from '@password-manager:types';
 
