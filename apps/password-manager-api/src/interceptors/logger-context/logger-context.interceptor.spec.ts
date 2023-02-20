@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CallHandler, ExecutionContext, HttpArgumentsHost } from '@nestjs/common/interfaces';
-import { AppConfigService } from '@password-manager:api:services';
+import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
 import { LogMessageFactory, LogPropertyEnum } from '@password-manager:logger';
 import { Request, Response } from 'express';
 

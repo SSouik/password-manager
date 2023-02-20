@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common/enums';
-import { AppConfigService } from '@password-manager:api:services';
+import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
 import { Logger } from '@password-manager:logger';
 import { EnvironmentEnum } from '@password-manager:types';
 

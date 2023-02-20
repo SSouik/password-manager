@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
-import { PasswordRepository } from '@password-manager:api:repositories';
+import { PasswordRepository } from '@password-manager:api:repositories/password/password.repository';
 import { Crypto } from '@password-manager:crypto';
 import { Password } from '@password-manager:types';
 

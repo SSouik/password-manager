@@ -1,7 +1,7 @@
 // Remove eslint override below once the remaining methods are implemented
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { QueryCommandInput } from '@aws-sdk/lib-dynamodb';
-import { ClassProvider, HttpException, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
+import { ClassProvider, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
 import { InjectionToken } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { IPasswordRepository } from '@password-manager:api:interfaces';

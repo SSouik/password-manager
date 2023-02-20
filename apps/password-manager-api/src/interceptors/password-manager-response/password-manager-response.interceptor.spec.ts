@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
-import { AppConfigService } from '@password-manager:api:services';
+import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
 import { Request, Response } from 'express';
 import { firstValueFrom, of } from 'rxjs';
 
