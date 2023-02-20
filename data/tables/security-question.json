@@ -1,0 +1,25 @@
+{
+    "TableName": "SecurityQuestion",
+    "KeySchema": [{ "AttributeName": "questionId", "KeyType": "HASH" }],
+    "AttributeDefinitions": [
+        { "AttributeName": "questionId", "AttributeType": "S" },
+        { "AttributeName": "clientId", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": 2,
+        "WriteCapacityUnits": 2
+    },
+    "GlobalSecondaryIndexes": [
+        {
+            "IndexName": "ClientIdIndex",
+            "ProvisionedThroughput": {
+                "ReadCapacityUnits": 2,
+                "WriteCapacityUnits": 2
+            },
+            "KeySchema": [{ "AttributeName": "clientId", "KeyType": "HASH" }],
+            "Projection": {
+                "ProjectionType": "ALL"
+            }
+        }
+    ]
+}

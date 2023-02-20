@@ -5,3 +5,4 @@ export * from './JWTPayload';
 export * from './Metadata';
 export * from './Password';
 export * from './PasswordManagerResponse';
+export * from './SecurityQuestion';

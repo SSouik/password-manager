@@ -1,6 +1,7 @@
 import { ClassProvider, Inject, Injectable, InjectionToken } from '@nestjs/common';
 import { IJWTBuilder, IJWTService } from '@password-manager:api:interfaces';
-import { JWT_BUILDER, LOGGER } from '@password-manager:api:providers';
+import { JWT_BUILDER } from '@password-manager:api:providers/factories/builders/jwt-builder.provider';
+import { LOGGER } from '@password-manager:api:providers/factories/logger/logger.provider';
 import { DateUtils } from '@password-manager:api:utils';
 import { ILogger } from '@password-manager:logger';
 import { JWTPayload, AuthToken } from '@password-manager:types';

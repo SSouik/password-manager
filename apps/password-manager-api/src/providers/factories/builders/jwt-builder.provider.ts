@@ -1,8 +1,8 @@
 import { FactoryProvider, InjectionToken } from '@nestjs/common';
-import { JWTBuilder } from '@password-manager:api:builders/jwt/jwt.builder';
+import { JWTBuilder } from '@password-manager:api:builders';
 import { AppConfig } from '@password-manager:api:config';
 import { IAppConfigService, IJWTBuilder } from '@password-manager:api:interfaces';
-import { APP_CONFIG_SERVICE } from '@password-manager:api:services';
+import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
 import { JWTAlgorithmEnum, JWTPayload } from '@password-manager:types';
 
 export const JWT_BUILDER: InjectionToken = 'JWTBuilder';
