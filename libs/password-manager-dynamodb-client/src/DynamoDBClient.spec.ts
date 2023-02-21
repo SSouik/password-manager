@@ -7,7 +7,7 @@ describe('DynamoDBClient Tests', () => {
     let awsDynamoDBClientSpy: jest.SpyInstance;
     let client: IDynamoDBClient;
 
-    beforeAll(() => {
+    beforeEach(() => {
         awsDynamoDBClientSpy = jest.spyOn(AWSDynamoDBClient.prototype, 'send').mockResolvedValue({} as never);
 
         client = new DynamoDBClient({
@@ -41,6 +41,30 @@ describe('DynamoDBClient Tests', () => {
                 TableName: 'Table',
                 IndexName: 'Index',
             });
+
+            expect(awsDynamoDBClientSpy).toBeCalledTimes(1);
+        });
+    });
+
+    describe('Save', () => {
+        it('Builds the PutCommand and sends it', async () => {
+            await client.save('Table', { key: 'value' });
+
+            expect(awsDynamoDBClientSpy).toBeCalledTimes(1);
+        });
+    });
+
+    describe('Batch Save', () => {
+        it('Builds the BatchWriteCommand with PutRequests and sends it', async () => {
+            await client.batchSave('Table', [{ foo: 'bar' }]);
+
+            expect(awsDynamoDBClientSpy).toBeCalledTimes(1);
+        });
+    });
+
+    describe('Batch Delete', () => {
+        it('Builds the BatchWriteCommand with DeleteRequests and sends it', async () => {
+            await client.batchDelete('Table', [{ foo: 'bar' }]);
 
             expect(awsDynamoDBClientSpy).toBeCalledTimes(1);
         });

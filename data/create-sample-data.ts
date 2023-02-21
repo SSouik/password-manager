@@ -33,14 +33,13 @@ const password1 = <Password>{
 
 const password2 = <Password>{
     passwordId: uuid(),
-    name: 'Password 1',
-    website: 'https://foo.com',
+    name: 'Password 2',
+    website: 'https://bar.com',
     login: 'login',
     value: Crypto.encrypt('P@ssword123'),
     clientId: clientId,
 };
 
 DynamoDBClient.save('Client', client);
-DynamoDBClient.save('Password', password1);
-DynamoDBClient.save('Password', password2);
+DynamoDBClient.batchSave('Password', [password1, password2]);
 DynamoDBClient.save('SecurityQuestion', securityQuestion);
