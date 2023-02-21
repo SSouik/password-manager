@@ -2,6 +2,7 @@ import { ClassProvider, Inject, Injectable, InjectionToken } from '@nestjs/commo
 import { IJWTBuilder, IJWTService } from '@password-manager:api:interfaces';
 import { JWT_BUILDER } from '@password-manager:api:providers/factories/builders/jwt-builder.provider';
 import { LOGGER } from '@password-manager:api:providers/factories/logger/logger.provider';
+import { PasswordManagerException } from '@password-manager:api:types';
 import { DateUtils } from '@password-manager:api:utils';
 import { ILogger } from '@password-manager:logger';
 import { JWTPayload, AuthToken } from '@password-manager:types';
@@ -47,13 +48,15 @@ export class JWTService implements IJWTService {
                     token: token,
                 });
 
-                return Promise.reject(new Error('Forbidden'));
+                return Promise.reject(
+                    PasswordManagerException.forbidden().withMessage('Token does not belong to the client.'),
+                );
             }
 
             this.logger.info('Successfully verified the clients token');
         } catch (error) {
             this.logger.error('Failed to verify the clients token', { token: token, error: error });
-            return Promise.reject(new Error('Forbidden'));
+            return Promise.reject(PasswordManagerException.forbidden().withMessage('Token failed verification.'));
         }
     }
 }

@@ -2,6 +2,7 @@
 import { ClassProvider, Inject, Injectable, InjectionToken } from '@nestjs/common';
 import { IClientRepository } from '@password-manager:api:interfaces';
 import { DYNAMODB_CLIENT, LOGGER } from '@password-manager:api:providers';
+import { PasswordManagerException } from '@password-manager:api:types';
 import { IDynamoDBClient } from '@password-manager:dynamodb-client';
 import { ILogger } from '@password-manager:logger';
 import { Client } from '@password-manager:types';
@@ -16,19 +17,19 @@ export class ClientRepository implements IClientRepository {
     ) {}
 
     public getClientById(clientId: string): Promise<Client> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 
     public createClient(client: Client): Promise<Client> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 
     public deleteClient(clientId: string): Promise<void> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 
     public updateClient(client: Client): Promise<void> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 }
 

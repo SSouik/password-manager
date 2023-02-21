@@ -75,8 +75,8 @@ export class DynamoDBClient implements IDynamoDBClient {
             return {
                 PutRequest: {
                     Item: JSON.parse(JSON.stringify(item)),
-                }
-            }
+                },
+            };
         });
 
         return this.dynamoDBClient.send(this.buildBatchWriteCommand(tableName, requests));
@@ -89,8 +89,8 @@ export class DynamoDBClient implements IDynamoDBClient {
             return {
                 DeleteRequest: {
                     Key: JSON.parse(JSON.stringify(key)),
-                }
-            }
+                },
+            };
         });
 
         return this.dynamoDBClient.send(this.buildBatchWriteCommand(tableName, requests));
@@ -128,8 +128,8 @@ export class DynamoDBClient implements IDynamoDBClient {
     private buildBatchWriteCommand(table: string, requests: Array<WriteRequest>): BatchWriteCommand {
         return new BatchWriteCommand(<BatchWriteCommandInput>{
             RequestItems: {
-                [table]: requests
-            }
+                [table]: requests,
+            },
         });
     }
 }

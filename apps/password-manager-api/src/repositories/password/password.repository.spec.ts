@@ -1,4 +1,5 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
+import { PasswordManagerException } from '@password-manager:api:types';
 import { DynamoDBClient } from '@password-manager:dynamodb-client';
 import { Logger } from '@password-manager:logger';
 import { Password } from '@password-manager:types';
@@ -27,7 +28,11 @@ describe('PasswordRepository Tests', () => {
             try {
                 await repository.getPasswordById('id');
             } catch (error) {
-                expect(error.message).toBe('Method not implemented.');
+                expect(error).toBeInstanceOf(PasswordManagerException);
+
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
+                expect(error.message).toBe('Not Implemented');
             }
         });
     });
@@ -74,7 +79,7 @@ describe('PasswordRepository Tests', () => {
             ]);
         });
 
-        it("Rejects with a NotFoundException when DynamoDB returns null for the client's passwords", async () => {
+        it("Rejects with a Not Found PasswordManagerException when DynamoDB returns null for the client's passwords", async () => {
             mockDynamoDBClient.query = jest.fn().mockResolvedValue({ Items: null });
 
             try {
@@ -93,15 +98,15 @@ describe('PasswordRepository Tests', () => {
                     },
                 });
 
-                expect(error instanceof HttpException).toBeTruthy();
+                expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as HttpException;
-                expect(exception.getStatus()).toBe(HttpStatus.NOT_FOUND);
-                expect(exception.message).toBe('No passwords were found for client');
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_FOUND);
+                expect(exception.message).toBe('No passwords were found for the client.');
             }
         });
 
-        it('Rejects with a NotFoundException when DynamoDB returns no passwords for the client', async () => {
+        it('Rejects with a Not Found PasswordManagerException when DynamoDB returns no passwords for the client', async () => {
             mockDynamoDBClient.query = jest.fn().mockResolvedValue({ Items: [] });
 
             try {
@@ -120,15 +125,15 @@ describe('PasswordRepository Tests', () => {
                     },
                 });
 
-                expect(error instanceof HttpException).toBeTruthy();
+                expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as HttpException;
-                expect(exception.getStatus()).toBe(HttpStatus.NOT_FOUND);
-                expect(exception.message).toBe('No passwords were found for client');
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_FOUND);
+                expect(exception.message).toBe('No passwords were found for the client.');
             }
         });
 
-        it('Rejects with a ServiceUnavailableException when DynamoDB fails due to an unknown reason', async () => {
+        it('Rejects with a Service Unavailable PasswordManagerException when DynamoDB fails due to an unknown reason', async () => {
             const mockError = new Error('error');
             mockDynamoDBClient.query = jest.fn().mockRejectedValue(mockError);
 
@@ -148,11 +153,11 @@ describe('PasswordRepository Tests', () => {
                     },
                 });
 
-                expect(error instanceof HttpException).toBeTruthy();
+                expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as HttpException;
-                expect(exception.getStatus()).toBe(HttpStatus.SERVICE_UNAVAILABLE);
-                expect(exception.message).toBe('Service Unavailable');
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+                expect(exception.message).toBe('Service is temporarily unavailable.');
             }
         });
     });
@@ -169,7 +174,11 @@ describe('PasswordRepository Tests', () => {
                     clientId: '123',
                 });
             } catch (error) {
-                expect(error.message).toBe('Method not implemented.');
+                expect(error).toBeInstanceOf(PasswordManagerException);
+
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
+                expect(error.message).toBe('Not Implemented');
             }
         });
     });
@@ -179,7 +188,11 @@ describe('PasswordRepository Tests', () => {
             try {
                 await repository.deletePassword('id');
             } catch (error) {
-                expect(error.message).toBe('Method not implemented.');
+                expect(error).toBeInstanceOf(PasswordManagerException);
+
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
+                expect(error.message).toBe('Not Implemented');
             }
         });
     });
@@ -189,7 +202,11 @@ describe('PasswordRepository Tests', () => {
             try {
                 await repository.deletePasswordsForClientId('123');
             } catch (error) {
-                expect(error.message).toBe('Method not implemented.');
+                expect(error).toBeInstanceOf(PasswordManagerException);
+
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
+                expect(error.message).toBe('Not Implemented');
             }
         });
     });
@@ -206,7 +223,11 @@ describe('PasswordRepository Tests', () => {
                     clientId: '123',
                 });
             } catch (error) {
-                expect(error.message).toBe('Method not implemented.');
+                expect(error).toBeInstanceOf(PasswordManagerException);
+
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
+                expect(error.message).toBe('Not Implemented');
             }
         });
     });

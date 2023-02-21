@@ -6,6 +6,7 @@ import { InjectionToken } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { IPasswordRepository } from '@password-manager:api:interfaces';
 import { DYNAMODB_CLIENT, LOGGER } from '@password-manager:api:providers';
+import { PasswordManagerException } from '@password-manager:api:types';
 import { IDynamoDBClient } from '@password-manager:dynamodb-client';
 import { ILogger } from '@password-manager:logger';
 import { Password } from '@password-manager:types';
@@ -22,7 +23,7 @@ export class PasswordRepository implements IPasswordRepository {
     ) {}
 
     public async getPasswordById(passwordId: string): Promise<Password> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 
     public async getPasswordsByClientId(clientId: string): Promise<Array<Password>> {
@@ -41,8 +42,9 @@ export class PasswordRepository implements IPasswordRepository {
             if (!result.Items || result.Items.length === 0) {
                 this.logger.info('No passwords were found for client');
 
-                // Update to custom exception
-                return Promise.reject(new NotFoundException('No passwords were found for client'));
+                return Promise.reject(
+                    PasswordManagerException.notFound().withMessage('No passwords were found for the client.'),
+                );
             }
 
             this.logger.info('Successfully found passwords for client');
@@ -50,25 +52,26 @@ export class PasswordRepository implements IPasswordRepository {
         } catch (error) {
             this.logger.error('Failed to get passwords for the client', { error });
 
-            // Update to custom exception
-            return Promise.reject(new ServiceUnavailableException('Service Unavailable'));
+            return Promise.reject(
+                PasswordManagerException.serviceUnavailable().withMessage('Service is temporarily unavailable.'),
+            );
         }
     }
 
     public async createPassword(password: Password): Promise<Password> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 
     public async deletePassword(passwordId: string): Promise<void> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 
     public async deletePasswordsForClientId(clientId: string): Promise<void> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 
     public async updatePassword(password: Password): Promise<void> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 }
 

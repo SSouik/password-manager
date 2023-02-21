@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common';
+import { PasswordManagerException } from '@password-manager:api:types';
 import { DynamoDBClient } from '@password-manager:dynamodb-client';
 import { Logger } from '@password-manager:logger';
 
@@ -25,7 +27,11 @@ describe('ClientRepository Tests', () => {
             try {
                 await repository.getSecurityQuestionById('id');
             } catch (error) {
-                expect(error.message).toBe('Method not implemented.');
+                expect(error).toBeInstanceOf(PasswordManagerException);
+
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
+                expect(error.message).toBe('Not Implemented');
             }
         });
     });
@@ -40,7 +46,11 @@ describe('ClientRepository Tests', () => {
                     clientId: 'id',
                 });
             } catch (error) {
-                expect(error.message).toBe('Method not implemented.');
+                expect(error).toBeInstanceOf(PasswordManagerException);
+
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
+                expect(error.message).toBe('Not Implemented');
             }
         });
     });
@@ -55,7 +65,11 @@ describe('ClientRepository Tests', () => {
                     clientId: 'id',
                 });
             } catch (error) {
-                expect(error.message).toBe('Method not implemented.');
+                expect(error).toBeInstanceOf(PasswordManagerException);
+
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
+                expect(error.message).toBe('Not Implemented');
             }
         });
     });

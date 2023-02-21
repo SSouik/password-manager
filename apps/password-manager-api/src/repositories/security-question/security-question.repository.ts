@@ -2,6 +2,7 @@
 import { ClassProvider, Inject, Injectable, InjectionToken } from '@nestjs/common';
 import { ISecurityQuestionRepository } from '@password-manager:api:interfaces';
 import { DYNAMODB_CLIENT, LOGGER } from '@password-manager:api:providers';
+import { PasswordManagerException } from '@password-manager:api:types';
 import { IDynamoDBClient } from '@password-manager:dynamodb-client';
 import { ILogger } from '@password-manager:logger';
 import { SecurityQuestion } from '@password-manager:types';
@@ -16,15 +17,15 @@ export class SecurityQuestionRepository implements ISecurityQuestionRepository {
     ) {}
 
     public getSecurityQuestionById(quiestionId: string): Promise<SecurityQuestion> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 
     public createSecurityQuestion(securityQuestion: SecurityQuestion): Promise<SecurityQuestion> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 
     public updateSecurityQuestion(securityQuestion: SecurityQuestion): Promise<void> {
-        throw new Error('Method not implemented.');
+        return Promise.reject(PasswordManagerException.notImplemented());
     }
 }
 
