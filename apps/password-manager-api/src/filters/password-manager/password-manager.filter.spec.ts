@@ -19,10 +19,11 @@ describe('PasswordManagerFilter Tests', () => {
     let filter: PasswordManagerFilter<TestType>;
 
     beforeEach(() => {
+        jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(mockTimestamp);
+
         mockResponse.getHeader = jest
             .fn()
             .mockReturnValueOnce('trace-id')
-            .mockReturnValueOnce(mockTimestamp)
             .mockReturnValueOnce('0.0.1');
         mockResponse.setHeader = jest.fn().mockReturnThis();
         mockResponse.status = jest.fn().mockReturnThis();
@@ -48,10 +49,12 @@ describe('PasswordManagerFilter Tests', () => {
             mockArgumentsHost,
         );
 
-        expect(mockResponse.getHeader).toBeCalledTimes(3);
+        expect(mockResponse.getHeader).toBeCalledTimes(2);
         expect(mockResponse.getHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id');
-        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(2, 'x-response-timestamp');
-        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version');
+        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(2, 'x-password-manager-version');
+
+        expect(mockResponse.setHeader).toBeCalledTimes(1);
+        expect(mockResponse.setHeader).toBeCalledWith('x-response-timestamp', mockTimestamp);
 
         expect(mockResponse.status).toBeCalledTimes(1);
         expect(mockResponse.status).toBeCalledWith(HttpStatus.NOT_FOUND);
@@ -81,10 +84,12 @@ describe('PasswordManagerFilter Tests', () => {
             mockArgumentsHost,
         );
 
-        expect(mockResponse.getHeader).toBeCalledTimes(3);
+        expect(mockResponse.getHeader).toBeCalledTimes(2);
         expect(mockResponse.getHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id');
-        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(2, 'x-response-timestamp');
-        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version');
+        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(2, 'x-password-manager-version');
+
+        expect(mockResponse.setHeader).toBeCalledTimes(1);
+        expect(mockResponse.setHeader).toBeCalledWith('x-response-timestamp', mockTimestamp);
 
         expect(mockResponse.status).toBeCalledTimes(1);
         expect(mockResponse.status).toBeCalledWith(HttpStatus.NOT_FOUND);

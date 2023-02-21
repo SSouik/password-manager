@@ -54,8 +54,8 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
 
         expect(mockResponse.setHeader).toBeCalledTimes(3);
         expect(mockResponse.setHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id', 'trace-id');
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-response-timestamp', mockTimestamp);
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version', '0.0.1');
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-password-manager-version', '0.0.1');
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-response-timestamp', mockTimestamp);
 
         expect(response).toStrictEqual({
             clientId: '123',
@@ -78,8 +78,8 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
 
         expect(mockResponse.setHeader).toBeCalledTimes(3);
         expect(mockResponse.setHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id', 'trace-id');
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-response-timestamp', mockTimestamp);
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version', '0.0.1');
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-password-manager-version', '0.0.1');
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-response-timestamp', mockTimestamp);
 
         expect(response).toStrictEqual({
             clientId: null,

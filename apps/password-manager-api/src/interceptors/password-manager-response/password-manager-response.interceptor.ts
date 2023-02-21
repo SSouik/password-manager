@@ -22,18 +22,19 @@ export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T,
         // This is assuming that the client ID is available in every route
         const clientId = request.params.clientId ?? null;
         const traceId = request.header('x-request-trace-id');
-        const timestamp = new Date().toISOString();
         const version = this.appConfigService.get('version');
 
         // Set response headers for each request
         response
             .setHeader('x-request-trace-id', traceId)
-            .setHeader('x-response-timestamp', timestamp)
             .setHeader('x-password-manager-version', version);
 
         // Add metadata to every response
         return next.handle().pipe(
             map((res: T) => {
+                const timestamp = new Date().toISOString();
+                response.setHeader('x-response-timestamp', timestamp);
+
                 return <PasswordManagerResponse>{
                     ...res,
                     clientId: clientId,
