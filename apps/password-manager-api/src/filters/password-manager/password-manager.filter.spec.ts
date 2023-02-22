@@ -21,10 +21,7 @@ describe('PasswordManagerFilter Tests', () => {
     beforeEach(() => {
         jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(mockTimestamp);
 
-        mockResponse.getHeader = jest
-            .fn()
-            .mockReturnValueOnce('trace-id')
-            .mockReturnValueOnce('0.0.1');
+        mockResponse.getHeader = jest.fn().mockReturnValueOnce('trace-id').mockReturnValueOnce('0.0.1');
         mockResponse.setHeader = jest.fn().mockReturnThis();
         mockResponse.status = jest.fn().mockReturnThis();
         mockResponse.json = jest.fn().mockReturnThis();

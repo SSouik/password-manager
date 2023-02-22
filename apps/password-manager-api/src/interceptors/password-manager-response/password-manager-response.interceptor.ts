@@ -25,9 +25,7 @@ export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T,
         const version = this.appConfigService.get('version');
 
         // Set response headers for each request
-        response
-            .setHeader('x-request-trace-id', traceId)
-            .setHeader('x-password-manager-version', version);
+        response.setHeader('x-request-trace-id', traceId).setHeader('x-password-manager-version', version);
 
         // Add metadata to every response
         return next.handle().pipe(
