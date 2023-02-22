@@ -20,7 +20,7 @@ describe('GetPasswordsController Tests', () => {
         jest.resetAllMocks();
     });
 
-    describe('Successful results', () => {
+    describe('Successful Results', () => {
         it("Returns a 200 and the client's passwords", async () => {
             mockPasswordRepository.getPasswordsByClientId = jest.fn().mockResolvedValue([
                 <Password>{

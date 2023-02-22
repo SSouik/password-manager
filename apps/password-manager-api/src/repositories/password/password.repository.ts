@@ -27,16 +27,16 @@ export class PasswordRepository implements IPasswordRepository {
     }
 
     public async getPasswordsByClientId(clientId: string): Promise<Array<Password>> {
-        const input = <QueryCommandInput>{
-            TableName: this.TABLE_NAME,
-            IndexName: 'ClientIdIndex',
-            KeyConditionExpression: 'clientId = :clientId',
-            ExpressionAttributeValues: {
-                ':clientId': clientId,
-            },
-        };
-
         try {
+            const input = <QueryCommandInput>{
+                TableName: this.TABLE_NAME,
+                IndexName: 'ClientIdIndex',
+                KeyConditionExpression: 'clientId = :clientId',
+                ExpressionAttributeValues: {
+                    ':clientId': clientId,
+                },
+            };
+
             const result = await this.dynamoDBClient.query(this.TABLE_NAME, input);
 
             if (!result.Items || result.Items.length === 0) {

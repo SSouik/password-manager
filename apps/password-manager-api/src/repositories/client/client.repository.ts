@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { GetCommandInput } from '@aws-sdk/lib-dynamodb';
+import { GetCommandInput, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { ClassProvider, Inject, Injectable, InjectionToken } from '@nestjs/common';
 import { IClientRepository } from '@password-manager:api:interfaces';
 import { DYNAMODB_CLIENT, LOGGER } from '@password-manager:api:providers';
@@ -45,6 +45,50 @@ export class ClientRepository implements IClientRepository {
             });
             return Promise.reject(
                 PasswordManagerException.serviceUnavailable().withMessage('Service is temporarily unavailable.'),
+            );
+        }
+    }
+
+    public async getClientByLogin(login: string): Promise<Client> {
+        try {
+            const input = <QueryCommandInput>{
+                TableName: this.TABLE_NAME,
+                IndexName: 'LoginIndex',
+                KeyConditionExpression: 'login = :login',
+                ExpressionAttributeValues: {
+                    ':login': login,
+                },
+            };
+
+            const result = await this.dynamoDBClient.query(this.TABLE_NAME, input);
+
+            if (!result.Items || result.Items.length === 0) {
+                this.logger.info('Client not found by login', { dynamoDB: { table: this.TABLE_NAME, login: login } });
+
+                return Promise.reject(
+                    PasswordManagerException.notFound<Partial<Client>>()
+                        .withMessage('No client was found for the provided login.')
+                        .withContext({ login: login }),
+                );
+            }
+
+            this.logger.info('Successfully found the client with the provided login', {
+                dynamoDB: { table: this.TABLE_NAME, login: login },
+            });
+
+            // There should only be one client per login/username so take
+            // the first item in the array
+            return result.Items[0] as Client;
+        } catch (error) {
+            this.logger.error('Failed to find the client by login', {
+                dynamoDB: { table: this.TABLE_NAME, login: login },
+                error: error,
+            });
+
+            return Promise.reject(
+                PasswordManagerException.serviceUnavailable<Partial<Client>>()
+                    .withMessage('Service is temporarily unavailable.')
+                    .withContext({ login: login }),
             );
         }
     }

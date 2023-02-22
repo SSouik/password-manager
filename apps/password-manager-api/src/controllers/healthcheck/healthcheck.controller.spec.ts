@@ -25,7 +25,7 @@ describe('HealthCheckController Tests', () => {
         jest.resetAllMocks();
     });
 
-    it('Retruns a 200', () => {
+    it('Successful Results', () => {
         const actual = controller.handler();
 
         expect(mockLogger.info).toBeCalledTimes(1);
