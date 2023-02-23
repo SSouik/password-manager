@@ -3,12 +3,14 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppConfig } from '@password-manager:api:config';
 import { IAppConfigService } from '@password-manager:api:interfaces';
 import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
-import { PasswordManagerResponse } from '@password-manager:types';
+import { PasswordManagerResponse, ResponseBase } from '@password-manager:types';
 import { Request, Response } from 'express';
 import { map, Observable } from 'rxjs';
 
 @Injectable()
-export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T, PasswordManagerResponse> {
+export class PasswordManagerResponseInterceptor<T extends ResponseBase>
+    implements NestInterceptor<T, PasswordManagerResponse>
+{
     constructor(@Inject(APP_CONFIG_SERVICE) private readonly appConfigService: IAppConfigService<AppConfig>) {}
 
     public intercept(
@@ -34,8 +36,10 @@ export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T,
                 response.setHeader('x-response-timestamp', timestamp);
 
                 return <PasswordManagerResponse>{
-                    ...res,
+                    statusCode: res.statusCode,
+                    message: res.message,
                     clientId: clientId,
+                    ...res,
                     metadata: {
                         requestTraceId: traceId,
                         timestamp: timestamp,

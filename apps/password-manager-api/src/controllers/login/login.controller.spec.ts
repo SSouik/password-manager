@@ -44,6 +44,7 @@ describe('LoginController Tests', () => {
 
             expect(actual.statusCode).toBe(HttpStatus.OK);
             expect(actual.message).toBe('Login successful');
+            expect(actual.clientId).toBe('id');
             expect(actual.auth).toStrictEqual(<AuthToken>{
                 token: 'token',
                 expiresIn: 3600,

@@ -1,12 +1,13 @@
-import { CallHandler, ExecutionContext } from '@nestjs/common';
+import { CallHandler, ExecutionContext, HttpStatus } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
+import { ResponseBase } from '@password-manager:types';
 import { Request, Response } from 'express';
 import { firstValueFrom, of } from 'rxjs';
 
 import { PasswordManagerResponseInterceptor } from './password-manager-response.interceptor';
 
-type TestType = {
+type TestType = ResponseBase & {
     foo: string;
     bar: number;
 };
@@ -31,6 +32,8 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
         mockExecutionContext.switchToHttp = jest.fn().mockReturnValue(mockHttpContext);
         mockCallHandler.handle = jest.fn().mockReturnValue(
             of(<TestType>{
+                statusCode: HttpStatus.OK,
+                message: 'OK',
                 foo: 'foo',
                 bar: 123,
             }),
@@ -58,14 +61,16 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
         expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-response-timestamp', mockTimestamp);
 
         expect(response).toStrictEqual({
+            statusCode: HttpStatus.OK,
+            message: 'OK',
             clientId: '123',
+            foo: 'foo',
+            bar: 123,
             metadata: {
                 requestTraceId: 'trace-id',
                 timestamp: mockTimestamp,
                 version: '0.0.1',
             },
-            foo: 'foo',
-            bar: 123,
         });
     });
 
@@ -82,14 +87,16 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
         expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-response-timestamp', mockTimestamp);
 
         expect(response).toStrictEqual({
+            statusCode: HttpStatus.OK,
+            message: 'OK',
             clientId: null,
+            foo: 'foo',
+            bar: 123,
             metadata: {
                 requestTraceId: 'trace-id',
                 timestamp: mockTimestamp,
                 version: '0.0.1',
             },
-            foo: 'foo',
-            bar: 123,
         });
     });
 });

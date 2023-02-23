@@ -58,6 +58,7 @@ export class LoginController {
         return {
             statusCode: HttpStatus.OK,
             message: 'Login successful',
+            clientId: client.clientId,
             auth: authToken,
         };
     }

@@ -22,8 +22,8 @@ export class PasswordManagerFilter<T> implements ExceptionFilter<PasswordManager
         const result = <PasswordManagerResponse>{
             statusCode: exception.statusCode,
             message: exception.message,
-            context: exception.context,
             clientId: clientId,
+            context: exception.context,
             metadata: {
                 requestTraceId: traceId,
                 timestamp: timestamp,
