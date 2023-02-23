@@ -1,11 +1,15 @@
-import { ArgumentsHost, Catch, ClassProvider, ExceptionFilter } from '@nestjs/common';
+import { ArgumentsHost, Catch, ClassProvider, ExceptionFilter, Inject } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { PasswordManagerException } from '@password-manager:api:types';
+import { AppConfig } from '@password-manager:api:config';
+import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
+import { IAppConfigService, PasswordManagerException } from '@password-manager:api:types';
 import { PasswordManagerResponse } from '@password-manager:types';
 import { Request, Response } from 'express';
 
 @Catch(PasswordManagerException)
 export class PasswordManagerFilter<T> implements ExceptionFilter<PasswordManagerException<T>> {
+    constructor(@Inject(APP_CONFIG_SERVICE) private readonly appConfigService: IAppConfigService<AppConfig>) {}
+
     public catch(exception: PasswordManagerException<T>, host: ArgumentsHost) {
         const httpContext = host.switchToHttp();
         const request = httpContext.getRequest<Request>();
@@ -14,10 +18,13 @@ export class PasswordManagerFilter<T> implements ExceptionFilter<PasswordManager
         // This is assuming that the client ID is available in every route
         const clientId = request.params.clientId ?? null;
         const timestamp = new Date().toISOString();
-        const traceId = response.getHeader('x-request-trace-id');
-        const version = response.getHeader('x-password-manager-version');
+        const traceId = request.header('x-request-trace-id');
+        const version = this.appConfigService.get('version');
 
-        response.setHeader('x-response-timestamp', timestamp);
+        response
+            .setHeader('x-request-trace-id', traceId)
+            .setHeader('x-response-timestamp', timestamp)
+            .setHeader('x-password-manager-version', version);
 
         const result = <PasswordManagerResponse>{
             statusCode: exception.statusCode,

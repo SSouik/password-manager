@@ -26,14 +26,14 @@ export class PasswordManagerResponseInterceptor<T extends ResponseBase>
         const traceId = request.header('x-request-trace-id');
         const version = this.appConfigService.get('version');
 
-        // Set response headers for each request
-        response.setHeader('x-request-trace-id', traceId).setHeader('x-password-manager-version', version);
-
         // Add metadata to every response
         return next.handle().pipe(
             map((res: T) => {
                 const timestamp = new Date().toISOString();
-                response.setHeader('x-response-timestamp', timestamp);
+                response
+                    .setHeader('x-request-trace-id', traceId)
+                    .setHeader('x-password-manager-version', version)
+                    .setHeader('x-response-timestamp', timestamp);
 
                 return <PasswordManagerResponse>{
                     statusCode: res.statusCode,

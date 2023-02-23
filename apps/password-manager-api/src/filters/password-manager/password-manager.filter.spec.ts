@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { ArgumentsHost, HttpArgumentsHost } from '@nestjs/common/interfaces';
+import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Request, Response } from 'express';
 
@@ -11,6 +12,7 @@ type TestType = {
 };
 
 describe('PasswordManagerFilter Tests', () => {
+    const mockAppConfigService = AppConfigService.prototype;
     const mockTimestamp = '2023-02-01T17:20:01.700Z';
     const mockRequest = {} as Request;
     const mockResponse = {} as Response;
@@ -21,7 +23,9 @@ describe('PasswordManagerFilter Tests', () => {
     beforeEach(() => {
         jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(mockTimestamp);
 
-        mockResponse.getHeader = jest.fn().mockReturnValueOnce('trace-id').mockReturnValueOnce('0.0.1');
+        mockAppConfigService.get = jest.fn().mockReturnValue('0.0.1');
+
+        mockRequest.header = jest.fn().mockReturnValue('trace-id');
         mockResponse.setHeader = jest.fn().mockReturnThis();
         mockResponse.status = jest.fn().mockReturnThis();
         mockResponse.json = jest.fn().mockReturnThis();
@@ -29,7 +33,7 @@ describe('PasswordManagerFilter Tests', () => {
         mockHttpContext.getRequest = jest.fn().mockReturnValue(mockRequest);
         mockHttpContext.getResponse = jest.fn().mockReturnValue(mockResponse);
 
-        filter = new PasswordManagerFilter<TestType>();
+        filter = new PasswordManagerFilter<TestType>(mockAppConfigService);
     });
 
     afterEach(() => {
@@ -46,12 +50,13 @@ describe('PasswordManagerFilter Tests', () => {
             mockArgumentsHost,
         );
 
-        expect(mockResponse.getHeader).toBeCalledTimes(2);
-        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id');
-        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(2, 'x-password-manager-version');
+        expect(mockRequest.header).toBeCalledTimes(1);
+        expect(mockRequest.header).toBeCalledWith('x-request-trace-id');
 
-        expect(mockResponse.setHeader).toBeCalledTimes(1);
-        expect(mockResponse.setHeader).toBeCalledWith('x-response-timestamp', mockTimestamp);
+        expect(mockResponse.setHeader).toBeCalledTimes(3);
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id', 'trace-id');
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-response-timestamp', mockTimestamp);
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version', '0.0.1');
 
         expect(mockResponse.status).toBeCalledTimes(1);
         expect(mockResponse.status).toBeCalledWith(HttpStatus.NOT_FOUND);
@@ -81,12 +86,13 @@ describe('PasswordManagerFilter Tests', () => {
             mockArgumentsHost,
         );
 
-        expect(mockResponse.getHeader).toBeCalledTimes(2);
-        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id');
-        expect(mockResponse.getHeader).toHaveBeenNthCalledWith(2, 'x-password-manager-version');
+        expect(mockRequest.header).toBeCalledTimes(1);
+        expect(mockRequest.header).toBeCalledWith('x-request-trace-id');
 
-        expect(mockResponse.setHeader).toBeCalledTimes(1);
-        expect(mockResponse.setHeader).toBeCalledWith('x-response-timestamp', mockTimestamp);
+        expect(mockResponse.setHeader).toBeCalledTimes(3);
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id', 'trace-id');
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-response-timestamp', mockTimestamp);
+        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version', '0.0.1');
 
         expect(mockResponse.status).toBeCalledTimes(1);
         expect(mockResponse.status).toBeCalledWith(HttpStatus.NOT_FOUND);
