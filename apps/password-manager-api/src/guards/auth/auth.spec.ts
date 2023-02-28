@@ -2,12 +2,13 @@ import { ExecutionContext, HttpStatus } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { JWTService } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
-import { Logger } from '@password-manager:logger';
+import { Logger, LogMessageFactory } from '@password-manager:logger';
 import { Request } from 'express';
 
 import { AuthGuard } from './auth.guard';
 
 describe('AuthGuard Tests', () => {
+    const mockLogMessageFactory = LogMessageFactory.prototype;
     const mockLogger = Logger.prototype;
     const mockJWTService = JWTService.prototype;
     const mockRequest = {} as Request;
@@ -16,6 +17,8 @@ describe('AuthGuard Tests', () => {
     let guard: AuthGuard;
 
     beforeEach(() => {
+        mockLogMessageFactory.setContext = jest.fn().mockReturnThis();
+
         ['info', 'debug', 'warn', 'error'].forEach((level) => {
             mockLogger[level] = jest.fn();
         });
@@ -26,7 +29,7 @@ describe('AuthGuard Tests', () => {
         mockHttpContext.getRequest = jest.fn().mockReturnValue(mockRequest);
         mockExecutionContext.switchToHttp = jest.fn().mockReturnValue(mockHttpContext);
 
-        guard = new AuthGuard(mockLogger, mockJWTService);
+        guard = new AuthGuard(mockLogMessageFactory, mockLogger, mockJWTService);
     });
 
     afterEach(() => {
@@ -36,12 +39,15 @@ describe('AuthGuard Tests', () => {
     describe('Can Activate', () => {
         it('Authorizes a valid token and client to access the route', async () => {
             mockRequest.headers = {
-                authorization: 'token',
+                authorization: 'Bearer token',
             };
 
             mockJWTService.verify = jest.fn().mockResolvedValue({});
 
             const actual = (await guard.canActivate(mockExecutionContext)) as boolean;
+
+            expect(mockLogMessageFactory.setContext).toBeCalledTimes(1);
+            expect(mockLogMessageFactory.setContext).toBeCalledWith('clientId', 'id');
 
             expect(mockLogger.warn).toBeCalledTimes(0);
 
@@ -67,6 +73,9 @@ describe('AuthGuard Tests', () => {
                 expect(exception.statusCode).toBe(HttpStatus.FORBIDDEN);
                 expect(exception.message).toBe('Client is forbidden from accessing the requested resource.');
 
+                expect(mockLogMessageFactory.setContext).toBeCalledTimes(1);
+                expect(mockLogMessageFactory.setContext).toBeCalledWith('clientId', 'id');
+
                 expect(mockLogger.warn).toBeCalledTimes(1);
                 expect(mockLogger.warn).toBeCalledWith('Client attempted to enter a protected route without a token');
 
@@ -89,6 +98,9 @@ describe('AuthGuard Tests', () => {
                 const exception = error as PasswordManagerException<unknown>;
                 expect(exception.statusCode).toBe(HttpStatus.FORBIDDEN);
                 expect(exception.message).toBe('Client is forbidden from accessing the requested resource.');
+
+                expect(mockLogMessageFactory.setContext).toBeCalledTimes(1);
+                expect(mockLogMessageFactory.setContext).toBeCalledWith('clientId', 'id');
 
                 expect(mockLogger.warn).toBeCalledTimes(0);
 

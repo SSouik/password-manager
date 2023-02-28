@@ -25,7 +25,7 @@ describe('PasswordManagerFilter Tests', () => {
 
         mockAppConfigService.get = jest.fn().mockReturnValue('0.0.1');
 
-        mockRequest.header = jest.fn().mockReturnValue('trace-id');
+        mockResponse.getHeader = jest.fn().mockReturnValue('trace-id');
         mockResponse.setHeader = jest.fn().mockReturnThis();
         mockResponse.status = jest.fn().mockReturnThis();
         mockResponse.json = jest.fn().mockReturnThis();
@@ -50,13 +50,11 @@ describe('PasswordManagerFilter Tests', () => {
             mockArgumentsHost,
         );
 
-        expect(mockRequest.header).toBeCalledTimes(1);
-        expect(mockRequest.header).toBeCalledWith('x-request-trace-id');
+        expect(mockResponse.getHeader).toBeCalledTimes(1);
+        expect(mockResponse.getHeader).toBeCalledWith('x-request-trace-id');
 
-        expect(mockResponse.setHeader).toBeCalledTimes(3);
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id', 'trace-id');
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-response-timestamp', mockTimestamp);
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version', '0.0.1');
+        expect(mockResponse.setHeader).toBeCalledTimes(1);
+        expect(mockResponse.setHeader).toBeCalledWith('x-response-timestamp', mockTimestamp);
 
         expect(mockResponse.status).toBeCalledTimes(1);
         expect(mockResponse.status).toBeCalledWith(HttpStatus.NOT_FOUND);
@@ -86,13 +84,11 @@ describe('PasswordManagerFilter Tests', () => {
             mockArgumentsHost,
         );
 
-        expect(mockRequest.header).toBeCalledTimes(1);
-        expect(mockRequest.header).toBeCalledWith('x-request-trace-id');
+        expect(mockResponse.getHeader).toBeCalledTimes(1);
+        expect(mockResponse.getHeader).toBeCalledWith('x-request-trace-id');
 
-        expect(mockResponse.setHeader).toBeCalledTimes(3);
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id', 'trace-id');
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-response-timestamp', mockTimestamp);
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-password-manager-version', '0.0.1');
+        expect(mockResponse.setHeader).toBeCalledTimes(1);
+        expect(mockResponse.setHeader).toBeCalledWith('x-response-timestamp', mockTimestamp);
 
         expect(mockResponse.status).toBeCalledTimes(1);
         expect(mockResponse.status).toBeCalledWith(HttpStatus.NOT_FOUND);

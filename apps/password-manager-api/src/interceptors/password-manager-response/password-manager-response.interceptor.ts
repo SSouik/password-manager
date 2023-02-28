@@ -23,17 +23,14 @@ export class PasswordManagerResponseInterceptor<T extends ResponseBase>
 
         // This is assuming that the client ID is available in every route
         const clientId = request.params.clientId ?? null;
-        const traceId = request.header('x-request-trace-id');
+        const traceId = response.getHeader('x-request-trace-id');
         const version = this.appConfigService.get('version');
 
         // Add metadata to every response
         return next.handle().pipe(
             map((res: T) => {
                 const timestamp = new Date().toISOString();
-                response
-                    .setHeader('x-request-trace-id', traceId)
-                    .setHeader('x-password-manager-version', version)
-                    .setHeader('x-response-timestamp', timestamp);
+                response.setHeader('x-response-timestamp', timestamp);
 
                 return <PasswordManagerResponse>{
                     statusCode: res.statusCode,

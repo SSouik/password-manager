@@ -1,14 +1,16 @@
 import { CanActivate, ExecutionContext, Inject } from '@nestjs/common';
 import { IJWTService } from '@password-manager:api:interfaces';
-import { LOGGER } from '@password-manager:api:providers';
+import { LOGGER, LOG_MESSAGE_FACTORY } from '@password-manager:api:providers';
 import { JWT_SERVICE } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
-import { ILogger } from '@password-manager:logger';
+import { ILogger, ILogMessageFactory } from '@password-manager:logger';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 
 export class AuthGuard implements CanActivate {
     constructor(
+        @Inject(LOG_MESSAGE_FACTORY)
+        private readonly logMessageFactory: ILogMessageFactory,
         @Inject(LOGGER)
         private readonly logger: ILogger,
         @Inject(JWT_SERVICE)
@@ -18,8 +20,11 @@ export class AuthGuard implements CanActivate {
     public canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest<Request>();
 
+        // Authenticated routes will have the client ID in the route
         const clientId = request.params.clientId;
-        const token = request.headers.authorization ?? null;
+        const token = request.headers.authorization?.replace('Bearer ', '') ?? null;
+
+        this.logMessageFactory.setContext('clientId', clientId);
 
         if (!token) {
             this.logger.warn('Client attempted to enter a protected route without a token');

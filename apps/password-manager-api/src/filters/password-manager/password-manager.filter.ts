@@ -18,13 +18,10 @@ export class PasswordManagerFilter<T> implements ExceptionFilter<PasswordManager
         // This is assuming that the client ID is available in every route
         const clientId = request.params.clientId ?? null;
         const timestamp = new Date().toISOString();
-        const traceId = request.header('x-request-trace-id');
+        const traceId = response.getHeader('x-request-trace-id');
         const version = this.appConfigService.get('version');
 
-        response
-            .setHeader('x-request-trace-id', traceId)
-            .setHeader('x-response-timestamp', timestamp)
-            .setHeader('x-password-manager-version', version);
+        response.setHeader('x-response-timestamp', timestamp);
 
         const result = <PasswordManagerResponse>{
             statusCode: exception.statusCode,

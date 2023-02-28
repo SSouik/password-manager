@@ -25,7 +25,7 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
     beforeEach(() => {
         jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(mockTimestamp);
 
-        mockRequest.header = jest.fn().mockReturnValue('trace-id');
+        mockResponse.getHeader = jest.fn().mockReturnValue('trace-id');
         mockResponse.setHeader = jest.fn().mockReturnThis();
         mockHttpContext.getRequest = jest.fn().mockReturnValue(mockRequest);
         mockHttpContext.getResponse = jest.fn().mockReturnValue(mockResponse);
@@ -55,10 +55,11 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
 
         const response = await firstValueFrom(await interceptor.intercept(mockExecutionContext, mockCallHandler));
 
-        expect(mockResponse.setHeader).toBeCalledTimes(3);
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id', 'trace-id');
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-password-manager-version', '0.0.1');
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-response-timestamp', mockTimestamp);
+        expect(mockResponse.getHeader).toBeCalledTimes(1);
+        expect(mockResponse.getHeader).toBeCalledWith('x-request-trace-id');
+
+        expect(mockResponse.setHeader).toBeCalledTimes(1);
+        expect(mockResponse.setHeader).toHaveBeenCalledWith('x-response-timestamp', mockTimestamp);
 
         expect(response).toStrictEqual({
             statusCode: HttpStatus.OK,
@@ -81,10 +82,11 @@ describe('PasswordManagerResponseInterceptor Tests', () => {
 
         const response = await firstValueFrom(await interceptor.intercept(mockExecutionContext, mockCallHandler));
 
-        expect(mockResponse.setHeader).toBeCalledTimes(3);
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(1, 'x-request-trace-id', 'trace-id');
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(2, 'x-password-manager-version', '0.0.1');
-        expect(mockResponse.setHeader).toHaveBeenNthCalledWith(3, 'x-response-timestamp', mockTimestamp);
+        expect(mockResponse.getHeader).toBeCalledTimes(1);
+        expect(mockResponse.getHeader).toBeCalledWith('x-request-trace-id');
+
+        expect(mockResponse.setHeader).toBeCalledTimes(1);
+        expect(mockResponse.setHeader).toBeCalledWith('x-response-timestamp', mockTimestamp);
 
         expect(response).toStrictEqual({
             statusCode: HttpStatus.OK,

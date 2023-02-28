@@ -35,10 +35,10 @@ export class LogMessageFactory implements ILogMessageFactory {
     }
 
     public create(level: LogLevelEnum, message: string, context: any): LogMessage {
-        this.message.ID = uuid();
-        this.message.TimeStamp = new Date().toISOString();
+        this.message[LogPropertyEnum.ID] = uuid();
+        this.message[LogPropertyEnum.TimeStamp] = new Date().toISOString();
         this.message.LogLevel = level;
-        this.message.Message = message;
+        this.message[LogPropertyEnum.Message] = message;
         this.message.Context = Object.assign({}, this.message.Context, context);
 
         return this.message;

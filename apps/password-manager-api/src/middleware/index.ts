@@ -1,1 +1,1 @@
-export * from './trace-id/trace-id.middleware';
+export * from './log-context/log-context.middleware';
