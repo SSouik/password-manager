@@ -13,15 +13,15 @@ import { APIUrlsEnum, CreatePasswordRequest, CreatePasswordResponse } from '@pas
 /*
  * Controller: CreatePasswordController
  * Purpose: Create a password entry in DynamoDB for the client
- * 
+ *
  * Dependencies:
  *  IPasswordRepository: Needed to save/create the password in DynamoDB
- *  Crypto: Needed to encrypt the password's value before saving in DynamoDB 
- * 
- * Returns: 
+ *  Crypto: Needed to encrypt the password's value before saving in DynamoDB
+ *
+ * Returns:
  *  StatusCode: 201
  *  Body: CreatePasswordResponse
- * 
+ *
  * Summary:
  *  This controller is dedicated to accepting a request to create a
  *  password for the client. The password's value needs to be encrypted
@@ -30,7 +30,6 @@ import { APIUrlsEnum, CreatePasswordRequest, CreatePasswordResponse } from '@pas
  *  should be generated before saving/creating the password. If all goes well, this
  *  controller should return the passwordId of the newly created Password.
  */
-
 
 @Controller(APIUrlsEnum.CreatePassword)
 @UseGuards(AuthGuard)
@@ -46,10 +45,13 @@ export class CreatePasswordController {
      * Save/create a new password in DynamoDB for the client
      * @param clientId ID of the client
      * @param request Attributes of the password to create
-     * @returns ID of the newly created password 
-     * 
+     * @returns ID of the newly created password
+     *
      * @see {@link CreatePasswordRequest}
      * @see {@link CreatePasswordResponse}
+     *
+     * @throws {@link PasswordManagerException}
+     * This can be thrown when DynamoDB is unavailable (Service Unavailable 503)
      */
     @Post()
     @HttpCode(HttpStatus.CREATED)
