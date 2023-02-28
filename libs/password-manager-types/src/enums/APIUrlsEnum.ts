@@ -6,5 +6,6 @@ export enum APIUrlsEnum {
     // Private
     GetPasswords = 'clients/:clientId/passwords',
     CreatePassword = 'clients/:clientId/passwords',
-    DeletePassword = '/clients/:clientId/passwords/:passwordId',
+    DeletePassword = 'clients/:clientId/passwords/:passwordId',
+    UpdatePassword = 'clients/:clientId/passwords/:passwordId',
 }
