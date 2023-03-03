@@ -55,7 +55,7 @@ export class PasswordsController {
      *  before it is saved/created in DyanmoDB. This way the password's value
      *  is not sitting in a database in plain text. Also, the ID of the password
      *  should be generated before saving/creating the password. If all goes well, this
-     *  controller should return the passwordId of the newly created Password.
+     *  method should return the passwordId of the newly created Password.
      *
      * @see {@link CreatePasswordRequest}
      * @see {@link CreatePasswordResponse}
@@ -103,7 +103,7 @@ export class PasswordsController {
      * @param request Attributes of the password to update
      *
      * @remarks
-     * This controller is dedicated to accepting a request to update an
+     * This method is dedicated to accepting a request to update an
      *  existing password in DynamoDB. The password's value needs to be
      *  encryted before being save in DynamoDB. However, before ecryption
      *  or any other work takes place, the controller should check to see
@@ -113,7 +113,7 @@ export class PasswordsController {
      * @see {@link UpdatePasswordRequest}
      *
      * @throws {@link PasswordManagerException} -
-     * This can be thrown when the requsted password to update does not exist (Not found 404)
+     * This can be thrown when the requessted password to update does not exist (Not found 404)
      * or when DynamoDB is unavailable (Service Unavailable 503)
      */
     @Put(':passwordId')
