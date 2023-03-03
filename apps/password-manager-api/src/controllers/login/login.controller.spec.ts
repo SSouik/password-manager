@@ -14,8 +14,6 @@ describe('LoginController Tests', () => {
     let controller: LoginController;
 
     beforeEach(() => {
-        mockCrypto.decrypt = jest.fn().mockReturnValue('password');
-
         controller = new LoginController(mockClientRepository, mockJWTService, mockCrypto);
     });
 
@@ -23,76 +21,20 @@ describe('LoginController Tests', () => {
         jest.resetAllMocks();
     });
 
-    describe('Successful Results', () => {
-        it('Returns a 200 and issues the client a token', async () => {
-            mockClientRepository.getClientByLogin = jest
-                .fn()
-                .mockResolvedValue(<Client>{ clientId: 'id', login: 'login', password: 'password' });
-
-            mockJWTService.create = jest.fn().mockResolvedValue(<AuthToken>{ token: 'token', expiresIn: 3600 });
-
-            const actual = await controller.handler({ login: 'login', password: 'password' });
-
-            expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
-            expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');
-
-            expect(mockCrypto.decrypt).toBeCalledTimes(1);
-            expect(mockCrypto.decrypt).toBeCalledWith('password');
-
-            expect(mockJWTService.create).toBeCalledTimes(1);
-            expect(mockJWTService.create).toBeCalledWith({ clientId: 'id' });
-
-            expect(actual.statusCode).toBe(HttpStatus.OK);
-            expect(actual.message).toBe('Login successful');
-            expect(actual.clientId).toBe('id');
-            expect(actual.auth).toStrictEqual(<AuthToken>{
-                token: 'token',
-                expiresIn: 3600,
-            });
-        });
-    });
-
-    describe('Unauthorized Results', () => {
-        it('Returns a 401 when no client exists with the provided login', async () => {
-            mockClientRepository.getClientByLogin = jest
-                .fn()
-                .mockRejectedValue(
-                    PasswordManagerException.notFound<Partial<Client>>().withContext({ login: 'login' }),
-                );
-
-            try {
-                await controller.handler({ login: 'login', password: 'password' });
-            } catch (error) {
-                expect(error).toBeInstanceOf(PasswordManagerException);
-
-                const exception = error as PasswordManagerException<Partial<Client>>;
-                expect(exception.statusCode).toBe(HttpStatus.UNAUTHORIZED);
-                expect(exception.message).toBe('Login and password combination is invalid.');
-                expect(exception.context).toStrictEqual({ login: 'login' });
-
-                expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
-                expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');
-
-                expect(mockCrypto.decrypt).toBeCalledTimes(0);
-
-                expect(mockJWTService.create).toBeCalledTimes(0);
-            }
+    describe('Login', () => {
+        beforeEach(() => {
+            mockCrypto.decrypt = jest.fn().mockReturnValue('password');
         });
 
-        it('Returns a 401 when the client exists but the provided password does not match', async () => {
-            mockClientRepository.getClientByLogin = jest
-                .fn()
-                .mockResolvedValue(<Client>{ clientId: 'id', login: 'login', password: 'password' });
+        describe('Successful Results', () => {
+            it('Returns a 200 and issues the client a token', async () => {
+                mockClientRepository.getClientByLogin = jest
+                    .fn()
+                    .mockResolvedValue(<Client>{ clientId: 'id', login: 'login', password: 'password' });
 
-            try {
-                await controller.handler({ login: 'login', password: 'password123' });
-            } catch (error) {
-                expect(error).toBeInstanceOf(PasswordManagerException);
+                mockJWTService.create = jest.fn().mockResolvedValue(<AuthToken>{ token: 'token', expiresIn: 3600 });
 
-                const exception = error as PasswordManagerException<Partial<Client>>;
-                expect(exception.statusCode).toBe(HttpStatus.UNAUTHORIZED);
-                expect(exception.message).toBe('Login and password combination is invalid.');
-                expect(exception.context).toStrictEqual({ login: 'login' });
+                const actual = await controller.login({ login: 'login', password: 'password' });
 
                 expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
                 expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');
@@ -100,38 +42,100 @@ describe('LoginController Tests', () => {
                 expect(mockCrypto.decrypt).toBeCalledTimes(1);
                 expect(mockCrypto.decrypt).toBeCalledWith('password');
 
-                expect(mockJWTService.create).toBeCalledTimes(0);
-            }
+                expect(mockJWTService.create).toBeCalledTimes(1);
+                expect(mockJWTService.create).toBeCalledWith({ clientId: 'id' });
+
+                expect(actual.statusCode).toBe(HttpStatus.OK);
+                expect(actual.message).toBe('Login successful');
+                expect(actual.clientId).toBe('id');
+                expect(actual.auth).toStrictEqual(<AuthToken>{
+                    token: 'token',
+                    expiresIn: 3600,
+                });
+            });
         });
-    });
 
-    describe('Service Unavailable Results', () => {
-        it('Returns a 503 when looking up the client in DynamoDB fails due to an unknown reason', async () => {
-            mockClientRepository.getClientByLogin = jest
-                .fn()
-                .mockRejectedValue(
-                    PasswordManagerException.serviceUnavailable<Partial<Client>>()
-                        .withMessage('Service is temporarily unavailable.')
-                        .withContext({ login: 'login' }),
-                );
+        describe('Unauthorized Results', () => {
+            it('Returns a 401 when no client exists with the provided login', async () => {
+                mockClientRepository.getClientByLogin = jest
+                    .fn()
+                    .mockRejectedValue(
+                        PasswordManagerException.notFound<Partial<Client>>().withContext({ login: 'login' }),
+                    );
 
-            try {
-                await controller.handler({ login: 'login', password: 'password' });
-            } catch (error) {
-                expect(error).toBeInstanceOf(PasswordManagerException);
+                try {
+                    await controller.login({ login: 'login', password: 'password' });
+                } catch (error) {
+                    expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<Partial<Client>>;
-                expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
-                expect(exception.message).toBe('Service is temporarily unavailable.');
-                expect(exception.context).toStrictEqual({ login: 'login' });
+                    const exception = error as PasswordManagerException<Partial<Client>>;
+                    expect(exception.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+                    expect(exception.message).toBe('Login and password combination is invalid.');
+                    expect(exception.context).toStrictEqual({ login: 'login' });
 
-                expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
-                expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');
+                    expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
+                    expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');
 
-                expect(mockCrypto.decrypt).toBeCalledTimes(0);
+                    expect(mockCrypto.decrypt).toBeCalledTimes(0);
 
-                expect(mockJWTService.create).toBeCalledTimes(0);
-            }
+                    expect(mockJWTService.create).toBeCalledTimes(0);
+                }
+            });
+
+            it('Returns a 401 when the client exists but the provided password does not match', async () => {
+                mockClientRepository.getClientByLogin = jest
+                    .fn()
+                    .mockResolvedValue(<Client>{ clientId: 'id', login: 'login', password: 'password' });
+
+                try {
+                    await controller.login({ login: 'login', password: 'password123' });
+                } catch (error) {
+                    expect(error).toBeInstanceOf(PasswordManagerException);
+
+                    const exception = error as PasswordManagerException<Partial<Client>>;
+                    expect(exception.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+                    expect(exception.message).toBe('Login and password combination is invalid.');
+                    expect(exception.context).toStrictEqual({ login: 'login' });
+
+                    expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
+                    expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');
+
+                    expect(mockCrypto.decrypt).toBeCalledTimes(1);
+                    expect(mockCrypto.decrypt).toBeCalledWith('password');
+
+                    expect(mockJWTService.create).toBeCalledTimes(0);
+                }
+            });
+        });
+
+        describe('Service Unavailable Results', () => {
+            it('Returns a 503 when looking up the client in DynamoDB fails due to an unknown reason', async () => {
+                mockClientRepository.getClientByLogin = jest
+                    .fn()
+                    .mockRejectedValue(
+                        PasswordManagerException.serviceUnavailable<Partial<Client>>()
+                            .withMessage('Service is temporarily unavailable.')
+                            .withContext({ login: 'login' }),
+                    );
+
+                try {
+                    await controller.login({ login: 'login', password: 'password' });
+                } catch (error) {
+                    expect(error).toBeInstanceOf(PasswordManagerException);
+
+                    const exception = error as PasswordManagerException<Partial<Client>>;
+                    expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+                    expect(exception.message).toBe('Service is temporarily unavailable.');
+                    expect(exception.context).toStrictEqual({ login: 'login' });
+
+                    expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
+                    expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');
+
+                    expect(mockCrypto.decrypt).toBeCalledTimes(0);
+
+                    expect(mockJWTService.create).toBeCalledTimes(0);
+                }
+            });
         });
     });
 });

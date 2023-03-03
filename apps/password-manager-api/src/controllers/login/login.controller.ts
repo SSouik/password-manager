@@ -5,9 +5,9 @@ import { CLIENT_REPOSITORY } from '@password-manager:api:repositories/client/cli
 import { JWT_SERVICE } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
-import { APIUrlsEnum, Client, LoginRequest, LoginResponse } from '@password-manager:types';
+import { Client, LoginRequest, LoginResponse } from '@password-manager:types';
 
-@Controller(APIUrlsEnum.Login)
+@Controller('login')
 export class LoginController {
     constructor(
         @Inject(CLIENT_REPOSITORY)
@@ -20,7 +20,7 @@ export class LoginController {
 
     @Post()
     @HttpCode(HttpStatus.OK)
-    public async handler(@Body() request: LoginRequest): Promise<LoginResponse> {
+    public async login(@Body() request: LoginRequest): Promise<LoginResponse> {
         const client = await this.clientRepository
             .getClientByLogin(request.login)
             .catch((error: PasswordManagerException<Partial<Client>>) => {
