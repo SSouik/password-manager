@@ -12,6 +12,7 @@ import {
     CreatePasswordRequest,
     CreatePasswordResponse,
     GetPasswordsResponse,
+    ResponseBase,
     UpdatePasswordRequest,
 } from '@password-manager:types';
 
@@ -83,6 +84,8 @@ export class PasswordsController {
      *  and then the password record in DynamoDB can be deleted. If all
      *  goes well, ths should return a 202 (Accepted).
      *
+     * @see {@link ResponseBase}
+     *
      * @throws {@link PasswordManagerException} -
      * This can be thrown when the requested password does not exist (Not found 404)
      * or when DynamoDB is unavailable (Serivce unavailable 503)
@@ -92,7 +95,7 @@ export class PasswordsController {
     public async deletePassword(
         @Param('passwordId')
         passwordId: string,
-    ): Promise<void> {
+    ): Promise<ResponseBase> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 
@@ -111,6 +114,7 @@ export class PasswordsController {
      *  the requested password does not exist.
      *
      * @see {@link UpdatePasswordRequest}
+     * @see {@link ResponseBase}
      *
      * @throws {@link PasswordManagerException} -
      * This can be thrown when the requessted password to update does not exist (Not found 404)
@@ -125,7 +129,7 @@ export class PasswordsController {
         passwordId: string,
         @Body()
         request: UpdatePasswordRequest,
-    ): Promise<void> {
+    ): Promise<ResponseBase> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 }
