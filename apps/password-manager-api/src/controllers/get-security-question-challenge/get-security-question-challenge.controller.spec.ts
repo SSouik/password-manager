@@ -1,17 +1,15 @@
 import { HttpStatus } from '@nestjs/common';
-import { PasswordRepository } from '@password-manager:api:repositories/password/password.repository';
+import { SecurityQuestionRepository } from '@password-manager:api:repositories/security-question/security-question.repository';
 import { PasswordManagerException } from '@password-manager:api:types';
-import { Crypto } from '@password-manager:crypto';
 
-import { UpdatePasswordController } from './update-password.controller';
+import { GetSecurityQuestionChallengeController } from './get-security-question-challenge.controller';
 
-describe('CreatePasswordController Tests', () => {
-    const mockPasswordRepository = PasswordRepository.prototype;
-    const mockCrypto = Crypto.prototype;
-    let controller: UpdatePasswordController;
+describe('GetSecurityQuestionChallengeController Tests', () => {
+    const mockSecurityQuestionRepository = SecurityQuestionRepository.prototype;
+    let controller: GetSecurityQuestionChallengeController;
 
     beforeEach(() => {
-        controller = new UpdatePasswordController(mockPasswordRepository, mockCrypto);
+        controller = new GetSecurityQuestionChallengeController(mockSecurityQuestionRepository);
     });
 
     afterEach(() => {
@@ -21,12 +19,7 @@ describe('CreatePasswordController Tests', () => {
     // Remove this test after the controller is implemented
     it('Method not implemented', async () => {
         try {
-            await controller.handler('id', 'id', {
-                name: 'name',
-                website: 'http://foo.com',
-                login: 'login',
-                value: 'password',
-            });
+            await controller.handler('login');
         } catch (error) {
             expect(error).toBeInstanceOf(PasswordManagerException);
 
@@ -36,7 +29,7 @@ describe('CreatePasswordController Tests', () => {
         }
     });
 
-    // Place all unit tests for successful results (status code 201) here
+    // Place all unit tests for successful results (status code 200) here
     describe('Successful Results', () => {});
 
     // Place all unit tests for not found results (status code 404)

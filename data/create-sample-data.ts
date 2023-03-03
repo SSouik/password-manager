@@ -20,6 +20,7 @@ const securityQuestion = <SecurityQuestion>{
     question: 'What is the name of your cat?',
     answer: Crypto.encrypt('Quavo'),
     clientId: clientId,
+    login: 'local',
 };
 
 const password1 = <Password>{

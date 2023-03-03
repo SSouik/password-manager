@@ -36,6 +36,20 @@ describe('ClientRepository Tests', () => {
         });
     });
 
+    describe('Get Security Question By Login', () => {
+        it('Throws an error because the method is not implemented', async () => {
+            try {
+                await repository.getSecurityQuestionByLogin('login');
+            } catch (error) {
+                expect(error).toBeInstanceOf(PasswordManagerException);
+
+                const exception = error as PasswordManagerException<unknown>;
+                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
+                expect(error.message).toBe('Not Implemented');
+            }
+        });
+    });
+
     describe('Create Security Question', () => {
         it('Throws an error because the method is not implemented', async () => {
             try {
@@ -44,6 +58,7 @@ describe('ClientRepository Tests', () => {
                     question: 'question',
                     answer: 'answer',
                     clientId: 'id',
+                    login: 'login',
                 });
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
@@ -63,6 +78,7 @@ describe('ClientRepository Tests', () => {
                     question: 'question',
                     answer: 'answer',
                     clientId: 'id',
+                    login: 'login',
                 });
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);

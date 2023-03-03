@@ -3,4 +3,5 @@ export type SecurityQuestion = {
     question: string;
     answer: string;
     clientId: string;
+    login: string;
 };

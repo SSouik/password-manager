@@ -3,7 +3,8 @@
     "KeySchema": [{ "AttributeName": "questionId", "KeyType": "HASH" }],
     "AttributeDefinitions": [
         { "AttributeName": "questionId", "AttributeType": "S" },
-        { "AttributeName": "clientId", "AttributeType": "S" }
+        { "AttributeName": "clientId", "AttributeType": "S" },
+        { "AttributeName": "login", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {
         "ReadCapacityUnits": 2,
@@ -17,6 +18,17 @@
                 "WriteCapacityUnits": 2
             },
             "KeySchema": [{ "AttributeName": "clientId", "KeyType": "HASH" }],
+            "Projection": {
+                "ProjectionType": "ALL"
+            }
+        },
+        {
+            "IndexName": "LoginIndex",
+            "ProvisionedThroughput": {
+                "ReadCapacityUnits": 2,
+                "WriteCapacityUnits": 2
+            },
+            "KeySchema": [{ "AttributeName": "login", "KeyType": "HASH" }],
             "Projection": {
                 "ProjectionType": "ALL"
             }

@@ -16,7 +16,11 @@ export class SecurityQuestionRepository implements ISecurityQuestionRepository {
         private readonly dynamoDBClient: IDynamoDBClient,
     ) {}
 
-    public getSecurityQuestionById(quiestionId: string): Promise<SecurityQuestion> {
+    public getSecurityQuestionById(questionId: string): Promise<SecurityQuestion> {
+        return Promise.reject(PasswordManagerException.notImplemented());
+    }
+
+    public getSecurityQuestionByLogin(login: string): Promise<SecurityQuestion> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 

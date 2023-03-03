@@ -1,6 +1,6 @@
 // Remove below line after implementing the controller
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, HttpCode, Param, Inject, UseGuards, Post, Body, Put } from '@nestjs/common';
+import { Controller, HttpCode, Param, Inject, UseGuards, Body, Put } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { AuthGuard } from '@password-manager:api:guards';
 import { IPasswordRepository } from '@password-manager:api:interfaces';
@@ -8,12 +8,7 @@ import { CRYPTO } from '@password-manager:api:providers';
 import { PASSWORD_REPOSITORY } from '@password-manager:api:repositories/password/password.repository';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
-import {
-    APIUrlsEnum,
-    CreatePasswordRequest,
-    CreatePasswordResponse,
-    UpdatePasswordRequest,
-} from '@password-manager:types';
+import { APIUrlsEnum, UpdatePasswordRequest } from '@password-manager:types';
 
 /*
  * Controller: UpdatePasswordController
