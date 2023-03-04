@@ -1,0 +1,9 @@
+<div [formGroup]="parentFormGroup">
+  <mat-form-field class="pm--Form-Field pm--mb3">
+    <mat-label>{{ label }}</mat-label>
+    <input matInput [placeholder]="placeholder" [formControlName]="formKey" [type]="type" [required]="required" />
+    <mat-error *ngIf="parentFormGroup.get(formKey)?.invalid">
+      {{ errorMessage }}
+    </mat-error>
+  </mat-form-field>
+</div>

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -77,6 +78,7 @@ import AppComponents from './index';
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,
+        ReactiveFormsModule,
     ],
     exports: [
         ...AppComponents,
