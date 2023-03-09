@@ -1,4 +1,5 @@
+import { ButtonComponent } from './button/button.component';
 import { HeaderComponent } from './header/header.component';
 import { InputComponent } from './input/input.component';
 
-export default [HeaderComponent, InputComponent];
+export default [ButtonComponent, HeaderComponent, InputComponent];

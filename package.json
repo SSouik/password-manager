@@ -18,7 +18,7 @@
         "build:api:prod": "nx build --project=password-manager-api --configuration=production",
         "start": "yarn start:api",
         "start:api": "nx serve --project=password-manager-api --configuration=development",
-        "start:ui": "nx serve --project=password-manager-ui --configuration=development",
+        "start:ui": "nx serve --project=password-manager-ui --configuration=development --port=3333",
         "test": "nx run-many --target=test --projects=password-manager-api,password-manager-ui,password-manager-dynamodb-client,password-manager-config,password-manager-logger,password-manager-crypto --parallel",
         "test:coverage": "yarn test --codeCoverage",
         "test:ui": "nx test --project=password-manager-ui",

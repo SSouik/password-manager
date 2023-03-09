@@ -1,0 +1,23 @@
+<div [ngSwitch]="type" [ngClass]="additionalClasses">
+  <button *ngSwitchCase="'basic'" class="pm--Button" mat-button [color]="color" (click)="(onClick)">
+    {{ label }}
+  </button>
+  <button *ngSwitchCase="'raised'" class="pm--Button" mat-raised-button [color]="color" (click)="(onClick)">
+    {{ label }}
+  </button>
+  <button *ngSwitchCase="'stroked'" mat-stroked-button [color]="color" (click)="(onClick)">
+    {{ label }}
+  </button>
+  <button *ngSwitchCase="'flat'" mat-flat-button [color]="color" (click)="(onClick)">
+    {{ label }}
+  </button>
+  <button *ngSwitchCase="'icon'" mat-icon-button [color]="color" (click)="(onClick)">
+    {{ label }}
+  </button>
+  <button *ngSwitchCase="'fab'" mat-fab [color]="color" (click)="(onClick)">
+    {{ label }}
+  </button>
+  <button *ngSwitchCase="'miniFab'" mat-mini-fab [color]="color" (click)="(onClick)">
+    {{ label }}
+  </button>
+</div>
