@@ -6,6 +6,8 @@ $pm-color-primary: #256eff;
 $pm-color-secondary: #ff256e;
 $pm-color-black: #232c33;
 $pm-color-white: #fcfcfc;
+$pm-color-warn: #ca8402;
+$pm-color-error: #c50711;
 $pm-gray-map: (
     '100': #f3f5f7,
     '200': #e7eaee,
@@ -96,6 +98,14 @@ $pm-light-theme: mat.define-light-theme(
 
 .pm--Color-White {
     color: $pm-color-white;
+}
+
+.pm--Color-Warn {
+    color: $pm-color-warn;
+}
+
+.pm--Color-Error {
+    color: $pm-color-error;
 }
 
 .pm--BackgroundColor-Primary {

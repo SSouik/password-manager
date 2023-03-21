@@ -5,6 +5,9 @@
         <img src="/assets/images/password-manager-logo.png" height="200px" width="200px" />
       </mat-card-title>
       <mat-card-subtitle class="pm--Text-Center">Please enter your username and password.</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="error.show" class="pm--Text-Center pm--Color-Error">{{
+        error.message
+      }}</mat-card-subtitle>
     </mat-card-header>
     <form class="pm--Form-Content pm--mt8" [formGroup]="loginFormGroup" novalidate>
       <mat-card-content>
@@ -32,6 +35,7 @@
           label="Login"
           color="primary"
           type="raised"
+          (click)="login()"
         ></password-manager-button>
       </mat-card-actions>
       <mat-card-footer>

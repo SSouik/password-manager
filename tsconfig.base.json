@@ -56,6 +56,8 @@
             "@password-manager:ui:pages:auth/*": ["apps/password-manager-ui/src/app/pages/auth/*"],
             "@password-manager:ui:pages:registration": ["apps/password-manager-ui/src/app/pages/registration"],
             "@password-manager:ui:pages:registration/*": ["apps/password-manager-ui/src/app/pages/registration/*"],
+            "@password-manager:ui:services": ["apps/password-manager-ui/src/app/services"],
+            "@password-manager:ui:services/*": ["apps/password-manager-ui/src/app/services/*"],
             "@password-manager:ui:types": ["apps/password-manager-ui/src/app/types"],
             "@password-manager:ui:types/*": ["apps/password-manager-ui/src/app/types/*"]
         }

@@ -4,7 +4,7 @@
     "plugins": ["@nrwl/nx", "import"],
     "rules": {
         "no-console": "error",
-        "no-shadow": "error",
+        "no-shadow": "off",
         "no-useless-constructor": "off",
         "no-empty-function": "off",
         "@typescript-eslint/no-useless-constructor": "error",
