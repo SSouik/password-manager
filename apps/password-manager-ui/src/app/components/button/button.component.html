@@ -1,14 +1,50 @@
 <div [ngSwitch]="type" [ngClass]="additionalClasses">
-  <button *ngSwitchCase="'basic'" class="pm--Button" mat-button [color]="color" (click)="(onClick)">
+  <button
+    *ngSwitchCase="'basic'"
+    class="pm--Button"
+    [ngClass]="{
+      'pm--BackgroundColor-White': color == 'basic'
+    }"
+    mat-button
+    [color]="color"
+    (click)="(onClick)"
+  >
     {{ label }}
   </button>
-  <button *ngSwitchCase="'raised'" class="pm--Button" mat-raised-button [color]="color" (click)="(onClick)">
+  <button
+    *ngSwitchCase="'raised'"
+    class="pm--Button"
+    [ngClass]="{
+      'pm--BackgroundColor-White': color == 'basic'
+    }"
+    mat-raised-button
+    [color]="color"
+    (click)="(onClick)"
+  >
     {{ label }}
   </button>
-  <button *ngSwitchCase="'stroked'" mat-stroked-button [color]="color" (click)="(onClick)">
+  <button
+    *ngSwitchCase="'stroked'"
+    class="pm--Button"
+    [ngClass]="{
+      'pm--BackgroundColor-White': color == 'basic'
+    }"
+    mat-stroked-button
+    [color]="color"
+    (click)="(onClick)"
+  >
     {{ label }}
   </button>
-  <button *ngSwitchCase="'flat'" mat-flat-button [color]="color" (click)="(onClick)">
+  <button
+    *ngSwitchCase="'flat'"
+    class="pm--Button"
+    [ngClass]="{
+      'pm--BackgroundColor-White': color == 'basic'
+    }"
+    mat-flat-button
+    [color]="color"
+    (click)="(onClick)"
+  >
     {{ label }}
   </button>
   <button *ngSwitchCase="'icon'" mat-icon-button [color]="color" (click)="(onClick)">

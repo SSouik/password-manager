@@ -1,31 +1,41 @@
-import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { GetPasswordsResponse } from '@password-manager:types';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { GetPasswordsResponse, UIUrlsEnum } from '@password-manager:types';
+import { BFFService } from '@password-manager:ui:services/bff/bff.service';
 import { Observable, of } from 'rxjs';
 
 import { DashboardComponent } from './dashboard.component';
+import PageConfig from './dashboard.component.config';
 
 describe('DashboardComponent Tests', () => {
-    let mockHttpClient: HttpClient;
+    let mockRouter: Router;
+    let mockBFFService: BFFService;
     let component: DashboardComponent;
     let fixture: ComponentFixture<DashboardComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
+            imports: [ReactiveFormsModule, RouterModule, HttpClientTestingModule],
             declarations: [DashboardComponent],
+            providers: [BFFService],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
 
         fixture = TestBed.createComponent(DashboardComponent);
         component = fixture.componentInstance;
 
-        mockHttpClient = TestBed.inject(HttpClient);
+        mockRouter = TestBed.inject(Router);
+        mockBFFService = TestBed.inject(BFFService);
+
+        mockRouter.navigateByUrl = jest.fn();
     });
 
     afterEach(() => {
+        window.localStorage.clear();
         jest.resetAllMocks();
     });
 
@@ -33,10 +43,11 @@ describe('DashboardComponent Tests', () => {
         expect(component).toBeTruthy();
     });
 
-    // Tests need to be updated later when the page is refactored
     describe('Component Initialization', () => {
         it('Fetches passwords for the client on initialization', () => {
-            mockHttpClient.get = jest.fn().mockReturnValue(
+            window.localStorage.setItem('sessionId', 'id');
+
+            mockBFFService.getPasswords = jest.fn().mockReturnValue(
                 of(<GetPasswordsResponse>{
                     statusCode: HttpStatusCode.Ok,
                     message: 'OK',
@@ -47,30 +58,72 @@ describe('DashboardComponent Tests', () => {
                             website: null,
                             login: 'login',
                             value: 'password',
+                            clientId: 'id',
                         },
                     ],
                 }),
             );
 
+            expect(component.page.isLoading).toBeTruthy();
+
             component.ngOnInit();
 
-            expect(mockHttpClient.get).toBeCalledTimes(1);
-            expect(mockHttpClient.get).toBeCalledWith('/api/v1/clients/123/passwords');
+            expect(mockBFFService.getPasswords).toBeCalledTimes(1);
+            expect(mockBFFService.getPasswords).toBeCalledWith('id');
 
-            expect(component.message).toBe('');
-            expect(component.passwords).toStrictEqual([
-                {
-                    passwordId: 'id',
-                    name: 'Foo',
-                    website: null,
-                    login: 'login',
-                    value: 'password',
+            expect(component.page.passwordEntries.pop()?.password).toStrictEqual({
+                passwordId: 'id',
+                name: 'Foo',
+                website: null,
+                login: 'login',
+                value: 'password',
+                clientId: 'id',
+            });
+
+            expect(component.page.banner.show).toBeFalsy();
+            expect(component.page.isLoading).toBeFalsy();
+        });
+
+        it('Fetches passwords for the client on initialization but receives a 404', () => {
+            window.localStorage.setItem('sessionId', 'id');
+
+            mockBFFService.getPasswords = jest.fn().mockReturnValue(
+                new Observable((observer) =>
+                    observer.error(
+                        new HttpErrorResponse({
+                            status: HttpStatusCode.NotFound,
+                            statusText: 'Not Found',
+                            error: { message: 'Not found' },
+                        }),
+                    ),
+                ),
+            );
+
+            expect(component.page.isLoading).toBeTruthy();
+
+            component.ngOnInit();
+
+            expect(mockBFFService.getPasswords).toBeCalledTimes(1);
+            expect(mockBFFService.getPasswords).toBeCalledWith('id');
+
+            expect(component.page.passwordEntries).toStrictEqual([]);
+
+            expect(component.page.banner).toStrictEqual({
+                show: true,
+                title: PageConfig.banner.createPassword.title,
+                message: PageConfig.banner.createPassword.message,
+                variant: PageConfig.banner.createPassword.variant,
+                button: {
+                    label: PageConfig.banner.createPassword.button.label,
+                    click: expect.anything(),
                 },
-            ]);
+            });
+
+            expect(component.page.isLoading).toBeFalsy();
         });
 
         it('Fetches passwords for the client on initialization but receives a 500', () => {
-            mockHttpClient.get = jest.fn().mockReturnValue(
+            mockBFFService.getPasswords = jest.fn().mockReturnValue(
                 new Observable((observer) =>
                     observer.error(
                         new HttpErrorResponse({
@@ -82,13 +135,48 @@ describe('DashboardComponent Tests', () => {
                 ),
             );
 
+            expect(component.page.isLoading).toBeTruthy();
+
             component.ngOnInit();
 
-            expect(mockHttpClient.get).toBeCalledTimes(1);
-            expect(mockHttpClient.get).toBeCalledWith('/api/v1/clients/123/passwords');
+            expect(mockBFFService.getPasswords).toBeCalledTimes(1);
+            expect(mockBFFService.getPasswords).toBeCalledWith('');
 
-            expect(component.message).toBe('Getting passwords failed with: 500 - Something broke');
-            expect(component.passwords).toStrictEqual([]);
+            expect(component.page.passwordEntries).toStrictEqual([]);
+
+            expect(component.page.banner).toStrictEqual({
+                show: true,
+                title: PageConfig.banner.error.title,
+                message: PageConfig.banner.error.message,
+                variant: PageConfig.banner.error.variant,
+                button: {
+                    label: PageConfig.banner.error.button.label,
+                    click: expect.anything(),
+                },
+            });
+
+            expect(component.page.isLoading).toBeFalsy();
+        });
+    });
+
+    describe('Go to Create Password Page', () => {
+        it('Navigates to the create password page', () => {
+            component.goToCreatePasswordPage();
+
+            expect(mockRouter.navigateByUrl).toBeCalledTimes(1);
+            expect(mockRouter.navigateByUrl).toBeCalledWith(UIUrlsEnum.CreatePassword);
+        });
+    });
+
+    describe('Close Banner', () => {
+        it('Closes the banner', () => {
+            component.page.banner.show = true;
+
+            expect(component.page.banner.show).toBeTruthy();
+
+            component.closeBanner();
+
+            expect(component.page.banner.show).toBeFalsy();
         });
     });
 });

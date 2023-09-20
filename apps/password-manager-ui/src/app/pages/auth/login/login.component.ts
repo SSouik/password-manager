@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UIUrlsEnum } from '@password-manager:types';
-import { BFFService } from '@password-manager:ui:services';
+import { BFFService } from '@password-manager:ui:services/bff/bff.service';
 
 import { LoginErrorsEnum } from './LoginErrorsEnum';
 

@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { fakeAsync, flush } from '@angular/core/testing';
-import { LoginResponse } from '@password-manager:types';
+import { GetPasswordsResponse, LoginResponse } from '@password-manager:types';
 import { of } from 'rxjs';
 
 import { BFFService } from './bff.service';
@@ -11,7 +11,7 @@ describe('BFFService Tests', () => {
 
     beforeEach(() => {
         // Mock getTime to return 1000 so the token expiration is
-        // 1 for every test (1000 / 1000) = 1
+        // 1000 for every test
         jest.spyOn(Date.prototype, 'getTime').mockReturnValue(1000);
 
         service = new BFFService(mockHttpClient);
@@ -23,7 +23,7 @@ describe('BFFService Tests', () => {
 
     describe('Login', () => {
         it('Sets the session in local storage when login is successful', fakeAsync(() => {
-            localStorage.setItem = jest.fn();
+            // mockLocalSessionService.set = jest.fn();
 
             mockHttpClient.post = jest.fn().mockReturnValue(
                 of(<LoginResponse>{
@@ -42,10 +42,11 @@ describe('BFFService Tests', () => {
                     expect(response.auth.expiresIn).toBe(3600);
 
                     // Update with wrapper around local storage
-                    // expect(localStorage.setItem).toBeCalledTimes(3);
-                    // expect(localStorage.setItem).toHaveBeenNthCalledWith(1, 'sessionId', 'id');
-                    // expect(localStorage.setItem).toHaveBeenNthCalledWith(2, 'sessionToken', 'token');
-                    // expect(localStorage.setItem).toHaveBeenNthCalledWith(3, 'sessionTokenExpiration', '1');
+                    // expect(mockLocalSessionService.set).toBeCalledTimes(4);
+                    // expect(mockLocalSessionService.set).toHaveBeenNthCalledWith(1, 'username', 'username');
+                    // expect(mockLocalSessionService.set).toHaveBeenNthCalledWith(2, 'sessionId', 'id');
+                    // expect(mockLocalSessionService.set).toHaveBeenNthCalledWith(3, 'sessionToken', 'token');
+                    // expect(mockLocalSessionService.set).toHaveBeenNthCalledWith(4, 'sessionTokenExpiration', '1000');
                 },
             });
 
@@ -53,15 +54,43 @@ describe('BFFService Tests', () => {
         }));
     });
 
-    // Remove once this method is used
-    describe('Build Headers with Auth', () => {
-        it('Build Headers', () => {
-            const headers = service['buildHeadersWithAuth']();
+    describe('Get Passwords', () => {
+        it('Gets the passwords for a client', fakeAsync(() => {
+            mockHttpClient.get = jest.fn().mockReturnValue(
+                of(<GetPasswordsResponse>{
+                    statusCode: HttpStatusCode.Ok,
+                    message: 'OK',
+                    passwords: [
+                        {
+                            passwordId: 'id',
+                            name: 'Name',
+                            website: null,
+                            login: 'Login',
+                            value: 'password',
+                            clientId: 'id',
+                        },
+                    ],
+                }),
+            );
 
-            expect(headers.get('Accept')).toBe('application/json');
-            expect(headers.get('Content-Type')).toBe('application/json');
-            expect(headers.get('User-Agent')).toBe('Password Manager UI');
-            expect(headers.get('Authorization')).toBe('Bearer token');
-        });
+            service.getPasswords('id').subscribe({
+                next: (response: GetPasswordsResponse) => {
+                    expect(response.statusCode).toBe(HttpStatusCode.Ok);
+                    expect(response.message).toBe('OK');
+                    expect(response.passwords).toStrictEqual([
+                        {
+                            passwordId: 'id',
+                            name: 'Name',
+                            website: null,
+                            login: 'Login',
+                            value: 'password',
+                            clientId: 'id',
+                        },
+                    ]);
+                },
+            });
+
+            flush();
+        }));
     });
 });

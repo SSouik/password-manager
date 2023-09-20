@@ -48,6 +48,8 @@
             "@password-manager:types": ["libs/password-manager-types/src/index.ts"],
             "@password-manager:ui:components": ["apps/password-manager-ui/src/app/components"],
             "@password-manager:ui:components/*": ["apps/password-manager-ui/src/app/components/*"],
+            "@password-manager:ui:guards": ["apps/password-manager-ui/src/app/guards"],
+            "@password-manager:ui:guards/*": ["apps/password-manager-ui/src/app/guards/*"],
             "@password-manager:ui:pages": ["apps/password-manager-ui/src/app/pages"],
             "@password-manager:ui:pages/*": ["apps/password-manager-ui/src/app/pages/*"],
             "@password-manager:ui:pages:app-container": ["apps/password-manager-ui/src/app/pages/app-container"],

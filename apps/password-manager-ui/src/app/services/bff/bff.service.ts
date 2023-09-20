@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginRequest, LoginResponse } from '@password-manager:types';
+import { GetPasswordsResponse, LoginRequest, LoginResponse } from '@password-manager:types';
 import { Observable, switchMap, take, of } from 'rxjs';
 
 @Injectable({
@@ -18,10 +18,9 @@ export class BFFService {
         return this.httpClient.post<LoginResponse>('api/v1/login', request, { headers: this.buildHeaders() }).pipe(
             take(1),
             switchMap((response: LoginResponse) => {
-                const date = new Date();
-                date.setSeconds(date.getSeconds() + response.auth.expiresIn);
-                const expirationTimestamp = Math.floor(date.getTime() / 1000).toString();
+                const expirationTimestamp = new Date(Date.now() + response.auth.expiresIn * 1000).getTime().toString();
 
+                localStorage.setItem('username', login);
                 localStorage.setItem('sessionId', response.clientId);
                 localStorage.setItem('sessionToken', response.auth.token);
                 localStorage.setItem('sessionTokenExpiration', expirationTimestamp);
@@ -29,6 +28,14 @@ export class BFFService {
                 return of(response);
             }),
         );
+    }
+
+    public getPasswords(clientId: string): Observable<GetPasswordsResponse> {
+        return this.httpClient
+            .get<GetPasswordsResponse>(`/api/v1/clients/${clientId}/passwords`, {
+                headers: this.buildHeadersWithAuth(),
+            })
+            .pipe(take(1));
     }
 
     private buildHeaders(): HttpHeaders {

@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LoginResponse, UIUrlsEnum } from '@password-manager:types';
-import BFFProvider, { BFFService } from '@password-manager:ui:services';
+import { BFFService } from '@password-manager:ui:services/bff/bff.service';
 import { Observable, of } from 'rxjs';
 
 import { LoginComponent } from './login.component';
@@ -21,14 +21,14 @@ describe('LoginComponent Tests', () => {
         await TestBed.configureTestingModule({
             imports: [ReactiveFormsModule, RouterModule, HttpClientTestingModule],
             declarations: [LoginComponent],
-            providers: [BFFProvider],
+            providers: [BFFService],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
 
         fixture = TestBed.createComponent(LoginComponent);
         component = fixture.componentInstance;
 
-        // Get the injected instancs of each dependency
+        // Get the injected instances of each dependency
         mockRouter = TestBed.inject(Router);
         mockBFFService = TestBed.inject(BFFService);
 

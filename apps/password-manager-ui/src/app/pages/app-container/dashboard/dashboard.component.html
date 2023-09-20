@@ -1,19 +1,86 @@
-<password-manager-header [links]="headerLinks"></password-manager-header>
-<div>
-  <h1>{{ message }}</h1>
-  <ul>
-    <li *ngFor="let password of passwords">
-      <span>{{ password.passwordId }}</span>
-      <br />
-      <span>{{ password.name }}</span>
-      <br />
-      <span>{{ password.website }}</span>
-      <br />
-      <span>{{ password.login }}</span>
-      <br />
-      <span>{{ password.value }}</span>
-      <br />
-      <span>{{ password.clientId }}</span>
-    </li>
-  </ul>
+<password-manager-header [links]="page.header.links"></password-manager-header>
+<div class="pm--Container-Main pm--BackgroundColor-Gray100">
+  <div class="pm--Dashboard-Spinner" *ngIf="page.isLoading">
+    <mat-spinner aria-label="Getting your passwords" diameter="100"></mat-spinner>
+  </div>
+
+  <div *ngIf="!page.isLoading">
+    <h1>Welcome, {{ page.username }}</h1>
+
+    <!-- Informative banner -->
+    <password-manager-banner
+      *ngIf="page.banner.show"
+      [title]="page.banner.title"
+      [message]="page.banner.message"
+      [variant]="page.banner.variant"
+      [submitButtonLabel]="page.banner.button.label"
+      (submit)="page.banner.button.click()"
+      (dismiss)="closeBanner()"
+    ></password-manager-banner>
+
+    <mat-accordion>
+      <div *ngFor="let entry of page.passwordEntries">
+        <form class="pm--mb4" [formGroup]="entry.formControl" novalidate (ngSubmit)="getPasswords()">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="pm--Expansion-Panel--header">
+                {{ entry.password.name }}
+              </mat-panel-title>
+              <mat-panel-description
+                class="pm--Expansion-Panel--header pm--Color-Secondary"
+                *ngIf="entry.password.website"
+              >
+                {{ entry.password.website }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="pm--Expansion-Panel--body">
+              <password-manager-input
+                [parentFormGroup]="entry.formControl"
+                formKey="name"
+                label="Name"
+                for="name"
+                placeholder="Amazon"
+                type="text"
+                errorMessage="Name is required"
+              ></password-manager-input>
+              <password-manager-input
+                [parentFormGroup]="entry.formControl"
+                formKey="website"
+                label="Website"
+                for="website"
+                placeholder="https://www.amazon.com"
+                type="text"
+              ></password-manager-input>
+              <password-manager-input
+                [parentFormGroup]="entry.formControl"
+                formKey="login"
+                label="Login"
+                for="login"
+                placeholder="username123"
+                type="text"
+                errorMessage="Login is required"
+              ></password-manager-input>
+              <password-manager-input
+                [parentFormGroup]="entry.formControl"
+                formKey="password"
+                label="Password"
+                for="password"
+                placeholder="P@ssword123"
+                type="password"
+                errorMessage="Password is required"
+              ></password-manager-input>
+            </div>
+            <mat-action-row>
+              <password-manager-button class="pm--mr4" label="Save" color="primary" type="raised">
+              </password-manager-button>
+              <password-manager-button class="pm--mr4" label="Delete" color="warn" type="raised">
+              </password-manager-button>
+              <password-manager-button class="pm--mr4" label="Cancel" color="basic" type="raised">
+              </password-manager-button>
+            </mat-action-row>
+          </mat-expansion-panel>
+        </form>
+      </div>
+    </mat-accordion>
+  </div>
 </div>

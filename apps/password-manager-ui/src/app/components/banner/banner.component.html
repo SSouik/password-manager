@@ -1,0 +1,24 @@
+<mat-card class="pm--p8" [ngClass]="setBackgroundColor()">
+  <mat-card-header>
+    <h3>{{ title }}</h3>
+  </mat-card-header>
+  <mat-card-content>
+    {{ message }}
+  </mat-card-content>
+  <mat-card-actions class="pm--Banner-Actions">
+    <password-manager-button
+      class="pm--mr4"
+      [label]="submitButtonLabel"
+      color="primary"
+      type="raised"
+      (click)="onSubmit()"
+    >
+    </password-manager-button>
+    <password-manager-button
+      [label]="dimissButtonLabel"
+      color="basic"
+      type="raised"
+      (click)="onDismiss()"
+    ></password-manager-button>
+  </mat-card-actions>
+</mat-card>

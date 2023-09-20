@@ -9,13 +9,33 @@ $pm-color-white: #fcfcfc;
 $pm-color-warn: #ca8402;
 $pm-color-error: #c50711;
 $pm-gray-map: (
-    '100': #f3f5f7,
-    '200': #e7eaee,
-    '300': #dbdfe6,
-    '400': #ced3dc,
-    '500': #c2ccd6,
-    '600': #b6c2ce,
-    '700': #a9b8c6,
+    100: #f3f5f7,
+    200: #e7eaee,
+    300: #dbdfe6,
+    400: #ced3dc,
+    500: #c2ccd6,
+    600: #b6c2ce,
+    700: #a9b8c6,
+);
+$pm-warn-map: (
+    50: #fdbe49,
+    100: #fdb735,
+    200: #fdb021,
+    300: #fda90d,
+    400: #f29e02,
+    500: #de9102,
+    600: #ca8402,
+    700: #b67702,
+);
+$pm-error-map: (
+    50: #f9767c,
+    100: #f83a44,
+    200: #f72631,
+    300: #f6131e,
+    400: #ec0914,
+    500: #d90812,
+    600: #c50711,
+    700: #b1060f,
 );
 $pm-primary-palette: (
     50: #e2f2ff,
@@ -122,6 +142,14 @@ $pm-light-theme: mat.define-light-theme(
 
 .pm--BackgroundColor-White {
     background-color: $pm-color-white !important;
+}
+
+.pm--BackgroundColor-Warn {
+    background-color: $pm-color-warn !important;
+}
+
+.pm--BackgroundColor-Error {
+    background-color: $pm-color-error !important;
 }
 
 @each $weight, $color in $pm-gray-map {

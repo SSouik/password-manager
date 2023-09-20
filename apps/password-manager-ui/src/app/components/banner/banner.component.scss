@@ -1,0 +1,21 @@
+@use 'sass:map';
+
+@import '../../../styles/colors.scss';
+
+.pm--Banner-Background--info {
+    background-color: map.get($pm-primary-palette, 100);
+}
+
+.pm--Banner-Background--warn {
+    background-color: map.get($pm-warn-map, 50);
+}
+
+.pm--Banner-Background--error {
+    background-color: map.get($pm-error-map, 50);
+}
+
+.pm--Banner-Actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
