@@ -1,19 +1,15 @@
 import { HttpStatus } from '@nestjs/common';
-import { SecurityQuestionRepository } from '@password-manager:api:repositories/security-question/security-question.repository';
-import { JWTService } from '@password-manager:api:services/jwt/jwt.service';
+import { ChallengeService } from '@password-manager:api:services/challenge/challenge.service';
 import { PasswordManagerException } from '@password-manager:api:types';
-import { Crypto } from '@password-manager:crypto';
 
 import { ChallengeController } from './challenge.controller';
 
 describe('ChallengeController Tests', () => {
-    const mockSecurityQuestionRepository = SecurityQuestionRepository.prototype;
-    const mockCrypto = Crypto.prototype;
-    const mockJWTService = JWTService.prototype;
+    const mockChallenge = ChallengeService.prototype;
     let controller: ChallengeController;
 
     beforeEach(() => {
-        controller = new ChallengeController(mockSecurityQuestionRepository, mockCrypto, mockJWTService);
+        controller = new ChallengeController(mockChallenge);
     });
 
     afterEach(() => {

@@ -1,11 +1,9 @@
-// Remove below line after implementing the controller
+// Remove below line after implementing the service
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, HttpCode, Get, Inject, Param, Post, Body } from '@nestjs/common';
-import { HttpStatus } from '@nestjs/common/enums';
+import { ClassProvider, Inject, InjectionToken } from '@nestjs/common';
 import { IChallengeService, IJWTService, ISecurityQuestionRepository } from '@password-manager:api:interfaces';
 import { CRYPTO } from '@password-manager:api:providers';
 import { SECURITY_QUESTION_REPOSITORY } from '@password-manager:api:repositories/security-question/security-question.repository';
-import { CHALLENGE_SERVICE } from '@password-manager:api:services/challenge/challenge.service';
 import { JWT_SERVICE } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
@@ -15,11 +13,14 @@ import {
     GetSecurityQuestionChallengeResponse,
 } from '@password-manager:types';
 
-@Controller('challenge/:login/security-question')
-export class ChallengeController {
+export class ChallengeService implements IChallengeService {
     constructor(
-        @Inject(CHALLENGE_SERVICE)
-        private readonly challengeService: IChallengeService,
+        @Inject(SECURITY_QUESTION_REPOSITORY)
+        private readonly securityQuestionRepository: ISecurityQuestionRepository,
+        @Inject(CRYPTO)
+        private readonly crypto: Crypto,
+        @Inject(JWT_SERVICE)
+        private readonly jwtService: IJWTService,
     ) {}
 
     /**
@@ -39,9 +40,7 @@ export class ChallengeController {
      * This can be thrown when the question/client does not exist (Not found 404)
      * or when DynamoDB is unavailable (Service unavailable 503)
      */
-    @Get()
-    @HttpCode(HttpStatus.OK)
-    public async getSecurityQuestion(@Param('login') login: string): Promise<GetSecurityQuestionChallengeResponse> {
+    public async getSecurityQuestion(login: string): Promise<GetSecurityQuestionChallengeResponse> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 
@@ -68,14 +67,17 @@ export class ChallengeController {
      * or when the answer is incorrect (Unauthorized 401)
      * or when DynamoDB is unavailable (Service unavailable 503)
      */
-    @Post('answer')
-    @HttpCode(HttpStatus.OK)
     public async answerSecurityQuestion(
-        @Param('login')
         login: string,
-        @Body()
         request: AnswerSecurityQuestionChallengeRequest,
     ): Promise<AnswerSecurityQuestionChallengeResponse> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 }
+
+export const CHALLENGE_SERVICE: InjectionToken = 'ChallengeService';
+
+export default <ClassProvider>{
+    provide: CHALLENGE_SERVICE,
+    useClass: ChallengeService,
+};
