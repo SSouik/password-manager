@@ -1,4 +1,4 @@
-import { ClassProvider, HttpStatus, Inject, InjectionToken } from '@nestjs/common';
+import { ClassProvider, HttpStatus, Inject, Injectable, InjectionToken } from '@nestjs/common';
 import { IAuthService, IClientRepository, IJWTService } from '@password-manager:api:interfaces';
 import { CRYPTO } from '@password-manager:api:providers';
 import { CLIENT_REPOSITORY } from '@password-manager:api:repositories/client/client.repository';
@@ -7,6 +7,7 @@ import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
 import { Client, LoginRequest, LoginResponse } from '@password-manager:types';
 
+@Injectable()
 export class AuthService implements IAuthService {
     constructor(
         @Inject(CLIENT_REPOSITORY)

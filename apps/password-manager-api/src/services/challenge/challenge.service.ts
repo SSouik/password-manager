@@ -1,6 +1,6 @@
 // Remove below line after implementing the service
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ClassProvider, Inject, InjectionToken } from '@nestjs/common';
+import { ClassProvider, Inject, Injectable, InjectionToken } from '@nestjs/common';
 import { IChallengeService, IJWTService, ISecurityQuestionRepository } from '@password-manager:api:interfaces';
 import { CRYPTO } from '@password-manager:api:providers';
 import { SECURITY_QUESTION_REPOSITORY } from '@password-manager:api:repositories/security-question/security-question.repository';
@@ -13,6 +13,7 @@ import {
     GetSecurityQuestionChallengeResponse,
 } from '@password-manager:types';
 
+@Injectable()
 export class ChallengeService implements IChallengeService {
     constructor(
         @Inject(SECURITY_QUESTION_REPOSITORY)

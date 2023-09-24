@@ -11,4 +11,5 @@ export * from './LoginRequest';
 export * from './LoginResponse';
 export * from './ResponseBase';
 export * from './UpdateClientRequest';
+export * from './UpdateClientResponse';
 export * from './UpdatePasswordRequest';

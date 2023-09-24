@@ -9,7 +9,7 @@ export class AuthController {
 
     @Post()
     @HttpCode(HttpStatus.OK)
-    public async login(@Body() request: LoginRequest): Promise<LoginResponse> {
+    public login(@Body() request: LoginRequest): Promise<LoginResponse> {
         return this.authService.login(request);
     }
 }
