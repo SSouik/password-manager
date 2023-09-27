@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 
 /**
  * This controller should contain three methods. One method to
- * create a security question, one to get the quesiton and answer
+ * create a security question, one to get the question and answer
  * and the last to update it.
  *
  * It is up to you to determine the following:

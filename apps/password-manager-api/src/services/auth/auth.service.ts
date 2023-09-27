@@ -5,7 +5,7 @@ import { CLIENT_REPOSITORY } from '@password-manager:api:repositories/client/cli
 import { JWT_SERVICE } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
-import { Client, LoginRequest, LoginResponse } from '@password-manager:types';
+import { LoginRequest, LoginResponse, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -21,16 +21,16 @@ export class AuthService implements IAuthService {
     public async login(request: LoginRequest): Promise<LoginResponse> {
         const client = await this.clientRepository
             .getClientByLogin(request.login)
-            .catch((error: PasswordManagerException<Partial<Client>>) => {
+            .catch((error: PasswordManagerException) => {
                 // If no client exists with the requested login, instead of
                 // responding with a 404, respond with a 401.
                 // This will tell consumers that the login and password combination is invalid.
                 // No need to provide context of logins that do or do not exist.
                 if (error.statusCode === HttpStatus.NOT_FOUND) {
                     return Promise.reject(
-                        PasswordManagerException.unauthorized<Partial<Client>>()
+                        PasswordManagerException.unauthorized()
                             .withMessage('Login and password combination is invalid.')
-                            .withContext(error.context),
+                            .withErrorCode(error.errorCode), // Using same error code to know the true error
                     );
                 }
 
@@ -44,9 +44,9 @@ export class AuthService implements IAuthService {
         // then respond with a 401 and a message stating that the login and password combination is invalid.
         if (request.password !== decryptedPassword) {
             return Promise.reject(
-                PasswordManagerException.unauthorized<Partial<Client>>()
+                PasswordManagerException.unauthorized()
                     .withMessage('Login and password combination is invalid.')
-                    .withContext({ login: request.login }),
+                    .withErrorCode(PasswordManagerErrorCodeEnum.CredentialsDoNotMatch),
             );
         }
 
@@ -54,9 +54,10 @@ export class AuthService implements IAuthService {
         const authToken = await this.jwtService.create({ clientId: client.clientId });
 
         return {
-            statusCode: HttpStatus.OK,
-            message: 'Login successful',
-            clientId: client.clientId,
+            client: {
+                clientId: client.clientId,
+                login: client.login,
+            },
             auth: authToken,
         };
     }

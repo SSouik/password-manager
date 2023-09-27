@@ -4,6 +4,7 @@ import { LOGGER, LOG_MESSAGE_FACTORY } from '@password-manager:api:providers';
 import { JWT_SERVICE } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { ILogger, ILogMessageFactory } from '@password-manager:logger';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 
@@ -29,9 +30,9 @@ export class AuthGuard implements CanActivate {
         if (!token) {
             this.logger.warn('Client attempted to enter a protected route without a token');
             return Promise.reject(
-                PasswordManagerException.forbidden().withMessage(
-                    'Client is forbidden from accessing the requested resource.',
-                ),
+                PasswordManagerException.forbidden()
+                    .withMessage('Client is forbidden from accessing the requested resource.')
+                    .withErrorCode(PasswordManagerErrorCodeEnum.NoToken),
             );
         }
 
@@ -43,9 +44,9 @@ export class AuthGuard implements CanActivate {
             .then(() => true)
             .catch(() => {
                 return Promise.reject(
-                    PasswordManagerException.forbidden().withMessage(
-                        'Client is forbidden from accessing the requested resource.',
-                    ),
+                    PasswordManagerException.forbidden()
+                        .withMessage('Client is forbidden from accessing the requested resource.')
+                        .withErrorCode(PasswordManagerErrorCodeEnum.InvalidToken),
                 );
             });
     }

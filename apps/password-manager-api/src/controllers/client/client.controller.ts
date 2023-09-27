@@ -5,7 +5,12 @@ import { AuthGuard } from '@password-manager:api:guards';
 import { IClientService } from '@password-manager:api:interfaces';
 import { CLIENT_SERVICE } from '@password-manager:api:services/client/client.service';
 import { PasswordManagerException } from '@password-manager:api:types';
-import { CreateClientRequest, CreateClientResponse, ResponseBase, UpdateClientRequest } from '@password-manager:types';
+import {
+    CreateClientRequest,
+    CreateClientResponse,
+    UpdateClientRequest,
+    UpdateClientResponse,
+} from '@password-manager:types';
 
 @Controller('clients')
 export class ClientController {
@@ -57,7 +62,7 @@ export class ClientController {
     @Delete(':clientId')
     @HttpCode(HttpStatus.ACCEPTED)
     @UseGuards(AuthGuard)
-    public async deleteClient(@Param('clientId') clientId: string): Promise<ResponseBase> {
+    public async deleteClient(@Param('clientId') clientId: string): Promise<void> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 
@@ -84,7 +89,7 @@ export class ClientController {
     public async updateClient(
         @Param('clientId') clientId: string,
         @Body() request: UpdateClientRequest,
-    ): Promise<ResponseBase> {
+    ): Promise<UpdateClientResponse> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 }

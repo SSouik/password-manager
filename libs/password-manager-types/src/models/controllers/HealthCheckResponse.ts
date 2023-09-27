@@ -1,8 +1,6 @@
-import { ResponseBase } from './ResponseBase';
-
 import { EnvironmentEnum } from '../../common';
 
-export type HealthCheckResponse = ResponseBase & {
+export type HealthCheckResponse = {
     environment: EnvironmentEnum;
     commitSha: string;
 };

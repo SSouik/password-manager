@@ -3,6 +3,7 @@ import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { JWTService } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Logger, LogMessageFactory } from '@password-manager:logger';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 import { Request } from 'express';
 
 import { AuthGuard } from './auth.guard';
@@ -69,9 +70,10 @@ describe('AuthGuard Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.FORBIDDEN);
                 expect(exception.message).toBe('Client is forbidden from accessing the requested resource.');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NoToken);
 
                 expect(mockLogMessageFactory.setContext).toBeCalledTimes(1);
                 expect(mockLogMessageFactory.setContext).toBeCalledWith('clientId', 'id');
@@ -95,9 +97,10 @@ describe('AuthGuard Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.FORBIDDEN);
                 expect(exception.message).toBe('Client is forbidden from accessing the requested resource.');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.InvalidToken);
 
                 expect(mockLogMessageFactory.setContext).toBeCalledTimes(1);
                 expect(mockLogMessageFactory.setContext).toBeCalledWith('clientId', 'id');

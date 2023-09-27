@@ -3,6 +3,7 @@ import { SecurityQuestionRepository } from '@password-manager:api:repositories/s
 import { JWTService } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { ChallengeService } from './challenge.service';
 
@@ -28,9 +29,10 @@ describe('ChallengeSecurity Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -43,9 +45,10 @@ describe('ChallengeSecurity Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });

@@ -15,8 +15,6 @@ export class HealthCheckController {
     @HttpCode(HttpStatus.OK)
     public getHealthCheck(): HealthCheckResponse {
         return {
-            statusCode: HttpStatus.OK,
-            message: 'Password Manager API is up and running',
             environment: this.appConfigService.getEnvironment(),
             commitSha: this.appConfigService.get('commitSha'),
         };

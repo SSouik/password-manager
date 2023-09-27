@@ -2,6 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { DynamoDBClient } from '@password-manager:dynamodb-client';
 import { Logger } from '@password-manager:logger';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { SecurityQuestionRepository } from './security-question.repository';
 
@@ -29,9 +30,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -43,9 +45,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -63,9 +66,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -83,9 +87,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });

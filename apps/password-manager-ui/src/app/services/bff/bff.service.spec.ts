@@ -23,11 +23,12 @@ describe('BFFService Tests', () => {
 
     describe('Login', () => {
         it('Sets the session in local storage when login is successful', fakeAsync(() => {
-            // mockLocalSessionService.set = jest.fn();
-
             mockHttpClient.post = jest.fn().mockReturnValue(
                 of(<LoginResponse>{
-                    clientId: 'id',
+                    client: {
+                        clientId: 'clientId',
+                        login: 'login',
+                    },
                     auth: {
                         token: 'token',
                         expiresIn: 3600,
@@ -35,9 +36,9 @@ describe('BFFService Tests', () => {
                 }),
             );
 
-            service.login('username', 'password').subscribe({
+            service.login('login', 'password').subscribe({
                 next: (response: LoginResponse) => {
-                    expect(response.clientId).toBe('id');
+                    expect(response.client.clientId).toBe('clientId');
                     expect(response.auth.token).toBe('token');
                     expect(response.auth.expiresIn).toBe(3600);
 
@@ -62,12 +63,12 @@ describe('BFFService Tests', () => {
                     message: 'OK',
                     passwords: [
                         {
-                            passwordId: 'id',
+                            passwordId: 'passwordId',
                             name: 'Name',
                             website: null,
                             login: 'Login',
                             value: 'password',
-                            clientId: 'id',
+                            clientId: 'clientId',
                         },
                     ],
                 }),
@@ -75,16 +76,14 @@ describe('BFFService Tests', () => {
 
             service.getPasswords('id').subscribe({
                 next: (response: GetPasswordsResponse) => {
-                    expect(response.statusCode).toBe(HttpStatusCode.Ok);
-                    expect(response.message).toBe('OK');
                     expect(response.passwords).toStrictEqual([
                         {
-                            passwordId: 'id',
+                            passwordId: 'passwordId',
                             name: 'Name',
                             website: null,
                             login: 'Login',
                             value: 'password',
-                            clientId: 'id',
+                            clientId: 'clientId',
                         },
                     ]);
                 },

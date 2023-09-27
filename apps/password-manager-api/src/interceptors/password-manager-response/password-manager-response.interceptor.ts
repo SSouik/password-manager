@@ -3,26 +3,21 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppConfig } from '@password-manager:api:config';
 import { IAppConfigService } from '@password-manager:api:interfaces';
 import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
-import { PasswordManagerResponse, ResponseBase } from '@password-manager:types';
-import { Request, Response } from 'express';
+import { PasswordManagerResponse } from '@password-manager:types';
+import { Response } from 'express';
 import { map, Observable } from 'rxjs';
 
 @Injectable()
-export class PasswordManagerResponseInterceptor<T extends ResponseBase>
-    implements NestInterceptor<T, PasswordManagerResponse>
-{
+export class PasswordManagerResponseInterceptor<T> implements NestInterceptor<T, PasswordManagerResponse> {
     constructor(@Inject(APP_CONFIG_SERVICE) private readonly appConfigService: IAppConfigService<AppConfig>) {}
 
     public intercept(
         context: ExecutionContext,
         next: CallHandler<T>,
-    ): Observable<PasswordManagerResponse> | Promise<Observable<PasswordManagerResponse>> {
+    ): Observable<PasswordManagerResponse> | Promise<Observable<PasswordManagerResponse & T>> {
         const httpContext = context.switchToHttp();
-        const request = httpContext.getRequest<Request>();
         const response = httpContext.getResponse<Response>();
 
-        // This is assuming that the client ID is available in every route
-        const clientId = request.params.clientId ?? null;
         const traceId = response.getHeader('x-request-trace-id');
         const version = this.appConfigService.get('version');
 
@@ -32,10 +27,8 @@ export class PasswordManagerResponseInterceptor<T extends ResponseBase>
                 const timestamp = new Date().toISOString();
                 response.setHeader('x-response-timestamp', timestamp);
 
-                return <PasswordManagerResponse>{
-                    statusCode: res.statusCode,
-                    message: res.message,
-                    clientId: clientId,
+                return <PasswordManagerResponse & T>{
+                    statusCode: response.statusCode,
                     ...res,
                     metadata: {
                         requestTraceId: traceId,

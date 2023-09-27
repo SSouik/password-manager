@@ -1,5 +1,5 @@
-import { ResponseBase } from './ResponseBase';
+import { ClientResponse } from './ClientResponse';
 
-export type CreateClientResponse = ResponseBase & {
-    clientId: string;
+export type CreateClientResponse = {
+    client: ClientResponse;
 };

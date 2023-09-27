@@ -1,5 +1,5 @@
-import { ResponseBase } from './ResponseBase';
+import { PasswordResponse } from './PasswordResponse';
 
-export type CreatePasswordResponse = ResponseBase & {
-    passwordId: string;
+export type CreatePasswordResponse = {
+    password: PasswordResponse;
 };

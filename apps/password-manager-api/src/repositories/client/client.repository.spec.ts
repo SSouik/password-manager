@@ -3,7 +3,7 @@ import { HttpStatus } from '@nestjs/common';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { DynamoDBClient } from '@password-manager:dynamodb-client';
 import { Logger } from '@password-manager:logger';
-import { Client } from '@password-manager:types';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { ClientRepository } from './client.repository';
 
@@ -60,13 +60,14 @@ describe('ClientRepository Tests', () => {
             });
 
             try {
-                await repository.getClientById('id');
+                await repository.getClientById('clientId');
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_FOUND);
-                expect(exception.message).toBe('Client not found by ID.');
+                expect(exception.message).toBe("No client exists with ID 'clientId'");
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.ClientNotFound);
 
                 expect(mockLogger.warn).toBeCalledTimes(1);
                 expect(mockLogger.warn).toBeCalledWith("Couldn't find the client by ID", {
@@ -77,7 +78,7 @@ describe('ClientRepository Tests', () => {
                 expect(mockDynamoDBClient.get).toBeCalledWith('Client', <GetCommandInput>{
                     TableName: 'Client',
                     Key: {
-                        clientId: 'id',
+                        clientId: 'clientId',
                     },
                 });
             }
@@ -89,13 +90,14 @@ describe('ClientRepository Tests', () => {
             mockDynamoDBClient.get = jest.fn().mockRejectedValue(err);
 
             try {
-                await repository.getClientById('id');
+                await repository.getClientById('clientId');
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
                 expect(exception.message).toBe('Service is temporarily unavailable.');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.DynamoDBDown);
 
                 expect(mockLogger.error).toBeCalledTimes(1);
                 expect(mockLogger.error).toBeCalledWith('Failed to find the client by ID', {
@@ -107,7 +109,7 @@ describe('ClientRepository Tests', () => {
                 expect(mockDynamoDBClient.get).toBeCalledWith('Client', <GetCommandInput>{
                     TableName: 'Client',
                     Key: {
-                        clientId: 'id',
+                        clientId: 'clientId',
                     },
                 });
             }
@@ -160,10 +162,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<Partial<Client>>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_FOUND);
-                expect(exception.message).toBe('No client was found for the provided login.');
-                expect(exception.context).toStrictEqual({ login: 'login' });
+                expect(exception.message).toBe("No client exists with login 'login'");
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.ClientNotFound);
 
                 expect(mockLogger.info).toBeCalledTimes(1);
                 expect(mockLogger.info).toBeCalledWith('Client not found by login', {
@@ -192,10 +194,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<Partial<Client>>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_FOUND);
-                expect(exception.message).toBe('No client was found for the provided login.');
-                expect(exception.context).toStrictEqual({ login: 'login' });
+                expect(exception.message).toBe("No client exists with login 'login'");
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.ClientNotFound);
 
                 expect(mockLogger.info).toBeCalledTimes(1);
                 expect(mockLogger.info).toBeCalledWith('Client not found by login', {
@@ -224,10 +226,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<Partial<Client>>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
                 expect(exception.message).toBe('Service is temporarily unavailable.');
-                expect(exception.context).toStrictEqual({ login: 'login' });
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.DynamoDBDown);
 
                 expect(mockLogger.error).toBeCalledTimes(1);
                 expect(mockLogger.error).toBeCalledWith('Failed to find the client by login', {
@@ -255,9 +257,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -269,9 +272,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -283,9 +287,10 @@ describe('ClientRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });

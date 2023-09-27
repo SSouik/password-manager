@@ -3,7 +3,7 @@ import { ClientRepository } from '@password-manager:api:repositories/client/clie
 import { JWTService } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
-import { AuthToken, Client } from '@password-manager:types';
+import { AuthToken, Client, ClientResponse, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { AuthService } from './auth.service';
 
@@ -29,7 +29,7 @@ describe('AuthService Tests', () => {
         it('Issues the client a token when they provide the correct password', async () => {
             mockClientRepository.getClientByLogin = jest
                 .fn()
-                .mockResolvedValue(<Client>{ clientId: 'id', login: 'login', password: 'password' });
+                .mockResolvedValue(<Client>{ clientId: 'clientId', login: 'login', password: 'password' });
 
             mockJWTService.create = jest.fn().mockResolvedValue(<AuthToken>{ token: 'token', expiresIn: 3600 });
 
@@ -42,11 +42,12 @@ describe('AuthService Tests', () => {
             expect(mockCrypto.decrypt).toBeCalledWith('password');
 
             expect(mockJWTService.create).toBeCalledTimes(1);
-            expect(mockJWTService.create).toBeCalledWith({ clientId: 'id' });
+            expect(mockJWTService.create).toBeCalledWith({ clientId: 'clientId' });
 
-            expect(actual.statusCode).toBe(HttpStatus.OK);
-            expect(actual.message).toBe('Login successful');
-            expect(actual.clientId).toBe('id');
+            expect(actual.client).toStrictEqual(<ClientResponse>{
+                clientId: 'clientId',
+                login: 'login',
+            });
             expect(actual.auth).toStrictEqual(<AuthToken>{
                 token: 'token',
                 expiresIn: 3600,
@@ -54,21 +55,17 @@ describe('AuthService Tests', () => {
         });
 
         it('Rejects with an Unauthorized PasswordManagerException when the requested login does not exist', async () => {
-            mockClientRepository.getClientByLogin = jest
-                .fn()
-                .mockRejectedValue(
-                    PasswordManagerException.notFound<Partial<Client>>().withContext({ login: 'login' }),
-                );
+            mockClientRepository.getClientByLogin = jest.fn().mockRejectedValue(PasswordManagerException.notFound());
 
             try {
                 await service.login({ login: 'login', password: 'password' });
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<Partial<Client>>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.UNAUTHORIZED);
                 expect(exception.message).toBe('Login and password combination is invalid.');
-                expect(exception.context).toStrictEqual({ login: 'login' });
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotFound);
 
                 expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
                 expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');
@@ -89,10 +86,10 @@ describe('AuthService Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<Partial<Client>>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.UNAUTHORIZED);
                 expect(exception.message).toBe('Login and password combination is invalid.');
-                expect(exception.context).toStrictEqual({ login: 'login' });
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.CredentialsDoNotMatch);
 
                 expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
                 expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');
@@ -108,9 +105,7 @@ describe('AuthService Tests', () => {
             mockClientRepository.getClientByLogin = jest
                 .fn()
                 .mockRejectedValue(
-                    PasswordManagerException.serviceUnavailable<Partial<Client>>()
-                        .withMessage('Service is temporarily unavailable.')
-                        .withContext({ login: 'login' }),
+                    PasswordManagerException.serviceUnavailable().withMessage('Service is temporarily unavailable.'),
                 );
 
             try {
@@ -118,10 +113,10 @@ describe('AuthService Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<Partial<Client>>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
                 expect(exception.message).toBe('Service is temporarily unavailable.');
-                expect(exception.context).toStrictEqual({ login: 'login' });
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.ServiceUnavailable);
 
                 expect(mockClientRepository.getClientByLogin).toBeCalledTimes(1);
                 expect(mockClientRepository.getClientByLogin).toBeCalledWith('login');

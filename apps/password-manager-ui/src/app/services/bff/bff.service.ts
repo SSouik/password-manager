@@ -21,7 +21,7 @@ export class BFFService {
                 const expirationTimestamp = new Date(Date.now() + response.auth.expiresIn * 1000).getTime().toString();
 
                 localStorage.setItem('username', login);
-                localStorage.setItem('sessionId', response.clientId);
+                localStorage.setItem('sessionId', response.client.clientId);
                 localStorage.setItem('sessionToken', response.auth.token);
                 localStorage.setItem('sessionTokenExpiration', expirationTimestamp);
 

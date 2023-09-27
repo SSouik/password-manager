@@ -4,6 +4,7 @@ import { PasswordRepository } from '@password-manager:api:repositories/password/
 import { SecurityQuestionRepository } from '@password-manager:api:repositories/security-question/security-question.repository';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { ClientService } from './client.service';
 
@@ -35,9 +36,10 @@ describe('ClientService Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 
@@ -52,9 +54,10 @@ describe('ClientService Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 
@@ -69,9 +72,10 @@ describe('ClientService Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 

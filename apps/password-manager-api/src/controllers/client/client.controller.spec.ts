@@ -1,26 +1,16 @@
 import { HttpStatus } from '@nestjs/common';
-import { ClientRepository } from '@password-manager:api:repositories/client/client.repository';
-import { PasswordRepository } from '@password-manager:api:repositories/password/password.repository';
-import { SecurityQuestionRepository } from '@password-manager:api:repositories/security-question/security-question.repository';
+import { ClientService } from '@password-manager:api:services/client/client.service';
 import { PasswordManagerException } from '@password-manager:api:types';
-import { Crypto } from '@password-manager:crypto';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { ClientController } from './client.controller';
 
 describe('ClientController Tests', () => {
-    const mockClientRepository = ClientRepository.prototype;
-    const mockPasswordRepository = PasswordRepository.prototype;
-    const mockSecurityQuestionRepository = SecurityQuestionRepository.prototype;
-    const mockCrypto = Crypto.prototype;
+    const mockClientService = ClientService.prototype;
     let controller: ClientController;
 
     beforeEach(() => {
-        controller = new ClientController(
-            mockClientRepository,
-            mockPasswordRepository,
-            mockSecurityQuestionRepository,
-            mockCrypto,
-        );
+        controller = new ClientController(mockClientService);
     });
 
     afterEach(() => {
@@ -35,9 +25,10 @@ describe('ClientController Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 
@@ -52,13 +43,14 @@ describe('ClientController Tests', () => {
         // Remove this test after the method is implemented
         it('Method not implemented', async () => {
             try {
-                await controller.deleteClient('id');
+                await controller.deleteClient('clientId');
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 
@@ -76,13 +68,14 @@ describe('ClientController Tests', () => {
         // Remove this test after the method is implemented
         it('Method not implemented', async () => {
             try {
-                await controller.updateClient('id', { login: 'login', password: 'password' });
+                await controller.updateClient('clientId', { login: 'login', password: 'password' });
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 

@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { DynamoDBClient } from '@password-manager:dynamodb-client';
 import { Logger } from '@password-manager:logger';
-import { Password } from '@password-manager:types';
+import { Password, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { PasswordRepository } from './password.repository';
 
@@ -30,9 +30,10 @@ describe('PasswordRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -83,7 +84,7 @@ describe('PasswordRepository Tests', () => {
             mockDynamoDBClient.query = jest.fn().mockResolvedValue({ Items: null });
 
             try {
-                await repository.getPasswordsByClientId('123');
+                await repository.getPasswordsByClientId('clientId');
             } catch (error) {
                 expect(mockLogger.info).toBeCalledTimes(1);
                 expect(mockLogger.info).toBeCalledWith('No passwords were found for client');
@@ -94,15 +95,16 @@ describe('PasswordRepository Tests', () => {
                     IndexName: 'ClientIdIndex',
                     KeyConditionExpression: 'clientId = :clientId',
                     ExpressionAttributeValues: {
-                        ':clientId': '123',
+                        ':clientId': 'clientId',
                     },
                 });
 
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_FOUND);
-                expect(exception.message).toBe('No passwords were found for the client.');
+                expect(exception.message).toBe("No passwords exist for the client ID 'clientId'");
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.PasswordNotFound);
             }
         });
 
@@ -110,7 +112,7 @@ describe('PasswordRepository Tests', () => {
             mockDynamoDBClient.query = jest.fn().mockResolvedValue({ Items: [] });
 
             try {
-                await repository.getPasswordsByClientId('123');
+                await repository.getPasswordsByClientId('clientId');
             } catch (error) {
                 expect(mockLogger.info).toBeCalledTimes(1);
                 expect(mockLogger.info).toBeCalledWith('No passwords were found for client');
@@ -121,15 +123,16 @@ describe('PasswordRepository Tests', () => {
                     IndexName: 'ClientIdIndex',
                     KeyConditionExpression: 'clientId = :clientId',
                     ExpressionAttributeValues: {
-                        ':clientId': '123',
+                        ':clientId': 'clientId',
                     },
                 });
 
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_FOUND);
-                expect(exception.message).toBe('No passwords were found for the client.');
+                expect(exception.message).toBe("No passwords exist for the client ID 'clientId'");
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.PasswordNotFound);
             }
         });
 
@@ -138,10 +141,13 @@ describe('PasswordRepository Tests', () => {
             mockDynamoDBClient.query = jest.fn().mockRejectedValue(mockError);
 
             try {
-                await repository.getPasswordsByClientId('123');
+                await repository.getPasswordsByClientId('clientId');
             } catch (error) {
                 expect(mockLogger.error).toBeCalledTimes(1);
-                expect(mockLogger.error).toBeCalledWith('Failed to get passwords for the client', { error: mockError });
+                expect(mockLogger.error).toBeCalledWith('Failed to get passwords for the client', {
+                    dynamoDB: { table: 'Password' },
+                    error: mockError,
+                });
 
                 expect(mockDynamoDBClient.query).toBeCalledTimes(1);
                 expect(mockDynamoDBClient.query).toBeCalledWith('Password', {
@@ -149,15 +155,16 @@ describe('PasswordRepository Tests', () => {
                     IndexName: 'ClientIdIndex',
                     KeyConditionExpression: 'clientId = :clientId',
                     ExpressionAttributeValues: {
-                        ':clientId': '123',
+                        ':clientId': 'clientId',
                     },
                 });
 
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
                 expect(exception.message).toBe('Service is temporarily unavailable.');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.DynamoDBDown);
             }
         });
     });
@@ -176,9 +183,10 @@ describe('PasswordRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -190,9 +198,10 @@ describe('PasswordRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -204,9 +213,10 @@ describe('PasswordRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });
@@ -225,9 +235,10 @@ describe('PasswordRepository Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(error.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
     });

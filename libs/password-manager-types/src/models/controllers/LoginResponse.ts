@@ -1,8 +1,8 @@
-import { ResponseBase } from './ResponseBase';
+import { ClientResponse } from './ClientResponse';
 
 import { AuthToken } from '../AuthToken';
 
-export type LoginResponse = ResponseBase & {
-    clientId: string;
+export type LoginResponse = {
+    client: ClientResponse;
     auth: AuthToken;
 };

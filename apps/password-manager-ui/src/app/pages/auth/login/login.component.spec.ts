@@ -78,7 +78,10 @@ describe('LoginComponent Tests', () => {
 
             mockBFFService.login = jest.fn().mockReturnValue(
                 of(<LoginResponse>{
-                    clientId: 'id',
+                    client: {
+                        clientId: 'clientId',
+                        login: 'username',
+                    },
                     auth: {
                         token: 'token',
                         expiresIn: 3600,

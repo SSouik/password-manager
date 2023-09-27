@@ -2,14 +2,10 @@ import { HttpStatus } from '@nestjs/common';
 import { ArgumentsHost, HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
 import { PasswordManagerException } from '@password-manager:api:types';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 import { Request, Response } from 'express';
 
 import { PasswordManagerFilter } from './password-manager.filter';
-
-type TestType = {
-    foo: string;
-    bar: number;
-};
 
 describe('PasswordManagerFilter Tests', () => {
     const mockAppConfigService = AppConfigService.prototype;
@@ -18,7 +14,7 @@ describe('PasswordManagerFilter Tests', () => {
     const mockResponse = {} as Response;
     const mockHttpContext = {} as HttpArgumentsHost;
     const mockArgumentsHost = {} as ArgumentsHost;
-    let filter: PasswordManagerFilter<TestType>;
+    let filter: PasswordManagerFilter;
 
     beforeEach(() => {
         jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(mockTimestamp);
@@ -33,7 +29,7 @@ describe('PasswordManagerFilter Tests', () => {
         mockHttpContext.getRequest = jest.fn().mockReturnValue(mockRequest);
         mockHttpContext.getResponse = jest.fn().mockReturnValue(mockResponse);
 
-        filter = new PasswordManagerFilter<TestType>(mockAppConfigService);
+        filter = new PasswordManagerFilter(mockAppConfigService);
     });
 
     afterEach(() => {
@@ -41,14 +37,7 @@ describe('PasswordManagerFilter Tests', () => {
     });
 
     it('Catches a PasswordManagerException and converts it into a PasswordManagerResponse', () => {
-        mockRequest.params = {
-            clientId: '123',
-        };
-
-        filter.catch(
-            PasswordManagerException.notFound<TestType>().withContext({ foo: 'bar', bar: 123 }),
-            mockArgumentsHost,
-        );
+        filter.catch(PasswordManagerException.notFound(), mockArgumentsHost);
 
         expect(mockResponse.getHeader).toBeCalledTimes(1);
         expect(mockResponse.getHeader).toBeCalledWith('x-request-trace-id');
@@ -62,46 +51,10 @@ describe('PasswordManagerFilter Tests', () => {
         expect(mockResponse.json).toBeCalledTimes(1);
         expect(mockResponse.json).toBeCalledWith({
             statusCode: HttpStatus.NOT_FOUND,
-            message: 'Not Found',
-            context: {
-                foo: 'bar',
-                bar: 123,
+            error: {
+                code: PasswordManagerErrorCodeEnum.NotFound,
+                details: 'Not Found',
             },
-            clientId: '123',
-            metadata: {
-                requestTraceId: 'trace-id',
-                timestamp: mockTimestamp,
-                version: '0.0.1',
-            },
-        });
-    });
-
-    it('Catches a PasswordManagerException and converts it into a PasswordManagerResponse with no client ID', () => {
-        mockRequest.params = {};
-
-        filter.catch(
-            PasswordManagerException.notFound<TestType>().withContext({ foo: 'bar', bar: 123 }),
-            mockArgumentsHost,
-        );
-
-        expect(mockResponse.getHeader).toBeCalledTimes(1);
-        expect(mockResponse.getHeader).toBeCalledWith('x-request-trace-id');
-
-        expect(mockResponse.setHeader).toBeCalledTimes(1);
-        expect(mockResponse.setHeader).toBeCalledWith('x-response-timestamp', mockTimestamp);
-
-        expect(mockResponse.status).toBeCalledTimes(1);
-        expect(mockResponse.status).toBeCalledWith(HttpStatus.NOT_FOUND);
-
-        expect(mockResponse.json).toBeCalledTimes(1);
-        expect(mockResponse.json).toBeCalledWith({
-            statusCode: HttpStatus.NOT_FOUND,
-            message: 'Not Found',
-            context: {
-                foo: 'bar',
-                bar: 123,
-            },
-            clientId: null,
             metadata: {
                 requestTraceId: 'trace-id',
                 timestamp: mockTimestamp,

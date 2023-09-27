@@ -2,6 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { JWTBuilder } from '@password-manager:api:builders/jwt/jwt.builder';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Logger } from '@password-manager:logger';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { JWTService } from './jwt.service';
 
@@ -58,9 +59,10 @@ describe('JWTService Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.FORBIDDEN);
                 expect(exception.message).toBe('Token does not belong to the client.');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.TokenDoesNotBelongToClient);
 
                 expect(mockLogger.warn).toBeCalledTimes(1);
                 expect(mockLogger.warn).toBeCalledWith('Client attempted to verify a token that is not theirs', {
@@ -80,9 +82,10 @@ describe('JWTService Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.FORBIDDEN);
                 expect(exception.message).toBe('Token failed verification.');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.InvalidToken);
 
                 expect(mockLogger.error).toBeCalledTimes(1);
                 expect(mockLogger.error).toBeCalledWith('Failed to verify the clients token', {

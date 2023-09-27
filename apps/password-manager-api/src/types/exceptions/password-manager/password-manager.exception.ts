@@ -1,70 +1,95 @@
 import { HttpStatus } from '@nestjs/common';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
-export class PasswordManagerException<T> implements Error {
+export class PasswordManagerException implements Error {
     public statusCode: HttpStatus;
+    public errorCode: PasswordManagerErrorCodeEnum;
     public name = 'PasswordManagerException';
     public message: string;
     public stack?: string;
-    public context: T;
 
-    constructor(statusCode = HttpStatus.INTERNAL_SERVER_ERROR, message = 'Internal Server Error', context = {}) {
+    constructor(
+        statusCode = HttpStatus.INTERNAL_SERVER_ERROR,
+        code = PasswordManagerErrorCodeEnum.InternalServerError,
+        message = 'Internal Server Error',
+    ) {
         this.statusCode = statusCode;
+        this.errorCode = code;
         this.message = message;
-        this.context = context as T;
     }
 
-    public static create<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException();
+    public static badRequest(): PasswordManagerException {
+        return new PasswordManagerException(
+            HttpStatus.BAD_REQUEST,
+            PasswordManagerErrorCodeEnum.BadRequest,
+            'Bad Request',
+        );
     }
 
-    public static badRequest<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException(HttpStatus.BAD_REQUEST, 'Bad Request');
+    public static unauthorized(): PasswordManagerException {
+        return new PasswordManagerException(
+            HttpStatus.UNAUTHORIZED,
+            PasswordManagerErrorCodeEnum.Unauthorized,
+            'Unauthorized',
+        );
     }
 
-    public static unauthorized<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException(HttpStatus.UNAUTHORIZED, 'Unauthorized');
+    public static forbidden(): PasswordManagerException {
+        return new PasswordManagerException(HttpStatus.FORBIDDEN, PasswordManagerErrorCodeEnum.Forbidden, 'Forbidden');
     }
 
-    public static forbidden<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException(HttpStatus.FORBIDDEN, 'Forbidden');
+    public static notFound(): PasswordManagerException {
+        return new PasswordManagerException(HttpStatus.NOT_FOUND, PasswordManagerErrorCodeEnum.NotFound, 'Not Found');
     }
 
-    public static notFound<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException(HttpStatus.NOT_FOUND, 'Not Found');
+    public static conflict(): PasswordManagerException {
+        return new PasswordManagerException(HttpStatus.CONFLICT, PasswordManagerErrorCodeEnum.Conflict, 'Conflict');
     }
 
-    public static conflict<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException(HttpStatus.CONFLICT, 'Conflict');
+    public static internalServerError(): PasswordManagerException {
+        return new PasswordManagerException(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            PasswordManagerErrorCodeEnum.InternalServerError,
+            'Internal Server Error',
+        );
     }
 
-    public static internalServerError<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException(HttpStatus.INTERNAL_SERVER_ERROR, 'Internal Server Error');
+    public static notImplemented(): PasswordManagerException {
+        return new PasswordManagerException(
+            HttpStatus.NOT_IMPLEMENTED,
+            PasswordManagerErrorCodeEnum.NotImplemented,
+            'Not Implemented',
+        );
     }
 
-    public static notImplemented<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException(HttpStatus.NOT_IMPLEMENTED, 'Not Implemented');
+    public static badGateway(): PasswordManagerException {
+        return new PasswordManagerException(
+            HttpStatus.BAD_GATEWAY,
+            PasswordManagerErrorCodeEnum.BadGateway,
+            'Bad Gateway',
+        );
     }
 
-    public static badGateway<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException(HttpStatus.BAD_GATEWAY, 'Bad Gateway');
+    public static serviceUnavailable(): PasswordManagerException {
+        return new PasswordManagerException(
+            HttpStatus.SERVICE_UNAVAILABLE,
+            PasswordManagerErrorCodeEnum.ServiceUnavailable,
+            'Service Unavailable',
+        );
     }
 
-    public static serviceUnavailable<K>(): PasswordManagerException<K> {
-        return new PasswordManagerException(HttpStatus.SERVICE_UNAVAILABLE, 'Service Unavailable');
-    }
-
-    public withStatusCode(statusCode: HttpStatus): PasswordManagerException<T> {
+    public withStatusCode(statusCode: HttpStatus): PasswordManagerException {
         this.statusCode = statusCode;
         return this;
     }
 
-    public withMessage(message: string): PasswordManagerException<T> {
+    public withMessage(message: string): PasswordManagerException {
         this.message = message;
         return this;
     }
 
-    public withContext(context: T): PasswordManagerException<T> {
-        this.context = context;
+    public withErrorCode(errorCode: PasswordManagerErrorCodeEnum): PasswordManagerException {
+        this.errorCode = errorCode;
         return this;
     }
 }

@@ -9,7 +9,7 @@ import { DYNAMODB_CLIENT, LOGGER } from '@password-manager:api:providers';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { IDynamoDBClient } from '@password-manager:dynamodb-client';
 import { ILogger } from '@password-manager:logger';
-import { Password } from '@password-manager:types';
+import { Password, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 @Injectable()
 export class PasswordRepository implements IPasswordRepository {
@@ -43,17 +43,26 @@ export class PasswordRepository implements IPasswordRepository {
                 this.logger.info('No passwords were found for client');
 
                 return Promise.reject(
-                    PasswordManagerException.notFound().withMessage('No passwords were found for the client.'),
+                    PasswordManagerException.notFound()
+                        .withMessage(`No passwords exist for the client ID '${clientId}'`)
+                        .withErrorCode(PasswordManagerErrorCodeEnum.PasswordNotFound),
                 );
             }
 
             this.logger.info('Successfully found passwords for client');
             return result.Items as Array<Password>;
         } catch (error) {
-            this.logger.error('Failed to get passwords for the client', { error });
+            this.logger.error('Failed to get passwords for the client', {
+                dynamoDB: {
+                    table: this.TABLE_NAME,
+                },
+                error,
+            });
 
             return Promise.reject(
-                PasswordManagerException.serviceUnavailable().withMessage('Service is temporarily unavailable.'),
+                PasswordManagerException.serviceUnavailable()
+                    .withMessage('Service is temporarily unavailable.')
+                    .withErrorCode(PasswordManagerErrorCodeEnum.DynamoDBDown),
             );
         }
     }

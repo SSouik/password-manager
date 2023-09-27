@@ -1,4 +1,3 @@
-export type UpdateClientResponse = {
-    clientId: string;
-    login: string;
-};
+import { CreateClientResponse } from './CreateClientResponse';
+
+export type UpdateClientResponse = CreateClientResponse;

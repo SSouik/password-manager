@@ -1,5 +1,3 @@
-import { ResponseBase } from './ResponseBase';
-
-export type GetSecurityQuestionChallengeResponse = ResponseBase & {
+export type GetSecurityQuestionChallengeResponse = {
     question: string;
 };

@@ -28,7 +28,11 @@ export class SecurityQuestionRepository implements ISecurityQuestionRepository {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 
-    public updateSecurityQuestion(securityQuestion: SecurityQuestion): Promise<void> {
+    public updateSecurityQuestion(securityQuestion: SecurityQuestion): Promise<SecurityQuestion> {
+        return Promise.reject(PasswordManagerException.notImplemented());
+    }
+
+    public deleteSecurityQuestionByClientId(clientId: string): Promise<void> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 }

@@ -16,7 +16,6 @@ import { Crypto } from '@password-manager:crypto';
 import {
     CreateClientRequest,
     CreateClientResponse,
-    ResponseBase,
     UpdateClientRequest,
     UpdateClientResponse,
 } from '@password-manager:types';
@@ -71,7 +70,7 @@ export class ClientService implements IClientService {
      * This can be thrown for multiple reasons. The client was not found (404 Not Found)
      * or when DynamoDB is unavailable (Service Unavailable 503)
      */
-    public deleteClient(clientId: string): Promise<ResponseBase> {
+    public deleteClient(clientId: string): Promise<void> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 

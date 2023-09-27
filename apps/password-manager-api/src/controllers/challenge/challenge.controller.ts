@@ -2,13 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, HttpCode, Get, Inject, Param, Post, Body } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
-import { IChallengeService, IJWTService, ISecurityQuestionRepository } from '@password-manager:api:interfaces';
-import { CRYPTO } from '@password-manager:api:providers';
-import { SECURITY_QUESTION_REPOSITORY } from '@password-manager:api:repositories/security-question/security-question.repository';
+import { IChallengeService } from '@password-manager:api:interfaces';
 import { CHALLENGE_SERVICE } from '@password-manager:api:services/challenge/challenge.service';
-import { JWT_SERVICE } from '@password-manager:api:services/jwt/jwt.service';
 import { PasswordManagerException } from '@password-manager:api:types';
-import { Crypto } from '@password-manager:crypto';
 import {
     AnswerSecurityQuestionChallengeRequest,
     AnswerSecurityQuestionChallengeResponse,

@@ -1,18 +1,16 @@
-import { HttpException, HttpStatus, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
-import { PasswordRepository } from '@password-manager:api:repositories/password/password.repository';
+import { HttpStatus } from '@nestjs/common';
+import { PasswordService } from '@password-manager:api:services/password/password.service';
 import { PasswordManagerException } from '@password-manager:api:types';
-import { Crypto } from '@password-manager:crypto';
-import { Password } from '@password-manager:types';
+import { Password, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { PasswordsController } from './passwords.controller';
 
 describe('PasswordsController Tests', () => {
-    const mockPasswordRepository = PasswordRepository.prototype;
-    const mockCrypto = Crypto.prototype;
+    const mockPasswordService = PasswordService.prototype;
     let controller: PasswordsController;
 
     beforeEach(() => {
-        controller = new PasswordsController(mockPasswordRepository, mockCrypto);
+        controller = new PasswordsController(mockPasswordService);
     });
 
     afterEach(() => {
@@ -20,38 +18,36 @@ describe('PasswordsController Tests', () => {
     });
 
     describe('Get Passwords', () => {
-        beforeEach(() => {
-            mockCrypto.decrypt = jest.fn().mockReturnValue('password');
-        });
-
         describe('Successful Results', () => {
             it("Returns a 200 and the client's passwords", async () => {
-                mockPasswordRepository.getPasswordsByClientId = jest.fn().mockResolvedValue([
-                    <Password>{
-                        passwordId: 'id',
-                        name: 'Foo',
-                        website: 'http://foo.com',
-                        login: 'login',
-                        value: 'password',
-                        clientId: '123',
-                    },
-                ]);
+                mockPasswordService.getPasswords = jest.fn().mockResolvedValue({
+                    statusCode: HttpStatus.OK,
+                    message: 'Ok',
+                    passwords: [
+                        <Password>{
+                            passwordId: 'passwordId',
+                            name: 'name',
+                            website: 'http://foo.com',
+                            login: 'login',
+                            value: 'value',
+                            clientId: 'clientId',
+                        },
+                    ],
+                });
 
-                const actual = await controller.getPasswords('123');
+                const actual = await controller.getPasswords('clientId');
 
-                expect(mockPasswordRepository.getPasswordsByClientId).toBeCalledTimes(1);
-                expect(mockPasswordRepository.getPasswordsByClientId).toBeCalledWith('123');
+                expect(mockPasswordService.getPasswords).toBeCalledTimes(1);
+                expect(mockPasswordService.getPasswords).toBeCalledWith('clientId');
 
-                expect(actual.statusCode).toBe(HttpStatus.OK);
-                expect(actual.message).toBe('Ok');
                 expect(actual.passwords).toStrictEqual([
                     <Password>{
-                        passwordId: 'id',
-                        name: 'Foo',
+                        passwordId: 'passwordId',
+                        name: 'name',
                         website: 'http://foo.com',
                         login: 'login',
-                        value: 'password',
-                        clientId: '123',
+                        value: 'value',
+                        clientId: 'clientId',
                     },
                 ]);
             });
@@ -59,42 +55,42 @@ describe('PasswordsController Tests', () => {
 
         describe('Not Found results', () => {
             it('Returns a 404 when the client does not have any passwords', async () => {
-                mockPasswordRepository.getPasswordsByClientId = jest
-                    .fn()
-                    .mockRejectedValue(new NotFoundException('Not Found'));
+                mockPasswordService.getPasswords = jest.fn().mockRejectedValue(PasswordManagerException.notFound());
 
                 try {
-                    await controller.getPasswords('123');
+                    await controller.getPasswords('clientId');
                 } catch (error) {
-                    expect(mockPasswordRepository.getPasswordsByClientId).toBeCalledTimes(1);
-                    expect(mockPasswordRepository.getPasswordsByClientId).toBeCalledWith('123');
+                    expect(mockPasswordService.getPasswords).toBeCalledTimes(1);
+                    expect(mockPasswordService.getPasswords).toBeCalledWith('clientId');
 
-                    expect(error instanceof HttpException).toBeTruthy();
+                    expect(error).toBeInstanceOf(PasswordManagerException);
 
-                    const exception = error as HttpException;
-                    expect(exception.getStatus()).toBe(HttpStatus.NOT_FOUND);
+                    const exception = error as PasswordManagerException;
+                    expect(exception.statusCode).toBe(HttpStatus.NOT_FOUND);
                     expect(exception.message).toBe('Not Found');
+                    expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotFound);
                 }
             });
         });
 
         describe('Service Unavailable results', () => {
             it("Returns a 503 when getting the client's passwords fails for an unknown reason", async () => {
-                mockPasswordRepository.getPasswordsByClientId = jest
+                mockPasswordService.getPasswords = jest
                     .fn()
-                    .mockRejectedValue(new ServiceUnavailableException('Service Unavailable'));
+                    .mockRejectedValue(PasswordManagerException.serviceUnavailable());
 
                 try {
-                    await controller.getPasswords('123');
+                    await controller.getPasswords('clientId');
                 } catch (error) {
-                    expect(mockPasswordRepository.getPasswordsByClientId).toBeCalledTimes(1);
-                    expect(mockPasswordRepository.getPasswordsByClientId).toBeCalledWith('123');
+                    expect(mockPasswordService.getPasswords).toBeCalledTimes(1);
+                    expect(mockPasswordService.getPasswords).toBeCalledWith('clientId');
 
-                    expect(error instanceof HttpException).toBeTruthy();
+                    expect(error).toBeInstanceOf(PasswordManagerException);
 
-                    const exception = error as HttpException;
-                    expect(exception.getStatus()).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+                    const exception = error as PasswordManagerException;
+                    expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
                     expect(exception.message).toBe('Service Unavailable');
+                    expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.ServiceUnavailable);
                 }
             });
         });
@@ -104,7 +100,7 @@ describe('PasswordsController Tests', () => {
         // Remove this test after the method is implemented
         it('Method not implemented', async () => {
             try {
-                await controller.createPassword('id', {
+                await controller.createPassword('clientId', {
                     name: 'name',
                     website: 'http://foo.com',
                     login: 'login',
@@ -113,9 +109,10 @@ describe('PasswordsController Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 
@@ -130,13 +127,14 @@ describe('PasswordsController Tests', () => {
         // Remove this test after the method is implemented
         it('Method not implemented', async () => {
             try {
-                await controller.deletePassword('id');
+                await controller.deletePassword('passwordId');
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 
@@ -154,7 +152,7 @@ describe('PasswordsController Tests', () => {
         // Remove this test after the method is implemented
         it('Method not implemented', async () => {
             try {
-                await controller.updatePassword('id', 'id', {
+                await controller.updatePassword('clientId', 'passwordId', {
                     name: 'name',
                     website: 'http://foo.com',
                     login: 'login',
@@ -163,9 +161,10 @@ describe('PasswordsController Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 

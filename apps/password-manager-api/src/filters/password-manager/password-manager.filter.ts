@@ -3,31 +3,29 @@ import { APP_FILTER } from '@nestjs/core';
 import { AppConfig } from '@password-manager:api:config';
 import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
 import { IAppConfigService, PasswordManagerException } from '@password-manager:api:types';
-import { PasswordManagerResponse } from '@password-manager:types';
-import { Request, Response } from 'express';
+import { PasswordManagerErrorResponse } from '@password-manager:types';
+import { Response } from 'express';
 
 @Catch(PasswordManagerException)
-export class PasswordManagerFilter<T> implements ExceptionFilter<PasswordManagerException<T>> {
+export class PasswordManagerFilter implements ExceptionFilter<PasswordManagerException> {
     constructor(@Inject(APP_CONFIG_SERVICE) private readonly appConfigService: IAppConfigService<AppConfig>) {}
 
-    public catch(exception: PasswordManagerException<T>, host: ArgumentsHost) {
+    public catch(exception: PasswordManagerException, host: ArgumentsHost) {
         const httpContext = host.switchToHttp();
-        const request = httpContext.getRequest<Request>();
         const response = httpContext.getResponse<Response>();
 
-        // This is assuming that the client ID is available in every route
-        const clientId = request.params.clientId ?? null;
         const timestamp = new Date().toISOString();
         const traceId = response.getHeader('x-request-trace-id');
         const version = this.appConfigService.get('version');
 
         response.setHeader('x-response-timestamp', timestamp);
 
-        const result = <PasswordManagerResponse>{
+        const result = <PasswordManagerErrorResponse>{
             statusCode: exception.statusCode,
-            message: exception.message,
-            clientId: clientId,
-            context: exception.context,
+            error: {
+                code: exception.errorCode,
+                details: exception.message,
+            },
             metadata: {
                 requestTraceId: traceId,
                 timestamp: timestamp,

@@ -1,4 +1,3 @@
-import { HttpStatus } from '@nestjs/common/enums';
 import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
 import { EnvironmentEnum } from '@password-manager:types';
 
@@ -29,8 +28,8 @@ describe('HealthCheckController Tests', () => {
             expect(mockAppConfigService.get).toBeCalledTimes(1);
             expect(mockAppConfigService.get).toBeCalledWith('commitSha');
 
-            expect(actual.statusCode).toBe(HttpStatus.OK);
             expect(actual.environment).toBe(EnvironmentEnum.Local);
+            expect(actual.commitSha).toBe('some-config');
         });
     });
 });

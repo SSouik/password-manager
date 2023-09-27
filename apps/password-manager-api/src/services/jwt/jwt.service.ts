@@ -5,7 +5,7 @@ import { LOGGER } from '@password-manager:api:providers/factories/logger/logger.
 import { PasswordManagerException } from '@password-manager:api:types';
 import { DateUtils } from '@password-manager:api:utils';
 import { ILogger } from '@password-manager:logger';
-import { JWTPayload, AuthToken } from '@password-manager:types';
+import { JWTPayload, AuthToken, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 @Injectable()
 export class JWTService implements IJWTService {
@@ -49,14 +49,20 @@ export class JWTService implements IJWTService {
                 });
 
                 return Promise.reject(
-                    PasswordManagerException.forbidden().withMessage('Token does not belong to the client.'),
+                    PasswordManagerException.forbidden()
+                        .withMessage('Token does not belong to the client.')
+                        .withErrorCode(PasswordManagerErrorCodeEnum.TokenDoesNotBelongToClient),
                 );
             }
 
             this.logger.info('Successfully verified the clients token');
         } catch (error) {
             this.logger.error('Failed to verify the clients token', { token: token, error: error });
-            return Promise.reject(PasswordManagerException.forbidden().withMessage('Token failed verification.'));
+            return Promise.reject(
+                PasswordManagerException.forbidden()
+                    .withMessage('Token failed verification.')
+                    .withErrorCode(PasswordManagerErrorCodeEnum.InvalidToken),
+            );
         }
     }
 }

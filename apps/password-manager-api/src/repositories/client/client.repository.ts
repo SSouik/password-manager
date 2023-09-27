@@ -6,7 +6,7 @@ import { DYNAMODB_CLIENT, LOGGER } from '@password-manager:api:providers';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { IDynamoDBClient } from '@password-manager:dynamodb-client';
 import { ILogger } from '@password-manager:logger';
-import { Client } from '@password-manager:types';
+import { Client, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 @Injectable()
 export class ClientRepository implements IClientRepository {
@@ -32,7 +32,11 @@ export class ClientRepository implements IClientRepository {
 
             if (!result.Item) {
                 this.logger.warn("Couldn't find the client by ID", { dynamoDB: { table: this.TABLE_NAME } });
-                return Promise.reject(PasswordManagerException.notFound().withMessage('Client not found by ID.'));
+                return Promise.reject(
+                    PasswordManagerException.notFound()
+                        .withMessage(`No client exists with ID '${clientId}'`)
+                        .withErrorCode(PasswordManagerErrorCodeEnum.ClientNotFound),
+                );
             }
 
             this.logger.info('Found client by ID', { dynamoDB: { table: this.TABLE_NAME } });
@@ -44,7 +48,9 @@ export class ClientRepository implements IClientRepository {
                 error: error,
             });
             return Promise.reject(
-                PasswordManagerException.serviceUnavailable().withMessage('Service is temporarily unavailable.'),
+                PasswordManagerException.serviceUnavailable()
+                    .withMessage('Service is temporarily unavailable.')
+                    .withErrorCode(PasswordManagerErrorCodeEnum.DynamoDBDown),
             );
         }
     }
@@ -66,9 +72,9 @@ export class ClientRepository implements IClientRepository {
                 this.logger.info('Client not found by login', { dynamoDB: { table: this.TABLE_NAME, login: login } });
 
                 return Promise.reject(
-                    PasswordManagerException.notFound<Partial<Client>>()
-                        .withMessage('No client was found for the provided login.')
-                        .withContext({ login: login }),
+                    PasswordManagerException.notFound()
+                        .withMessage(`No client exists with login '${login}'`)
+                        .withErrorCode(PasswordManagerErrorCodeEnum.ClientNotFound),
                 );
             }
 
@@ -86,9 +92,9 @@ export class ClientRepository implements IClientRepository {
             });
 
             return Promise.reject(
-                PasswordManagerException.serviceUnavailable<Partial<Client>>()
+                PasswordManagerException.serviceUnavailable()
                     .withMessage('Service is temporarily unavailable.')
-                    .withContext({ login: login }),
+                    .withErrorCode(PasswordManagerErrorCodeEnum.DynamoDBDown),
             );
         }
     }

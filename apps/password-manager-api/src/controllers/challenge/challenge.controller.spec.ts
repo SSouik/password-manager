@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { ChallengeService } from '@password-manager:api:services/challenge/challenge.service';
 import { PasswordManagerException } from '@password-manager:api:types';
+import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { ChallengeController } from './challenge.controller';
 
@@ -24,9 +25,10 @@ describe('ChallengeController Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 
@@ -48,9 +50,10 @@ describe('ChallengeController Tests', () => {
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
-                const exception = error as PasswordManagerException<unknown>;
+                const exception = error as PasswordManagerException;
                 expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
                 expect(exception.message).toBe('Not Implemented');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
             }
         });
 

@@ -1,8 +1,5 @@
-import { ResponseBase } from './ResponseBase';
-
 import { AuthToken } from '../AuthToken';
 
-export type AnswerSecurityQuestionChallengeResponse = ResponseBase & {
-    clientId: string;
+export type AnswerSecurityQuestionChallengeResponse = {
     auth: AuthToken;
 };
