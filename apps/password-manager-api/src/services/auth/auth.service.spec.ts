@@ -27,9 +27,12 @@ describe('AuthService Tests', () => {
         });
 
         it('Issues the client a token when they provide the correct password', async () => {
-            mockClientRepository.getClientByLogin = jest
-                .fn()
-                .mockResolvedValue(<Client>{ clientId: 'clientId', login: 'login', password: 'password' });
+            mockClientRepository.getClientByLogin = jest.fn().mockResolvedValue(<Client>{
+                clientId: 'clientId',
+                login: 'login',
+                password: 'password',
+                metadata: { createdDate: 'now', updatedDate: 'now' },
+            });
 
             mockJWTService.create = jest.fn().mockResolvedValue(<AuthToken>{ token: 'token', expiresIn: 3600 });
 
@@ -47,6 +50,10 @@ describe('AuthService Tests', () => {
             expect(actual.client).toStrictEqual(<ClientResponse>{
                 clientId: 'clientId',
                 login: 'login',
+                metadata: {
+                    createdDate: 'now',
+                    updatedDate: 'now',
+                },
             });
             expect(actual.auth).toStrictEqual(<AuthToken>{
                 token: 'token',

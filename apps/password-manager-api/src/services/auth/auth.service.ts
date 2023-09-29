@@ -57,6 +57,7 @@ export class AuthService implements IAuthService {
             client: {
                 clientId: client.clientId,
                 login: client.login,
+                metadata: client.metadata,
             },
             auth: authToken,
         };

@@ -1,3 +1,5 @@
+import { Metadata } from './Metadata';
+
 import { Nullable } from '../common';
 
 export type Password = {
@@ -7,4 +9,5 @@ export type Password = {
     login: string;
     value: string;
     clientId: string;
+    metadata: Metadata;
 };

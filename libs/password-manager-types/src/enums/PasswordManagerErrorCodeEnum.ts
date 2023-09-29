@@ -1,10 +1,12 @@
 export enum PasswordManagerErrorCodeEnum {
     // Bad Request Error codes
     BadRequest = 'PMBR001',
+    LoginAlreadyExists = 'PMBR002',
 
     // Unauthorized Error codes
     Unauthorized = 'PMUA001',
     CredentialsDoNotMatch = 'PMUA002',
+    IncorrectAnswer = 'PMUA003',
 
     // Forbidden Error codes
     Forbidden = 'PMFB001',
@@ -16,6 +18,7 @@ export enum PasswordManagerErrorCodeEnum {
     NotFound = 'PMNF001',
     ClientNotFound = 'PMNF002',
     PasswordNotFound = 'PMNF003',
+    QuestionNotFound = 'PMNF004',
 
     // Conflict Error codes
     Conflict = 'PMC001',

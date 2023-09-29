@@ -3,7 +3,7 @@ import { GetCommandInput, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { ClassProvider, Inject, Injectable, InjectionToken } from '@nestjs/common';
 import { IClientRepository } from '@password-manager:api:interfaces';
 import { DYNAMODB_CLIENT, LOGGER } from '@password-manager:api:providers';
-import { PasswordManagerException } from '@password-manager:api:types';
+import { ClientInput, PasswordManagerException } from '@password-manager:api:types';
 import { IDynamoDBClient } from '@password-manager:dynamodb-client';
 import { ILogger } from '@password-manager:logger';
 import { Client, PasswordManagerErrorCodeEnum } from '@password-manager:types';
@@ -22,7 +22,7 @@ export class ClientRepository implements IClientRepository {
     public async getClientById(clientId: string): Promise<Client> {
         try {
             const input = <GetCommandInput>{
-                TableName: this.TABLE_NAME, // update dynamo client to use this
+                TableName: this.TABLE_NAME,
                 Key: {
                     clientId: clientId,
                 },
@@ -99,7 +99,7 @@ export class ClientRepository implements IClientRepository {
         }
     }
 
-    public createClient(client: Client): Promise<Client> {
+    public createClient(input: ClientInput): Promise<Client> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 
@@ -107,7 +107,7 @@ export class ClientRepository implements IClientRepository {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 
-    public updateClient(client: Client): Promise<void> {
+    public updateClient(clientId: string, input: ClientInput): Promise<Client> {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 }

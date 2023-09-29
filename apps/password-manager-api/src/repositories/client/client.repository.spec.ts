@@ -253,7 +253,7 @@ describe('ClientRepository Tests', () => {
     describe('Create client', () => {
         it('Throws an error because the method is not implemented', async () => {
             try {
-                await repository.createClient({ clientId: 'id', login: 'login', password: 'password' });
+                await repository.createClient({ login: 'login', password: 'password' });
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
@@ -283,7 +283,7 @@ describe('ClientRepository Tests', () => {
     describe('Update client', () => {
         it('Throws an error because the method is not implemented', async () => {
             try {
-                await repository.updateClient({ clientId: 'id', login: 'login', password: 'password' });
+                await repository.updateClient('clientId', { login: 'login', password: 'password' });
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 

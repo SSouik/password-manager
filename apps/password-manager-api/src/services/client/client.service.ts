@@ -1,21 +1,16 @@
 // Remove below line when the service has been implemented
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ClassProvider, Inject, InjectionToken } from '@nestjs/common';
-import {
-    IClientRepository,
-    IClientService,
-    IPasswordRepository,
-    ISecurityQuestionRepository,
-} from '@password-manager:api:interfaces';
+import { ClassProvider, HttpStatus, Inject, InjectionToken } from '@nestjs/common';
+import { IClientRepository, IClientService, IPasswordRepository } from '@password-manager:api:interfaces';
 import { CRYPTO } from '@password-manager:api:providers';
 import { CLIENT_REPOSITORY } from '@password-manager:api:repositories/client/client.repository';
 import { PASSWORD_REPOSITORY } from '@password-manager:api:repositories/password/password.repository';
-import { SECURITY_QUESTION_REPOSITORY } from '@password-manager:api:repositories/security-question/security-question.repository';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
 import {
     CreateClientRequest,
     CreateClientResponse,
+    PasswordManagerErrorCodeEnum,
     UpdateClientRequest,
     UpdateClientResponse,
 } from '@password-manager:types';
@@ -26,52 +21,48 @@ export class ClientService implements IClientService {
         private readonly clientRepository: IClientRepository,
         @Inject(PASSWORD_REPOSITORY)
         private readonly passwordRepository: IPasswordRepository,
-        @Inject(SECURITY_QUESTION_REPOSITORY)
-        private readonly securityQuestionRepository: ISecurityQuestionRepository,
         @Inject(CRYPTO)
-        private readonly crytpo: Crypto,
+        private readonly crypto: Crypto,
     ) {}
 
-    /**
-     * Save/create a new client in DynamoDB
-     * @param request Attributes of the client to create
-     * @returns The ID of the newly created client
-     *
-     * @remarks
-     * This method is dedicated to accepting a request to create
-     * a new client in DynamoDB. The password of the client should
-     * be encrypted before being saved in DynamoDB. The client ID needs
-     * to be generated as well before creating the client. If all goes well,
-     * the method should return the newly created client ID.
-     *
-     * @see {@link CreateClientRequest}
-     * @see {@link CreateClientResponse}
-     *
-     * @throws {@link PasswordManagerException} -
-     * This can be thrown when DynamoDB is unavailable (Service Unavailable 503)
-     */
-    public createClient(request: CreateClientRequest): Promise<CreateClientResponse> {
-        return Promise.reject(PasswordManagerException.notImplemented());
+    public async createClient(request: CreateClientRequest): Promise<CreateClientResponse> {
+        await this.clientRepository
+            .getClientByLogin(request.login)
+            .then(() =>
+                Promise.reject(
+                    PasswordManagerException.badRequest()
+                        .withMessage('Login is already in use')
+                        .withErrorCode(PasswordManagerErrorCodeEnum.LoginAlreadyExists),
+                ),
+            )
+            .catch((error) => {
+                // If no client was found by the requested login, resolve and
+                // move on to creating the client
+                if (error instanceof PasswordManagerException && error.statusCode === HttpStatus.NOT_FOUND) {
+                    return Promise.resolve();
+                }
+
+                // If some other error occurs, reject with it
+                return Promise.reject(error);
+            });
+
+        // Encrypt the password
+        const encryptedPassword = this.crypto.encrypt(request.password);
+
+        const client = await this.clientRepository.createClient({ login: request.login, password: encryptedPassword });
+
+        return {
+            client: {
+                clientId: client.clientId,
+                login: client.login,
+                metadata: client.metadata,
+            },
+        };
     }
 
-    /**
-     * Delete a client along with their passwords and security question
-     * @param clientId ID of the client
-     * @returns Statuscode and message indicating the result of the request
-     *
-     * @remarks
-     * This method is dedicated to deleting a client along with anything else
-     * that is tied to them. This means deleting the client, then their passwords
-     * and security question. If all goes well, return a 202 (Accepted)
-     *
-     * @see {@link ResponseBase}
-     *
-     * @throws {@link PasswordManagerException}
-     * This can be thrown for multiple reasons. The client was not found (404 Not Found)
-     * or when DynamoDB is unavailable (Service Unavailable 503)
-     */
-    public deleteClient(clientId: string): Promise<void> {
-        return Promise.reject(PasswordManagerException.notImplemented());
+    public async deleteClient(clientId: string): Promise<void> {
+        await this.clientRepository.deleteClient(clientId);
+        await this.passwordRepository.deletePasswordsForClientId(clientId);
     }
 
     /**
