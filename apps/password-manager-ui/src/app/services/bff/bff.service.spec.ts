@@ -1,4 +1,4 @@
-import { HttpClient, HttpStatusCode } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { fakeAsync, flush } from '@angular/core/testing';
 import { GetPasswordsResponse, LoginResponse } from '@password-manager:types';
 import { of } from 'rxjs';
@@ -59,8 +59,6 @@ describe('BFFService Tests', () => {
         it('Gets the passwords for a client', fakeAsync(() => {
             mockHttpClient.get = jest.fn().mockReturnValue(
                 of(<GetPasswordsResponse>{
-                    statusCode: HttpStatusCode.Ok,
-                    message: 'OK',
                     passwords: [
                         {
                             passwordId: 'passwordId',

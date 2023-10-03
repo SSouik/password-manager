@@ -19,7 +19,7 @@
     ></password-manager-banner>
 
     <mat-accordion>
-      <div *ngFor="let entry of page.passwordEntries">
+      <div *ngFor="let entry of page.passwordEntries; index as i">
         <form class="pm--mb4" [formGroup]="entry.formControl" novalidate (ngSubmit)="getPasswords()">
           <mat-expansion-panel>
             <mat-expansion-panel-header>
@@ -66,16 +66,34 @@
                 label="Password"
                 for="password"
                 placeholder="P@ssword123"
-                type="password"
+                [sensitive]="true"
                 errorMessage="Password is required"
               ></password-manager-input>
             </div>
             <mat-action-row>
-              <password-manager-button class="pm--mr4" label="Save" color="primary" type="raised">
+              <password-manager-button
+                class="pm--mr4"
+                label="Save"
+                color="primary"
+                type="raised"
+                (click)="updatePassword(i)"
+              >
               </password-manager-button>
-              <password-manager-button class="pm--mr4" label="Delete" color="warn" type="raised">
+              <password-manager-button
+                class="pm--mr4"
+                label="Delete"
+                color="warn"
+                type="raised"
+                (click)="deletePassword(i)"
+              >
               </password-manager-button>
-              <password-manager-button class="pm--mr4" label="Cancel" color="basic" type="raised">
+              <password-manager-button
+                class="pm--mr4"
+                label="Cancel"
+                color="basic"
+                type="raised"
+                (click)="cancelPasswordEdit(i)"
+              >
               </password-manager-button>
             </mat-action-row>
           </mat-expansion-panel>

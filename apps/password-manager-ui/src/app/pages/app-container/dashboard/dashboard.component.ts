@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatExpansionPanel } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { GetPasswordsResponse, Password, UIUrlsEnum } from '@password-manager:types';
 import { BFFService } from '@password-manager:ui:services/bff/bff.service';
@@ -14,6 +15,8 @@ import PageConfig from './dashboard.component.config';
     styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+    @ViewChildren(MatExpansionPanel) public expansionPanels!: QueryList<MatExpansionPanel>;
+
     public page = {
         isLoading: true,
         username: '',
@@ -99,11 +102,38 @@ export class DashboardComponent implements OnInit {
         });
     }
 
+    public updatePassword(index: number): void {
+        // Needs to be implemented
+        this.closePasswordEntryAccordion(index);
+    }
+
+    public deletePassword(index: number): void {
+        // Needs to be implemented
+        this.closePasswordEntryAccordion(index);
+    }
+
+    public cancelPasswordEdit(index: number): void {
+        const passwordEntry = this.page.passwordEntries[index];
+
+        passwordEntry.formControl = this.formBuilder.group({
+            name: [passwordEntry.password.name, [Validators.required]],
+            website: [passwordEntry.password.website],
+            login: [passwordEntry.password.login, [Validators.required]],
+            password: [passwordEntry.password.value, [Validators.required]],
+        });
+
+        this.closePasswordEntryAccordion(index);
+    }
+
     public goToCreatePasswordPage(): void {
         this.router.navigateByUrl(UIUrlsEnum.CreatePassword);
     }
 
     public closeBanner(): void {
         this.page.banner.show = false;
+    }
+
+    private closePasswordEntryAccordion(index: number): void {
+        this.expansionPanels.get(index)?.close();
     }
 }

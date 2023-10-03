@@ -50,7 +50,8 @@
             "executor": "@angular-devkit/build-angular:dev-server",
             "configurations": {
                 "development": {
-                    "browserTarget": "password-manager-ui:build:development"
+                    "browserTarget": "password-manager-ui:build:development",
+                    "proxyConfig": "apps/password-manager-ui/proxy.config.json"
                 },
                 "production": {
                     "browserTarget": "password-manager-ui:build:production"

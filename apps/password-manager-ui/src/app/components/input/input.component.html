@@ -2,6 +2,15 @@
   <mat-form-field class="pm--Form-Field pm--mb3">
     <mat-label>{{ label }}</mat-label>
     <input matInput [placeholder]="placeholder" [formControlName]="formKey" [type]="type" [required]="required" />
+    <button
+      *ngIf="sensitive"
+      class="pm--Input-Icon pm--mr2"
+      matSuffix
+      type="button"
+      (click)="togglePasswordVisibility()"
+    >
+      <mat-icon>{{ sensitiveIcon }}</mat-icon>
+    </button>
     <mat-error *ngIf="parentFormGroup.get(formKey)?.invalid">
       {{ errorMessage }}
     </mat-error>

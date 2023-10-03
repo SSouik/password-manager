@@ -9,7 +9,7 @@ import { BFFService } from '@password-manager:ui:services/bff/bff.service';
 import { Observable, of } from 'rxjs';
 
 import { LoginComponent } from './login.component';
-import { LoginErrorsEnum } from './LoginErrorsEnum';
+import PageConfig from './login.component.config';
 
 describe('LoginComponent Tests', () => {
     let mockRouter: Router;
@@ -89,12 +89,12 @@ describe('LoginComponent Tests', () => {
                 }),
             );
 
-            expect(component.isLoading).toBeFalsy();
+            expect(component.page.isLoading).toBeFalsy();
 
             component.login();
 
-            expect(component.error.show).toBeFalsy();
-            expect(component.isLoading).toBeFalsy();
+            expect(component.page.error.show).toBeFalsy();
+            expect(component.page.isLoading).toBeFalsy();
 
             expect(mockBFFService.login).toBeCalledTimes(1);
             expect(mockBFFService.login).toBeCalledWith('username', 'password');
@@ -126,13 +126,13 @@ describe('LoginComponent Tests', () => {
                     ),
                 );
 
-            expect(component.isLoading).toBeFalsy();
+            expect(component.page.isLoading).toBeFalsy();
 
             component.login();
 
-            expect(component.error.show).toBeTruthy();
-            expect(component.error.message).toBe(LoginErrorsEnum.InvalidCredentials);
-            expect(component.isLoading).toBeFalsy();
+            expect(component.page.error.show).toBeTruthy();
+            expect(component.page.error.message).toBe(PageConfig.error.invalidCredentials);
+            expect(component.page.isLoading).toBeFalsy();
 
             expect(mockBFFService.login).toBeCalledTimes(1);
             expect(mockBFFService.login).toBeCalledWith('', '');
@@ -161,19 +161,19 @@ describe('LoginComponent Tests', () => {
                     observer.error(
                         new HttpErrorResponse({
                             status: HttpStatusCode.ServiceUnavailable,
-                            statusText: 'Serivce Unavailable',
+                            statusText: 'Service Unavailable',
                         }),
                     ),
                 ),
             );
 
-            expect(component.isLoading).toBeFalsy();
+            expect(component.page.isLoading).toBeFalsy();
 
             component.login();
 
-            expect(component.error.show).toBeTruthy();
-            expect(component.error.message).toBe(LoginErrorsEnum.UnexpectedError);
-            expect(component.isLoading).toBeFalsy();
+            expect(component.page.error.show).toBeTruthy();
+            expect(component.page.error.message).toBe(PageConfig.error.generic);
+            expect(component.page.isLoading).toBeFalsy();
 
             expect(mockBFFService.login).toBeCalledTimes(1);
             expect(mockBFFService.login).toBeCalledWith('username', 'password');

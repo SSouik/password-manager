@@ -3,9 +3,10 @@
     *ngSwitchCase="'basic'"
     class="pm--Button"
     [ngClass]="{
-      'pm--BackgroundColor-White': color == 'basic'
+      'pm--BackgroundColor-White': color === 'basic'
     }"
     mat-button
+    type="button"
     [color]="color"
     (click)="(onClick)"
   >
@@ -15,9 +16,10 @@
     *ngSwitchCase="'raised'"
     class="pm--Button"
     [ngClass]="{
-      'pm--BackgroundColor-White': color == 'basic'
+      'pm--BackgroundColor-White': color === 'basic'
     }"
     mat-raised-button
+    type="button"
     [color]="color"
     (click)="(onClick)"
   >
@@ -27,9 +29,10 @@
     *ngSwitchCase="'stroked'"
     class="pm--Button"
     [ngClass]="{
-      'pm--BackgroundColor-White': color == 'basic'
+      'pm--BackgroundColor-White': color === 'basic'
     }"
     mat-stroked-button
+    type="button"
     [color]="color"
     (click)="(onClick)"
   >
@@ -39,21 +42,22 @@
     *ngSwitchCase="'flat'"
     class="pm--Button"
     [ngClass]="{
-      'pm--BackgroundColor-White': color == 'basic'
+      'pm--BackgroundColor-White': color === 'basic'
     }"
     mat-flat-button
+    type="button"
     [color]="color"
     (click)="(onClick)"
   >
     {{ label }}
   </button>
-  <button *ngSwitchCase="'icon'" mat-icon-button [color]="color" (click)="(onClick)">
+  <button *ngSwitchCase="'icon'" mat-icon-button type="button" [color]="color" (click)="(onClick)">
     {{ label }}
   </button>
-  <button *ngSwitchCase="'fab'" mat-fab [color]="color" (click)="(onClick)">
+  <button *ngSwitchCase="'fab'" mat-fab type="button" [color]="color" (click)="(onClick)">
     {{ label }}
   </button>
-  <button *ngSwitchCase="'miniFab'" mat-mini-fab [color]="color" (click)="(onClick)">
+  <button *ngSwitchCase="'miniFab'" mat-mini-fab type="button" [color]="color" (click)="(onClick)">
     {{ label }}
   </button>
 </div>

@@ -1,8 +1,9 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatExpansionPanel } from '@angular/material/expansion';
 import { Router, RouterModule } from '@angular/router';
 import { GetPasswordsResponse, UIUrlsEnum } from '@password-manager:types';
 import { BFFService } from '@password-manager:ui:services/bff/bff.service';
@@ -49,8 +50,6 @@ describe('DashboardComponent Tests', () => {
 
             mockBFFService.getPasswords = jest.fn().mockReturnValue(
                 of(<GetPasswordsResponse>{
-                    statusCode: HttpStatusCode.Ok,
-                    message: 'OK',
                     passwords: [
                         {
                             passwordId: 'id',
@@ -156,6 +155,66 @@ describe('DashboardComponent Tests', () => {
             });
 
             expect(component.page.isLoading).toBeFalsy();
+        });
+    });
+
+    describe('Update Password', () => {
+        // Remove this test and replace with others once implemented
+        it('Closes the accordion', () => {
+            component.expansionPanels = {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                get: (index: number) => ({
+                    close: () => {},
+                }),
+            } as QueryList<MatExpansionPanel>;
+
+            component.updatePassword(0);
+        });
+    });
+
+    describe('Delete Password', () => {
+        // Remove this test and replace with others once implemented
+        it('Closes the accordion', () => {
+            component.expansionPanels = {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                get: (index: number) => ({
+                    close: () => {},
+                }),
+            } as QueryList<MatExpansionPanel>;
+
+            component.deletePassword(0);
+        });
+    });
+
+    describe('Cancel Password Edit', () => {
+        // Remove this test and replace with others once implemented
+        it('Closes the accordion', () => {
+            component.expansionPanels = {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                get: (index: number) => ({
+                    close: () => {},
+                }),
+            } as QueryList<MatExpansionPanel>;
+
+            component.page.passwordEntries = [
+                {
+                    password: {
+                        name: 'name',
+                        website: 'website',
+                        login: 'login',
+                        value: 'value',
+                        passwordId: 'passwordId',
+                        clientId: 'clientId',
+                        metadata: {
+                            createdDate: 'now',
+                            updatedDate: 'now',
+                        },
+                    },
+                    formControl: {} as FormGroup,
+                },
+            ];
+
+            component.cancelPasswordEdit(0);
         });
     });
 

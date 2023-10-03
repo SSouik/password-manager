@@ -1,19 +1,9 @@
 {
-    "ext": "ts html scss",
+    "ext": "ts",
     "delay": "3000",
     "ignore": ["*.spec.ts"],
-    "watch": [
-        "./apps/password-manager-api/src/**/*.ts",
-        "./apps/password-manager-ui/src/**/*.ts",
-        "./apps/password-manager-ui/src/**/*.scss",
-        "./apps/password-manager-ui/src/**/*.html",
-        "./libs/password-manager-config/src/**/*.ts",
-        "./libs/password-manager-crypto/src/**/*.ts",
-        "./libs/password-manager-dynamodb-client/src/**/*.ts",
-        "./libs/password-manager-logger/src/**/*.ts",
-        "./libs/password-manager-types/src/**/*.ts"
-    ],
-    "exec": "yarn build:ui:dev && node --inspect=0.0.0.0:9239 --nolazy -r ts-node/register/transpile-only -r tsconfig-paths/register apps/password-manager-api/src/main.ts",
+    "watch": ["./apps/password-manager-api/src/**/*.ts"],
+    "exec": "node --inspect=0.0.0.0:9239 --nolazy -r ts-node/register/transpile-only -r tsconfig-paths/register apps/password-manager-api/src/main.ts",
     "signal": "SIGTERM",
     "env": {
         "TS_NODE_PROJECT": "apps/password-manager-api/tsconfig.app.json"

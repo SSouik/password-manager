@@ -5,9 +5,12 @@
         <img src="/assets/images/password-manager-logo.png" height="200px" width="200px" />
       </mat-card-title>
       <mat-card-subtitle class="pm--Text-Center">Please enter your username and password.</mat-card-subtitle>
-      <mat-card-subtitle *ngIf="error.show" class="pm--Text-Center pm--Color-Error">{{
-        error.message
+      <mat-card-subtitle *ngIf="page.error.show" class="pm--Text-Center pm--Color-Error">{{
+        page.error.message
       }}</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="page.isLoading" class="pm--Login-Spinner">
+        <mat-spinner aria-label="Logging you in..." diameter="60"></mat-spinner>
+      </mat-card-subtitle>
     </mat-card-header>
     <form class="pm--Form-Content pm--mt8" [formGroup]="loginFormGroup" novalidate>
       <mat-card-content>
@@ -24,7 +27,7 @@
           formKey="password"
           label="Password"
           placeholder="P@ssword123"
-          type="password"
+          [sensitive]="true"
           [required]="true"
           errorMessage="This field is required"
         ></password-manager-input>

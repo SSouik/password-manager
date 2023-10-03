@@ -1,0 +1,14 @@
+@use 'sass:map';
+
+@import '../../../styles/colors.scss';
+
+.pm--Input-Icon {
+    border-radius: 50%;
+    border-color: transparent;
+    background-color: transparent;
+    cursor: pointer;
+
+    &:hover {
+        background-color: map.get($pm-gray-map, 400);
+    }
+}
