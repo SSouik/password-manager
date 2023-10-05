@@ -61,7 +61,8 @@
             "@password-manager:ui:services": ["apps/password-manager-ui/src/app/services"],
             "@password-manager:ui:services/*": ["apps/password-manager-ui/src/app/services/*"],
             "@password-manager:ui:types": ["apps/password-manager-ui/src/app/types"],
-            "@password-manager:ui:types/*": ["apps/password-manager-ui/src/app/types/*"]
+            "@password-manager:ui:types/*": ["apps/password-manager-ui/src/app/types/*"],
+            "@password-manager:ui:validators": ["apps/password-manager-ui/src/app/validators/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]

@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { fakeAsync, flush } from '@angular/core/testing';
 import { GetPasswordsResponse, LoginResponse } from '@password-manager:types';
+import { BrowserStorageService } from '@password-manager:ui:services/browser-storage/browser-storage.service';
 import { of } from 'rxjs';
 
 import { BFFService } from './bff.service';
 
 describe('BFFService Tests', () => {
     const mockHttpClient = HttpClient.prototype;
+    const mockBrowserStorageService = BrowserStorageService.prototype;
     let service: BFFService;
 
     beforeEach(() => {
@@ -14,7 +16,7 @@ describe('BFFService Tests', () => {
         // 1000 for every test
         jest.spyOn(Date.prototype, 'getTime').mockReturnValue(1000);
 
-        service = new BFFService(mockHttpClient);
+        service = new BFFService(mockHttpClient, mockBrowserStorageService);
     });
 
     afterEach(() => {
@@ -23,6 +25,8 @@ describe('BFFService Tests', () => {
 
     describe('Login', () => {
         it('Sets the session in local storage when login is successful', fakeAsync(() => {
+            mockBrowserStorageService.setItem = jest.fn();
+
             mockHttpClient.post = jest.fn().mockReturnValue(
                 of(<LoginResponse>{
                     client: {
@@ -42,12 +46,15 @@ describe('BFFService Tests', () => {
                     expect(response.auth.token).toBe('token');
                     expect(response.auth.expiresIn).toBe(3600);
 
-                    // Update with wrapper around local storage
-                    // expect(mockLocalSessionService.set).toBeCalledTimes(4);
-                    // expect(mockLocalSessionService.set).toHaveBeenNthCalledWith(1, 'username', 'username');
-                    // expect(mockLocalSessionService.set).toHaveBeenNthCalledWith(2, 'sessionId', 'id');
-                    // expect(mockLocalSessionService.set).toHaveBeenNthCalledWith(3, 'sessionToken', 'token');
-                    // expect(mockLocalSessionService.set).toHaveBeenNthCalledWith(4, 'sessionTokenExpiration', '1000');
+                    expect(mockBrowserStorageService.setItem).toBeCalledTimes(4);
+                    expect(mockBrowserStorageService.setItem).toHaveBeenNthCalledWith(1, 'username', 'login');
+                    expect(mockBrowserStorageService.setItem).toHaveBeenNthCalledWith(2, 'sessionId', 'clientId');
+                    expect(mockBrowserStorageService.setItem).toHaveBeenNthCalledWith(3, 'sessionToken', 'token');
+                    expect(mockBrowserStorageService.setItem).toHaveBeenNthCalledWith(
+                        4,
+                        'sessionTokenExpiration',
+                        1000,
+                    );
                 },
             });
 

@@ -5,6 +5,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { GetPasswordsResponse, Password, UIUrlsEnum } from '@password-manager:types';
 import { BFFService } from '@password-manager:ui:services/bff/bff.service';
+import { BrowserStorageService } from '@password-manager:ui:services/browser-storage/browser-storage.service';
 import { HeaderLinks } from '@password-manager:ui:types';
 
 import PageConfig from './dashboard.component.config';
@@ -40,8 +41,9 @@ export class DashboardComponent implements OnInit {
         private readonly formBuilder: FormBuilder,
         private readonly router: Router,
         private readonly bffService: BFFService,
+        private readonly browserStorageService: BrowserStorageService,
     ) {
-        this.page.username = localStorage.getItem('username') ?? '';
+        this.page.username = this.browserStorageService.getItem('username') ?? '';
     }
 
     public ngOnInit(): void {
@@ -49,7 +51,7 @@ export class DashboardComponent implements OnInit {
     }
 
     public getPasswords(): void {
-        const clientId = localStorage.getItem('sessionId') ?? '';
+        const clientId = this.browserStorageService.getItem('sessionId') ?? '';
 
         this.page.isLoading = true;
 

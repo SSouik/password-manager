@@ -1,20 +1,21 @@
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { UIUrlsEnum } from '@password-manager:types';
+import { BrowserStorageService } from '@password-manager:ui:services';
 
 import { AuthGuard } from './auth.guard';
 
 describe('AuthGuard Tests', () => {
     const mockRouter = Router.prototype;
+    const mockBrowserStorageService = BrowserStorageService.prototype;
     let guard: AuthGuard;
 
     beforeEach(() => {
         mockRouter.navigateByUrl = jest.fn();
 
-        guard = new AuthGuard(mockRouter);
+        guard = new AuthGuard(mockRouter, mockBrowserStorageService);
     });
 
     afterEach(() => {
-        localStorage.clear();
         jest.resetAllMocks();
     });
 
@@ -29,7 +30,7 @@ describe('AuthGuard Tests', () => {
         });
 
         it('Returns false and redirects when the token is expired', () => {
-            localStorage.setItem('sesstionTokenExpiration', '1');
+            mockBrowserStorageService.getItem = jest.fn().mockReturnValue(1);
 
             Date.now = jest.fn().mockReturnValue(2);
 

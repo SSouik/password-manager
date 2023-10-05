@@ -7,6 +7,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { Router, RouterModule } from '@angular/router';
 import { GetPasswordsResponse, UIUrlsEnum } from '@password-manager:types';
 import { BFFService } from '@password-manager:ui:services/bff/bff.service';
+import { BrowserStorageService } from '@password-manager:ui:services/browser-storage/browser-storage.service';
 import { Observable, of } from 'rxjs';
 
 import { DashboardComponent } from './dashboard.component';
@@ -15,6 +16,7 @@ import PageConfig from './dashboard.component.config';
 describe('DashboardComponent Tests', () => {
     let mockRouter: Router;
     let mockBFFService: BFFService;
+    let mockBrowserStorageService: BrowserStorageService;
     let component: DashboardComponent;
     let fixture: ComponentFixture<DashboardComponent>;
 
@@ -22,7 +24,7 @@ describe('DashboardComponent Tests', () => {
         await TestBed.configureTestingModule({
             imports: [ReactiveFormsModule, RouterModule, HttpClientTestingModule],
             declarations: [DashboardComponent],
-            providers: [BFFService],
+            providers: [BFFService, BrowserStorageService],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
 
@@ -31,12 +33,12 @@ describe('DashboardComponent Tests', () => {
 
         mockRouter = TestBed.inject(Router);
         mockBFFService = TestBed.inject(BFFService);
+        mockBrowserStorageService = TestBed.inject(BrowserStorageService);
 
         mockRouter.navigateByUrl = jest.fn();
     });
 
     afterEach(() => {
-        window.localStorage.clear();
         jest.resetAllMocks();
     });
 
@@ -46,7 +48,7 @@ describe('DashboardComponent Tests', () => {
 
     describe('Component Initialization', () => {
         it('Fetches passwords for the client on initialization', () => {
-            window.localStorage.setItem('sessionId', 'id');
+            mockBrowserStorageService.getItem = jest.fn().mockReturnValue('id');
 
             mockBFFService.getPasswords = jest.fn().mockReturnValue(
                 of(<GetPasswordsResponse>{
@@ -84,7 +86,7 @@ describe('DashboardComponent Tests', () => {
         });
 
         it('Fetches passwords for the client on initialization but receives a 404', () => {
-            window.localStorage.setItem('sessionId', 'id');
+            mockBrowserStorageService.getItem = jest.fn().mockReturnValue('id');
 
             mockBFFService.getPasswords = jest.fn().mockReturnValue(
                 new Observable((observer) =>
