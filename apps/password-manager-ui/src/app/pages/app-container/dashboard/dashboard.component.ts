@@ -47,16 +47,22 @@ export class DashboardComponent implements OnInit {
     }
 
     public ngOnInit(): void {
+        // Once the component loads in the browser, get the
+        // client's passwords
         this.getPasswords();
     }
 
     public getPasswords(): void {
+        // Get the client's ID from local storage. Should exist
+        // after the client has successfully logged in
         const clientId = this.browserStorageService.getItem('sessionId') ?? '';
 
         this.page.isLoading = true;
 
         this.bffService.getPasswords(clientId).subscribe({
             next: (response: GetPasswordsResponse) => {
+                // On a successful request to the BFF to get the client's
+                // password. Map the passwords to the password entries object
                 this.page.passwordEntries = response.passwords.map((password) => {
                     return {
                         password: password,
@@ -73,7 +79,9 @@ export class DashboardComponent implements OnInit {
                 this.page.isLoading = false;
             },
             error: (error: HttpErrorResponse) => {
-                // 404s are expected
+                // 404s are expected. This means the client does
+                // not have any passwords yet and they should
+                // be prompted to create one
                 if (error.status === HttpStatusCode.NotFound) {
                     this.page.banner = {
                         show: true,
@@ -86,6 +94,9 @@ export class DashboardComponent implements OnInit {
                         },
                     };
                 } else {
+                    // Some error other than a 404 happened. This means
+                    // that something went wrong so display an error
+                    // indicating that
                     this.page.banner = {
                         show: true,
                         title: PageConfig.banner.error.title,
@@ -106,17 +117,31 @@ export class DashboardComponent implements OnInit {
 
     public updatePassword(index: number): void {
         // Needs to be implemented
+        // Similar to the getPasswords method, this should
+        // rely on a method in the BFFService that will
+        // update a password. Notice the argument for this
+        // method is a number label 'index'. This can be used
+        // to get the correct form values.
         this.closePasswordEntryAccordion(index);
     }
 
     public deletePassword(index: number): void {
         // Needs to be implemented
+        // Similar to the getPasswords method, this should
+        // rely on a method in the BFFService. Notice the
+        // argument is a number label 'index'. This can be used
+        // to get the desired password ID to delete.
         this.closePasswordEntryAccordion(index);
     }
 
     public cancelPasswordEdit(index: number): void {
+        // Get the desired password entry. This contains the
+        // password object/entity along with the form group
+        // associated with each.
         const passwordEntry = this.page.passwordEntries[index];
 
+        // Reset the form control for the password to the intial
+        // values of the password entity that the BFF returned
         passwordEntry.formControl = this.formBuilder.group({
             name: [passwordEntry.password.name, [Validators.required]],
             website: [passwordEntry.password.website],
@@ -124,6 +149,7 @@ export class DashboardComponent implements OnInit {
             password: [passwordEntry.password.value, [Validators.required]],
         });
 
+        // Close the expansion panel
         this.closePasswordEntryAccordion(index);
     }
 
@@ -136,6 +162,7 @@ export class DashboardComponent implements OnInit {
     }
 
     private closePasswordEntryAccordion(index: number): void {
+        // Closes the currently open/selected expansion panel
         this.expansionPanels.get(index)?.close();
     }
 }

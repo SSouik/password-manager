@@ -30,6 +30,10 @@ export class LoginComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
+        // Once the component is loaded, create a form group
+        // for the login form. This contains two inputs. Once
+        // which is an input for the username/login and the
+        // other is the password
         this.loginFormGroup = this.formBuilder.group({
             username: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
             password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
@@ -38,6 +42,8 @@ export class LoginComponent implements OnInit {
 
     public login(): void {
         this.page.isLoading = true;
+
+        // Get the username/login and password from the form group
         const username = this.loginFormGroup.get('username')?.value ?? '';
         const password = this.loginFormGroup.get('password')?.value ?? '';
 
