@@ -1,6 +1,6 @@
 import { AlgorithmEnum, Crypto, EncodingEnum } from '../libs/password-manager-crypto/src';
 
-// Secrets should never be commited, but again this is a
+// Secrets should never be committed, but again this is a
 // sample application so the encryption secret means nothing
 const crypto = Crypto.create()
     .withAlgorithm(AlgorithmEnum.AES256CTR)
