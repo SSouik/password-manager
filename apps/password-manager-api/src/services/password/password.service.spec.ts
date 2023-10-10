@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { PasswordRepository } from '@password-manager:api:repositories/password/password.repository';
-import { PasswordManagerException } from '@password-manager:api:types';
+import { PasswordInput, PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
 import { Password, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
@@ -113,22 +113,56 @@ describe('PasswordService Tests', () => {
     });
 
     describe('Update Password', () => {
-        it('Method not implemented', async () => {
-            try {
-                await service.updatePassword('clientId', 'passwordId', {
-                    name: 'name',
-                    website: 'http://foo.com',
-                    login: 'login',
-                    value: 'P@ssword123',
-                });
-            } catch (error) {
-                expect(error).toBeInstanceOf(PasswordManagerException);
+        it('Updates the password', async () => {
+            mockPasswordRepository.getPasswordById = jest.fn().mockResolvedValue({});
+            mockCrypto.encrypt = jest.fn().mockReturnValue('password');
+            mockPasswordRepository.updatePassword = jest.fn().mockResolvedValue(<Password>{
+                passwordId: 'passwordId',
+                name: 'name',
+                website: 'website',
+                login: 'login',
+                value: 'password',
+                clientId: 'clientId',
+                metadata: {
+                    createdDate: 'now',
+                    updatedDate: 'now',
+                },
+            });
 
-                const exception = error as PasswordManagerException;
-                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
-                expect(exception.message).toBe('Not Implemented');
-                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
-            }
+            const result = await service.updatePassword('clientId', 'passwordId', {
+                name: 'name',
+                website: 'website',
+                login: 'login',
+                value: 'password',
+            });
+
+            expect(result.password).toStrictEqual({
+                passwordId: 'passwordId',
+                name: 'name',
+                website: 'website',
+                login: 'login',
+                value: 'password',
+                clientId: 'clientId',
+                metadata: {
+                    createdDate: 'now',
+                    updatedDate: 'now',
+                },
+            });
+
+            expect(mockPasswordRepository.getPasswordById).toBeCalledTimes(1);
+            expect(mockPasswordRepository.getPasswordById).toBeCalledWith('passwordId');
+
+            expect(mockCrypto.encrypt).toBeCalledTimes(1);
+            expect(mockCrypto.encrypt).toBeCalledWith('password');
+
+            expect(mockPasswordRepository.updatePassword).toBeCalledTimes(1);
+            expect(mockPasswordRepository.updatePassword).toBeCalledWith('passwordId', <PasswordInput>{
+                name: 'name',
+                website: 'website',
+                login: 'login',
+                value: 'password',
+                clientId: 'clientId',
+            });
         });
     });
 });

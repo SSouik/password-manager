@@ -65,24 +65,15 @@ export class ClientService implements IClientService {
         await this.passwordRepository.deletePasswordsForClientId(clientId);
     }
 
-    /**
-     * Update a client's login and password in DynamoDB
-     * @param clientId ID of the client
-     * @param request Attributes of the client to update
-     * @returns Statuscode and message indicating the result of the request
-     *
-     * @remarks
-     * This method is dedicated to updating the client's login and password.
-     * The client's password must be encrypted before updating in DynamoDB.
-     * If all goes well, this should return a 202 (Accepted)
-     *
-     * @see {@link UpdateClientRequest}
-     *
-     * @throws {@link PasswordManagerException}
-     * This can be thrown when the client does not exist (404 Not Found)
-     * or when DynamoDB is unavailable (503 Service Unavailable)
-     */
     public updateClient(clientId: string, request: UpdateClientRequest): Promise<UpdateClientResponse> {
+        // This method should do everything that is needed to update a client.
+        // The first step should verify that the client exists. You should use the
+        // ClientRepository to do so. If the client does not exist, this method should
+        // reject with a 404 (Not Found) exception
+        // If the client does exist, then you can proceed to update the client.
+        // Before updating the client, the requested password should be encrypted. Use the Crypto dependency
+        // to help with that. Lastly, after encrypting the password, you can update the client by
+        // using the ClientRepository
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 }

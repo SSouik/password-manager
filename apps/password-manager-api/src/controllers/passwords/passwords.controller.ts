@@ -45,7 +45,7 @@ export class PasswordsController {
     }
 
     @Put(':passwordId')
-    @HttpCode(HttpStatus.ACCEPTED)
+    @HttpCode(HttpStatus.OK)
     public async updatePassword(
         @Param('clientId')
         clientId: string,

@@ -4,7 +4,7 @@ import { ClassProvider, HttpStatus, Inject, Injectable, InjectionToken } from '@
 import { IPasswordRepository, IPasswordService } from '@password-manager:api:interfaces';
 import { CRYPTO } from '@password-manager:api:providers';
 import { PASSWORD_REPOSITORY } from '@password-manager:api:repositories/password/password.repository';
-import { PasswordManagerException } from '@password-manager:api:types';
+import { PasswordInput, PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
 import {
     CreatePasswordRequest,
@@ -50,7 +50,28 @@ export class PasswordService implements IPasswordService {
         passwordId: string,
         request: UpdatePasswordRequest,
     ): Promise<UpdatePasswordResponse> {
-        return Promise.reject(PasswordManagerException.notImplemented());
+        // Verify that the password exists
+        // If it doesn't, this method will reject with a 404 (Not Found) exception
+        await this.passwordRepository.getPasswordById(passwordId);
+
+        // Encrypt the requested password record's value
+        const encryptedPassword = this.crypto.encrypt(request.value);
+
+        // Construct the PasswordInput type by spreading the
+        // requested password over it and overwriting the value
+        // with the encrypted value
+        const input = <PasswordInput>{
+            ...request,
+            clientId,
+            value: encryptedPassword,
+        };
+
+        // Update the password with the constructed input above
+        const password = await this.passwordRepository.updatePassword(passwordId, input);
+
+        return {
+            password,
+        };
     }
 }
 

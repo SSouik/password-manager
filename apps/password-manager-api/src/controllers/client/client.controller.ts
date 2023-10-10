@@ -33,7 +33,7 @@ export class ClientController {
     }
 
     @Put(':clientId')
-    @HttpCode(HttpStatus.ACCEPTED)
+    @HttpCode(HttpStatus.OK)
     @UseGuards(AuthGuard)
     public async updateClient(
         @Param('clientId') clientId: string,

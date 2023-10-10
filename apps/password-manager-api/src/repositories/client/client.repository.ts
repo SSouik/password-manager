@@ -60,7 +60,7 @@ export class ClientRepository implements IClientRepository {
                 error: error,
             });
 
-            // Reject/throw an exception indicating a 503 (Service Unavailable) and that 
+            // Reject/throw an exception indicating a 503 (Service Unavailable) and that
             // DynamoDB is down
             return Promise.reject(
                 PasswordManagerException.serviceUnavailable()
