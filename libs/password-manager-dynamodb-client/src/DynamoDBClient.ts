@@ -6,6 +6,7 @@ import {
     DeleteTableCommandOutput,
     DynamoDBClient as AWSDynamoDBClient,
     WriteRequest,
+    DeleteItemCommandOutput,
 } from '@aws-sdk/client-dynamodb';
 import {
     BatchWriteCommandInput,
@@ -20,6 +21,11 @@ import {
     QueryCommandOutput,
     QueryCommand,
     BatchWriteCommand,
+    DeleteCommandInput,
+    DeleteCommand,
+    UpdateCommandInput,
+    UpdateCommandOutput,
+    UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 
 import { IDynamoDBClient, DynamoDBConnection } from './types';
@@ -64,6 +70,28 @@ export class DynamoDBClient implements IDynamoDBClient {
         };
 
         const command = new PutCommand(params);
+
+        return this.dynamoDBClient.send(command);
+    }
+
+    public update(table: string, input: UpdateCommandInput): Promise<UpdateCommandOutput> {
+        const params = <UpdateCommandInput>{
+            ...input,
+            TableName: this.buildTableName(table),
+        };
+
+        const command = new UpdateCommand(params);
+
+        return this.dynamoDBClient.send(command);
+    }
+
+    public delete(table: string, input: DeleteCommandInput): Promise<DeleteItemCommandOutput> {
+        const params = <DeleteCommandInput>{
+            ...input,
+            TableName: this.buildTableName(table),
+        };
+
+        const command = new DeleteCommand(params);
 
         return this.dynamoDBClient.send(command);
     }

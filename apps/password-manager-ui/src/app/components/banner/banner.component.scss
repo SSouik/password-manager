@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@import '../../../styles/colors.scss';
+@import '../../../styles/colors';
 
 .pm--Banner-Background--info {
     background-color: map.get($pm-primary-palette, 100);

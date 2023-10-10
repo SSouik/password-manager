@@ -37,7 +37,7 @@
             "@password-manager:api:repositories/*": ["apps/password-manager-api/src/repositories/*"],
             "@password-manager:api:services": ["apps/password-manager-api/src/services"],
             "@password-manager:api:services/*": ["apps/password-manager-api/src/services/*"],
-            "@password-manager:api:types": ["apps/password-manager-api/src/types"],
+            "@password-manager:api:types": ["apps/password-manager-api/src/types/index.ts"],
             "@password-manager:api:types/*": ["apps/password-manager-api/src/types/*"],
             "@password-manager:api:utils": ["apps/password-manager-api/src/utils"],
             "@password-manager:api:utils/*": ["apps/password-manager-api/src/utils/*"],

@@ -1,4 +1,5 @@
 # Password Manager
+
 Password Manager is a tutorial application designed to teach
 developers how to create a full stack application using a
 variety of technologies and frameworks. Those include [Angular](https://angular.io/),
@@ -22,6 +23,7 @@ variety of technologies and frameworks. Those include [Angular](https://angular.
 <br/>
 
 ## What is Angular?
+
 [Angular](https://angular.io/) is a modern frontend framework
 designed to allow developers to create efficient and reliable
 single page applications (SPA). The framework is built by Google
@@ -34,6 +36,7 @@ technologies and developments with minimal effort.
 <br/>
 
 ## What is NestJS?
+
 [NestJS](https://nestjs.com/) is a progressive Node.js
 server side application framework. It fully supports the usage
 of both JavaScript and TypeScript to allow developers flexibility
@@ -41,11 +44,12 @@ when creating a server side application. NestJS is built on top
 of another server side Node.js framework called [Express](https://expressjs.com/) but provides a more opinionated
 approach to development. It can be used to create standalone
 APIs or a server side application which serves/supports a
-client side application. 
+client side application.
 
 <br/>
 
 ## What is Docker?
+
 [Docker](https://www.docker.com/) is a technology that is
 widely used across the world. It provides a way for developers
 to create an isolated environment for their application to
@@ -59,6 +63,7 @@ anywhere that DOcker is supported.
 <br/>
 
 ## What is DynamoDB
+
 [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) is a fully managed and
 maintained NoSQL database that AWS provides. DynamoDB is
 scalable, fast, and easy to use and relieves developers or
@@ -70,6 +75,7 @@ security for your data.
 <br/>
 
 ## What is a Monorepo?
+
 A monorepo is a code repository which holds multiple applications
 and/or libraries. There are many different approaches and usages
 of monorepos but a what they provide is a single codebase
@@ -81,16 +87,19 @@ to share libraries, data models, and become a single deployable.
 <br/>
 
 ## Getting Started
+
 ### Install Node
 
 Install NVM (Node Version Manager)
 
 Windows Only
+
 ```bash
 choco install nvm
 ```
 
 Mac Only
+
 ```bash
 brew install nvm
 ```
@@ -100,6 +109,7 @@ After installing NVM, install the correct version of Node
 ```bash
 nvm install 16.14
 ```
+
 > This will install Node version 16.14.
 
 Load Node 16.14
@@ -107,11 +117,13 @@ Load Node 16.14
 ```bash
 nvm use 16.14
 ```
+
 > This will load Node version 16.14 as the current node executable version
 
 <br/>
 
 ### Build the Apps
+
 There are several libraries and two applications which all
 need to be built. Building essentially means compiling the
 TypeScript into JavaScript.
@@ -121,6 +133,7 @@ Build everything
 ```bash
 yarn build
 ```
+
 > This will every application and library within the codebase
 
 Build the Config library
@@ -192,6 +205,7 @@ yarn build:api:prod
 <br/>
 
 ### Running the Apps
+
 There are a few ways to approach running the applications but
 for the best local development experience, follow the steps below.
 
@@ -217,6 +231,7 @@ Running the applications this way will allow for hot reloading
 when making changes to either the UI or the API.
 
 #### Initializing DynamoDB
+
 DynamoDB when it is first used needs to be configured with
 the tables and potentially some seed data for your application
 to use. All the tables can be found [here](./data/tables) which
@@ -228,6 +243,7 @@ Create the Tables
 ```bash
 yarn dynamo:tables:create
 ```
+
 > You can tear them down with `yarn dynamo:tables:delete`
 
 Add seed data
@@ -235,6 +251,7 @@ Add seed data
 ```bash
 yarn dynamo:data:create
 ```
+
 > This will add a client record along with two passwords in DynamoDB that can be used for testing
 
 AWS has created a library which allows developers to interact
@@ -245,5 +262,5 @@ local DynamoDB instance. Open another terminal and run the following:
 ```bash
 yarn dynamo:admin
 ```
-> If you open your browser to `http://localhost:8080` you will see the dashboard for DynamoDB
 
+> If you open your browser to `http://localhost:8080` you will see the dashboard for DynamoDB

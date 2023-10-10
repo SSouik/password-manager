@@ -54,6 +54,32 @@ describe('DynamoDBClient Tests', () => {
         });
     });
 
+    describe('Delete', () => {
+        it('Builds the DeleteCommand and sends it', async () => {
+            await client.delete('Table', {
+                TableName: 'Table',
+                Key: {
+                    key: 'value',
+                },
+            });
+
+            expect(awsDynamoDBClientSpy).toBeCalledTimes(1);
+        });
+    });
+
+    describe('Update', () => {
+        it('Builds the UpdateCommand and sends it', async () => {
+            await client.update('Table', {
+                TableName: 'Table',
+                Key: {
+                    key: 'value',
+                },
+            });
+
+            expect(awsDynamoDBClientSpy).toBeCalledTimes(1);
+        });
+    });
+
     describe('Batch Save', () => {
         it('Builds the BatchWriteCommand with PutRequests and sends it', async () => {
             await client.batchSave('Table', [{ foo: 'bar' }]);

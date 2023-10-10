@@ -1,10 +1,15 @@
+import { DeleteCommandInput } from '@aws-sdk/lib-dynamodb';
 import { HttpStatus } from '@nestjs/common';
-import { PasswordManagerException } from '@password-manager:api:types';
+import { PasswordInput, PasswordManagerException } from '@password-manager:api:types';
 import { DynamoDBClient } from '@password-manager:dynamodb-client';
 import { Logger } from '@password-manager:logger';
 import { Password, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 
 import { PasswordRepository } from './password.repository';
+
+jest.mock('uuid', () => ({
+    v4: () => 'uuid',
+}));
 
 describe('PasswordRepository Tests', () => {
     const mockLogger = Logger.prototype;
@@ -12,6 +17,8 @@ describe('PasswordRepository Tests', () => {
     let repository: PasswordRepository;
 
     beforeEach(() => {
+        jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('now');
+
         ['info', 'debug', 'warn', 'error'].forEach((level) => {
             mockLogger[level] = jest.fn();
         });
@@ -170,38 +177,146 @@ describe('PasswordRepository Tests', () => {
     });
 
     describe('Create Password', () => {
-        it('Throws an error because the method is not implemented', async () => {
+        it('Creates a new password in DynamoDB', async () => {
+            mockDynamoDBClient.save = jest.fn().mockResolvedValue({});
+
+            const input = <PasswordInput>{
+                name: 'name',
+                website: null,
+                login: 'login',
+                value: 'P@ssword123',
+                clientId: 'clientId',
+            };
+
+            const result = await repository.createPassword(input);
+
+            expect(result.name).toBe('name');
+            expect(result.website).toBeNull();
+            expect(result.login).toBe('login');
+            expect(result.value).toBe('P@ssword123');
+
+            expect(mockDynamoDBClient.save).toBeCalledTimes(1);
+            expect(mockDynamoDBClient.save).toBeCalledWith('Password', <Password>{
+                passwordId: 'uuid',
+                name: 'name',
+                website: null,
+                login: 'login',
+                value: 'P@ssword123',
+                clientId: 'clientId',
+                metadata: {
+                    createdDate: 'now',
+                    updatedDate: 'now',
+                },
+            });
+
+            expect(mockLogger.info).toBeCalledTimes(1);
+            expect(mockLogger.info).toBeCalledWith('Successfully created anew password for client', {
+                dynamoDB: {
+                    table: 'Password',
+                },
+            });
+        });
+
+        it('Rejects with a ServiceUnavailable exception when saving the password fails', async () => {
+            const mockError = new Error('Something went wrong');
+            mockDynamoDBClient.save = jest.fn().mockRejectedValue(mockError);
+
+            const input = <PasswordInput>{
+                name: 'name',
+                website: null,
+                login: 'login',
+                value: 'P@ssword123',
+                clientId: 'clientId',
+            };
+
             try {
-                await repository.createPassword(<Password>{
-                    passwordId: 'id',
-                    name: 'Foo',
-                    website: 'http://foo.com',
-                    login: 'login',
-                    value: 'password',
-                    clientId: '123',
-                });
+                await repository.createPassword(input);
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
                 const exception = error as PasswordManagerException;
-                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
-                expect(error.message).toBe('Not Implemented');
-                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
+                expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+                expect(exception.message).toBe('Service Unavailable');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.DynamoDBDown);
+
+                expect(mockDynamoDBClient.save).toBeCalledTimes(1);
+                expect(mockDynamoDBClient.save).toBeCalledWith('Password', <Password>{
+                    passwordId: 'uuid',
+                    name: 'name',
+                    website: null,
+                    login: 'login',
+                    value: 'P@ssword123',
+                    clientId: 'clientId',
+                    metadata: {
+                        createdDate: 'now',
+                        updatedDate: 'now',
+                    },
+                });
+
+                expect(mockLogger.error).toBeCalledTimes(1);
+                expect(mockLogger.error).toBeCalledWith('Failed to create a new password for the client', {
+                    dynamoDB: {
+                        table: 'Password',
+                        error: mockError,
+                    },
+                });
             }
         });
     });
 
     describe('Delete Password', () => {
-        it('Throws an error because the method is not implemented', async () => {
+        it('Deletes the password in DynamoDB', async () => {
+            mockDynamoDBClient.delete = jest.fn().mockResolvedValue({});
+
+            await repository.deletePassword('passwordId');
+
+            expect(mockDynamoDBClient.delete).toBeCalledTimes(1);
+            expect(mockDynamoDBClient.delete).toBeCalledWith('Password', <DeleteCommandInput>{
+                TableName: 'Password',
+                Key: {
+                    passwordId: 'passwordId',
+                },
+            });
+
+            expect(mockLogger.info).toBeCalledTimes(1);
+            expect(mockLogger.info).toBeCalledWith('Successfully deleted password', {
+                dynamoDB: {
+                    table: 'Password',
+                    passwordId: 'passwordId',
+                },
+            });
+        });
+
+        it('Rejects with a ServiceUnavailable exception when deleting the password in DynamoDB fails', async () => {
+            const mockError = new Error('Something broke');
+            mockDynamoDBClient.delete = jest.fn().mockRejectedValue(mockError);
+
             try {
-                await repository.deletePassword('id');
+                await repository.deletePassword('passwordId');
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
                 const exception = error as PasswordManagerException;
-                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
-                expect(error.message).toBe('Not Implemented');
-                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
+                expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+                expect(exception.message).toBe('Service Unavailable');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.DynamoDBDown);
+
+                expect(mockDynamoDBClient.delete).toBeCalledTimes(1);
+                expect(mockDynamoDBClient.delete).toBeCalledWith('Password', <DeleteCommandInput>{
+                    TableName: 'Password',
+                    Key: {
+                        passwordId: 'passwordId',
+                    },
+                });
+
+                expect(mockLogger.error).toBeCalledTimes(1);
+                expect(mockLogger.error).toBeCalledWith('Failed to delete password', {
+                    dynamoDB: {
+                        table: 'Password',
+                        passwordId: 'passwordId',
+                        error: mockError,
+                    },
+                });
             }
         });
     });
@@ -222,23 +337,130 @@ describe('PasswordRepository Tests', () => {
     });
 
     describe('Update Password', () => {
-        it('Throws an error because the method is not implemented', async () => {
-            try {
-                await repository.updatePassword(<Password>{
-                    passwordId: 'id',
-                    name: 'Foo',
-                    website: 'http://foo.com',
+        it('Updates the password in DynamoDB', async () => {
+            mockDynamoDBClient.update = jest.fn().mockResolvedValue({
+                Attributes: <Password>{
+                    passwordId: 'passwordId',
+                    name: 'name',
+                    website: null,
                     login: 'login',
-                    value: 'password',
-                    clientId: '123',
+                    value: 'P@ssword123',
+                    clientId: 'clientId',
+                    metadata: {
+                        createdDate: 'now',
+                        updatedDate: 'now',
+                    },
+                },
+            });
+
+            const result = await repository.updatePassword('passwordId', {
+                name: 'name',
+                website: null,
+                login: 'login',
+                value: 'P@ssword123',
+                clientId: 'clientId',
+            });
+
+            expect(result.passwordId).toBe('passwordId');
+            expect(result.name).toBe('name');
+            expect(result.website).toBeNull();
+            expect(result.login).toBe('login');
+            expect(result.value).toBe('P@ssword123');
+            expect(result.clientId).toBe('clientId');
+            expect(result.metadata.createdDate).toBe('now');
+            expect(result.metadata.updatedDate).toBe('now');
+
+            expect(mockDynamoDBClient.update).toBeCalledTimes(1);
+            expect(mockDynamoDBClient.update).toBeCalledWith('Password', {
+                TableName: 'Password',
+                Key: {
+                    passwordId: 'passwordId',
+                },
+                UpdateExpression:
+                    'set #name = :name, #website = :website, #login = :login, #value = :value, #clientId = :clientId, #metadata.updatedDate = :updatedDate',
+                ExpressionAttributeNames: {
+                    '#name': 'name',
+                    '#website': 'website',
+                    '#login': 'login',
+                    '#value': 'value',
+                    '#clientId': 'clientId',
+                    '#updatedDate': 'updatedDate',
+                },
+                ExpressionAttributeValues: {
+                    ':name': 'name',
+                    ':website': null,
+                    ':login': 'login',
+                    ':value': 'P@ssword123',
+                    ':clientId': 'clientId',
+                    ':updatedDate': 'now',
+                },
+                ConditionExpression: 'attribute_exists(passwordId)',
+            });
+
+            expect(mockLogger.info).toBeCalledTimes(1);
+            expect(mockLogger.info).toBeCalledWith('Successfully updated the password', {
+                dynamoDB: {
+                    table: 'Password',
+                    passwordId: 'passwordId',
+                },
+            });
+        });
+
+        it('Rejects with a ServiceUnavailable exception when updating the password in DynamoDB fails', async () => {
+            const mockError = new Error('Something broke');
+            mockDynamoDBClient.update = jest.fn().mockRejectedValue(mockError);
+
+            try {
+                await repository.updatePassword('passwordId', {
+                    name: 'name',
+                    website: null,
+                    login: 'login',
+                    value: 'P@ssword123',
+                    clientId: 'clientId',
                 });
             } catch (error) {
                 expect(error).toBeInstanceOf(PasswordManagerException);
 
                 const exception = error as PasswordManagerException;
-                expect(exception.statusCode).toBe(HttpStatus.NOT_IMPLEMENTED);
-                expect(error.message).toBe('Not Implemented');
-                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.NotImplemented);
+                expect(exception.statusCode).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+                expect(exception.message).toBe('Service Unavailable');
+                expect(exception.errorCode).toBe(PasswordManagerErrorCodeEnum.DynamoDBDown);
+
+                expect(mockDynamoDBClient.update).toBeCalledTimes(1);
+                expect(mockDynamoDBClient.update).toBeCalledWith('Password', {
+                    TableName: 'Password',
+                    Key: {
+                        passwordId: 'passwordId',
+                    },
+                    UpdateExpression:
+                        'set #name = :name, #website = :website, #login = :login, #value = :value, #clientId = :clientId, #metadata.updatedDate = :updatedDate',
+                    ExpressionAttributeNames: {
+                        '#name': 'name',
+                        '#website': 'website',
+                        '#login': 'login',
+                        '#value': 'value',
+                        '#clientId': 'clientId',
+                        '#updatedDate': 'updatedDate',
+                    },
+                    ExpressionAttributeValues: {
+                        ':name': 'name',
+                        ':website': null,
+                        ':login': 'login',
+                        ':value': 'P@ssword123',
+                        ':clientId': 'clientId',
+                        ':updatedDate': 'now',
+                    },
+                    ConditionExpression: 'attribute_exists(passwordId)',
+                });
+
+                expect(mockLogger.error).toBeCalledTimes(1);
+                expect(mockLogger.error).toBeCalledWith('Failed to update password', {
+                    dynamoDB: {
+                        table: 'Password',
+                        passwordId: 'passwordId',
+                        error: mockError,
+                    },
+                });
             }
         });
     });
