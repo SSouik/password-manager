@@ -1,14 +1,14 @@
-import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
+import { HealthCheckService } from '@password-manager:api:services';
 import { EnvironmentEnum } from '@password-manager:types';
 
-import { HealthCheckController } from './healthcheck.controller';
+import { HealthCheckController } from './health-check.controller';
 
 describe('HealthCheckController Tests', () => {
-    const mockAppConfigService = AppConfigService.prototype;
+    const mockHealthCheckService = HealthCheckService.prototype;
     let controller: HealthCheckController;
 
     beforeEach(() => {
-        controller = new HealthCheckController(mockAppConfigService);
+        controller = new HealthCheckController(mockHealthCheckService);
     });
 
     afterEach(() => {
@@ -17,16 +17,13 @@ describe('HealthCheckController Tests', () => {
 
     describe('Get Health Check', () => {
         beforeEach(() => {
-            mockAppConfigService.getEnvironment = jest.fn().mockReturnValue(EnvironmentEnum.Local);
-            mockAppConfigService.get = jest.fn().mockReturnValue('some-config');
+            mockHealthCheckService.getHealth = jest
+                .fn()
+                .mockReturnValue({ environment: EnvironmentEnum.Local, commitSha: 'some-config' });
         });
 
         it('Successful Results', () => {
             const actual = controller.getHealthCheck();
-
-            expect(mockAppConfigService.getEnvironment).toBeCalledTimes(1);
-            expect(mockAppConfigService.get).toBeCalledTimes(1);
-            expect(mockAppConfigService.get).toBeCalledWith('commitSha');
 
             expect(actual.environment).toBe(EnvironmentEnum.Local);
             expect(actual.commitSha).toBe('some-config');

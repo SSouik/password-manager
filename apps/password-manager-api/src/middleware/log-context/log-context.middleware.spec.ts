@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
+import { ConfigService } from '@password-manager:api:services';
 import { LogMessageFactory, LogPropertyEnum } from '@password-manager:logger';
 import { Request, Response } from 'express';
 
@@ -8,7 +8,7 @@ import { LogContextMiddleware } from './log-context.middleware';
 jest.mock('uuid', () => ({ v4: () => 'trace-id' }));
 
 describe('LogContextMiddleware Tests', () => {
-    const mockAppConfigService = AppConfigService.prototype;
+    const ddmockConfigService = ConfigService.prototype;
     const mockLogMessageFactory = LogMessageFactory.prototype;
     const mockRequest = {} as Request;
     const mockResponse = {} as Response;
@@ -16,14 +16,14 @@ describe('LogContextMiddleware Tests', () => {
     let middleware: LogContextMiddleware;
 
     beforeEach(() => {
-        mockAppConfigService.get = jest.fn().mockReturnValue('0.0.1');
+        ddmockConfigService.get = jest.fn().mockReturnValue('0.0.1');
         mockLogMessageFactory.setProperty = jest.fn().mockReturnThis();
         mockLogMessageFactory.setContext = jest.fn().mockReturnThis();
 
         mockResponse.setHeader = jest.fn().mockReturnThis();
         mockNextHandler = jest.fn();
 
-        middleware = new LogContextMiddleware(mockAppConfigService, mockLogMessageFactory);
+        middleware = new LogContextMiddleware(ddmockConfigService, mockLogMessageFactory);
     });
 
     afterEach(() => {
@@ -40,8 +40,8 @@ describe('LogContextMiddleware Tests', () => {
 
         middleware.use(mockRequest, mockResponse, mockNextHandler);
 
-        expect(mockAppConfigService.get).toBeCalledTimes(1);
-        expect(mockAppConfigService.get).toBeCalledWith('version');
+        expect(ddmockConfigService.get).toBeCalledTimes(1);
+        expect(ddmockConfigService.get).toBeCalledWith('version');
 
         expect(mockLogMessageFactory.setProperty).toBeCalledTimes(3);
         expect(mockLogMessageFactory.setProperty).toHaveBeenNthCalledWith(1, LogPropertyEnum.TraceID, 'trace-id');

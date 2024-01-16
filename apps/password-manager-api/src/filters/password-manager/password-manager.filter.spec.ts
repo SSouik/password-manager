@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { ArgumentsHost, HttpArgumentsHost } from '@nestjs/common/interfaces';
-import { AppConfigService } from '@password-manager:api:services/config/app-config.service';
+import { ConfigService } from '@password-manager:api:services';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 import { Request, Response } from 'express';
@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 import { PasswordManagerFilter } from './password-manager.filter';
 
 describe('PasswordManagerFilter Tests', () => {
-    const mockAppConfigService = AppConfigService.prototype;
+    const mockConfigService = ConfigService.prototype;
     const mockTimestamp = '2023-02-01T17:20:01.700Z';
     const mockRequest = {} as Request;
     const mockResponse = {} as Response;
@@ -19,7 +19,7 @@ describe('PasswordManagerFilter Tests', () => {
     beforeEach(() => {
         jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(mockTimestamp);
 
-        mockAppConfigService.get = jest.fn().mockReturnValue('0.0.1');
+        mockConfigService.get = jest.fn().mockReturnValue('0.0.1');
 
         mockResponse.getHeader = jest.fn().mockReturnValue('trace-id');
         mockResponse.setHeader = jest.fn().mockReturnThis();
@@ -29,7 +29,7 @@ describe('PasswordManagerFilter Tests', () => {
         mockHttpContext.getRequest = jest.fn().mockReturnValue(mockRequest);
         mockHttpContext.getResponse = jest.fn().mockReturnValue(mockResponse);
 
-        filter = new PasswordManagerFilter(mockAppConfigService);
+        filter = new PasswordManagerFilter(mockConfigService);
     });
 
     afterEach(() => {

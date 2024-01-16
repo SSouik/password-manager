@@ -25,6 +25,6 @@
             }
         }
     },
-    "tags": [],
+    "tags": ["e2e"],
     "implicitDependencies": ["password-manager-ui"]
 }

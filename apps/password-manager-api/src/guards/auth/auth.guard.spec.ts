@@ -1,6 +1,6 @@
 import { ExecutionContext, HttpStatus } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
-import { JWTService } from '@password-manager:api:services/jwt/jwt.service';
+import { JWTService } from '@password-manager:api:services';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Logger, LogMessageFactory } from '@password-manager:logger';
 import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
