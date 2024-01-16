@@ -1,7 +1,5 @@
-import { ClassProvider, Inject, Injectable, InjectionToken } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { IJWTBuilder, IJWTService } from '@password-manager:api:interfaces';
-import { JWT_BUILDER } from '@password-manager:api:providers/factories/builders/jwt-builder.provider';
-import { LOGGER } from '@password-manager:api:providers/factories/logger/logger.provider';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { DateUtils } from '@password-manager:api:utils';
 import { ILogger } from '@password-manager:logger';
@@ -9,12 +7,7 @@ import { JWTPayload, AuthToken, PasswordManagerErrorCodeEnum } from '@password-m
 
 @Injectable()
 export class JWTService implements IJWTService {
-    constructor(
-        @Inject(LOGGER)
-        private readonly logger: ILogger,
-        @Inject(JWT_BUILDER)
-        private readonly jwtBuilder: IJWTBuilder<JWTPayload>,
-    ) {}
+    constructor(private readonly logger: ILogger, private readonly jwtBuilder: IJWTBuilder<JWTPayload>) {}
 
     public async create(claims: JWTPayload): Promise<AuthToken> {
         const now = new Date();
@@ -66,10 +59,3 @@ export class JWTService implements IJWTService {
         }
     }
 }
-
-export const JWT_SERVICE: InjectionToken = 'JWTService';
-
-export default <ClassProvider>{
-    provide: JWT_SERVICE,
-    useClass: JWTService,
-};

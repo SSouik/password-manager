@@ -1,7 +1,6 @@
-import AuthService from './auth/auth.service';
-import ClientService from './client/client.service';
-import AppConfigService from './config/app-config.service';
-import JWTService from './jwt/jwt.service';
-import PasswordService from './password/password.service';
-
-export default [AuthService, ClientService, AppConfigService, JWTService, PasswordService];
+export * from './auth/auth.service';
+export * from './client/client.service';
+export * from './config/config.service';
+export * from './health-check/health-check.service';
+export * from './jwt/jwt.service';
+export * from './password/password.service';

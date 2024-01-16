@@ -1,9 +1,8 @@
-import { ValueProvider, InjectionToken } from '@nestjs/common';
+import { ValueProvider } from '@nestjs/common';
 import { appConfig } from '@password-manager:api:config';
-
-export const APP_CONFIG: InjectionToken = 'AppConfig';
+import { DependencyInjectionTokenEnum } from '@password-manager:api:types';
 
 export default <ValueProvider>{
-    provide: APP_CONFIG,
+    provide: DependencyInjectionTokenEnum.APP_CONFIG,
     useValue: appConfig,
 };

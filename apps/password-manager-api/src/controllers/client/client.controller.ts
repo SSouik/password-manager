@@ -3,8 +3,7 @@
 import { Body, Controller, Delete, HttpCode, HttpStatus, Inject, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@password-manager:api:guards';
 import { IClientService } from '@password-manager:api:interfaces';
-import { CLIENT_SERVICE } from '@password-manager:api:services/client/client.service';
-import { PasswordManagerException } from '@password-manager:api:types';
+import { DependencyInjectionTokenEnum, PasswordManagerException } from '@password-manager:api:types';
 import {
     CreateClientRequest,
     CreateClientResponse,
@@ -15,7 +14,7 @@ import {
 @Controller('clients')
 export class ClientController {
     constructor(
-        @Inject(CLIENT_SERVICE)
+        @Inject(DependencyInjectionTokenEnum.CLIENT_SERVICE)
         private readonly clientService: IClientService,
     ) {}
 

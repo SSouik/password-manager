@@ -1,20 +1,18 @@
-import { FactoryProvider, InjectionToken, Scope } from '@nestjs/common';
+import { FactoryProvider, Scope } from '@nestjs/common';
 import { AppConfig } from '@password-manager:api:config';
-import { IAppConfigService } from '@password-manager:api:interfaces';
-import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
+import { IConfigService } from '@password-manager:api:interfaces';
+import { DependencyInjectionTokenEnum } from '@password-manager:api:types';
 import { ILogMessageFactory, LogMessageFactory } from '@password-manager:logger';
 
-export const LOG_MESSAGE_FACTORY: InjectionToken = 'LogMessageFactory';
-
 export default <FactoryProvider>{
-    provide: LOG_MESSAGE_FACTORY,
+    provide: DependencyInjectionTokenEnum.LOG_MESSAGE_FACTORY,
     scope: Scope.REQUEST, // new up on every request
-    useFactory: (appConfigService: IAppConfigService<AppConfig>): ILogMessageFactory => {
+    useFactory: (configService: IConfigService<AppConfig>): ILogMessageFactory => {
         return new LogMessageFactory({
-            CommitSha: appConfigService.get('commitSha'),
-            Region: appConfigService.get('region'),
-            Environment: appConfigService.getEnvironment(),
+            CommitSha: configService.get('commitSha'),
+            Region: configService.get('region'),
+            Environment: configService.getEnvironment(),
         });
     },
-    inject: [APP_CONFIG_SERVICE],
+    inject: [DependencyInjectionTokenEnum.CONFIG_SERVICE],
 };

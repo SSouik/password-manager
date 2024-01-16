@@ -1,19 +1,17 @@
-import { FactoryProvider, InjectionToken } from '@nestjs/common';
+import { FactoryProvider } from '@nestjs/common';
 import { AppConfig } from '@password-manager:api:config';
-import { IAppConfigService } from '@password-manager:api:interfaces';
-import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
+import { IConfigService } from '@password-manager:api:interfaces';
+import { DependencyInjectionTokenEnum } from '@password-manager:api:types';
 import { AlgorithmEnum, Crypto, EncodingEnum } from '@password-manager:crypto';
 
-export const CRYPTO: InjectionToken = 'Crypto';
-
 export default <FactoryProvider>{
-    provide: CRYPTO,
-    useFactory: (appConfigService: IAppConfigService<AppConfig>): Crypto => {
+    provide: DependencyInjectionTokenEnum.CRYPTO,
+    useFactory: (configService: IConfigService<AppConfig>): Crypto => {
         return Crypto.create()
             .withAlgorithm(AlgorithmEnum.AES256CTR)
-            .withSecret(appConfigService.get('encryptionKey'))
-            .withInitializationVector(appConfigService.get('initializationVector'))
+            .withSecret(configService.get('encryptionKey'))
+            .withInitializationVector(configService.get('initializationVector'))
             .withEncoding(EncodingEnum.Base64);
     },
-    inject: [APP_CONFIG_SERVICE],
+    inject: [DependencyInjectionTokenEnum.CONFIG_SERVICE],
 };

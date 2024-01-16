@@ -1,11 +1,11 @@
 import { Body, Controller, HttpCode, HttpStatus, Inject, Post } from '@nestjs/common';
 import { IAuthService } from '@password-manager:api:interfaces';
-import { AUTH_SERVICE } from '@password-manager:api:services/auth/auth.service';
+import { DependencyInjectionTokenEnum } from '@password-manager:api:types';
 import { LoginRequest, LoginResponse } from '@password-manager:types';
 
 @Controller('login')
 export class AuthController {
-    constructor(@Inject(AUTH_SERVICE) private readonly authService: IAuthService) {}
+    constructor(@Inject(DependencyInjectionTokenEnum.AUTH_SERVICE) private readonly authService: IAuthService) {}
 
     @Post()
     @HttpCode(HttpStatus.OK)

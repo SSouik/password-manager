@@ -1,10 +1,7 @@
 // Remove below line when the service has been implemented
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ClassProvider, HttpStatus, Inject, InjectionToken } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 import { IClientRepository, IClientService, IPasswordRepository } from '@password-manager:api:interfaces';
-import { CRYPTO } from '@password-manager:api:providers';
-import { CLIENT_REPOSITORY } from '@password-manager:api:repositories/client/client.repository';
-import { PASSWORD_REPOSITORY } from '@password-manager:api:repositories/password/password.repository';
 import { PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
 import {
@@ -17,11 +14,8 @@ import {
 
 export class ClientService implements IClientService {
     constructor(
-        @Inject(CLIENT_REPOSITORY)
         private readonly clientRepository: IClientRepository,
-        @Inject(PASSWORD_REPOSITORY)
         private readonly passwordRepository: IPasswordRepository,
-        @Inject(CRYPTO)
         private readonly crypto: Crypto,
     ) {}
 
@@ -77,10 +71,3 @@ export class ClientService implements IClientService {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 }
-
-export const CLIENT_SERVICE: InjectionToken = 'ClientService';
-
-export default <ClassProvider>{
-    provide: CLIENT_SERVICE,
-    useClass: ClientService,
-};

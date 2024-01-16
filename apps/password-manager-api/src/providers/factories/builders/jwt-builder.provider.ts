@@ -1,19 +1,17 @@
-import { FactoryProvider, InjectionToken } from '@nestjs/common';
+import { FactoryProvider } from '@nestjs/common';
 import { JWTBuilder } from '@password-manager:api:builders';
 import { AppConfig } from '@password-manager:api:config';
-import { IAppConfigService, IJWTBuilder } from '@password-manager:api:interfaces';
-import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
+import { IConfigService, IJWTBuilder } from '@password-manager:api:interfaces';
+import { DependencyInjectionTokenEnum } from '@password-manager:api:types';
 import { JWTAlgorithmEnum, JWTPayload } from '@password-manager:types';
 
-export const JWT_BUILDER: InjectionToken = 'JWTBuilder';
-
 export default <FactoryProvider>{
-    provide: JWT_BUILDER,
-    useFactory: (appConfigService: IAppConfigService<AppConfig>): IJWTBuilder<JWTPayload> => {
+    provide: DependencyInjectionTokenEnum.JWT_BUILDER,
+    useFactory: (configService: IConfigService<AppConfig>): IJWTBuilder<JWTPayload> => {
         return JWTBuilder.create<JWTPayload>()
-            .withSecret(appConfigService.get('jwtSecret'))
+            .withSecret(configService.get('jwtSecret'))
             .withAlgorithm(JWTAlgorithmEnum.HS256)
-            .addIssuer(appConfigService.get('appUrl').href);
+            .addIssuer(configService.get('appUrl').href);
     },
-    inject: [APP_CONFIG_SERVICE],
+    inject: [DependencyInjectionTokenEnum.CONFIG_SERVICE],
 };

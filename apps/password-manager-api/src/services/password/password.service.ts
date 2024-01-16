@@ -1,9 +1,7 @@
 // Remove below line after implementing the service
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ClassProvider, HttpStatus, Inject, Injectable, InjectionToken } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { IPasswordRepository, IPasswordService } from '@password-manager:api:interfaces';
-import { CRYPTO } from '@password-manager:api:providers';
-import { PASSWORD_REPOSITORY } from '@password-manager:api:repositories/password/password.repository';
 import { PasswordInput, PasswordManagerException } from '@password-manager:api:types';
 import { Crypto } from '@password-manager:crypto';
 import {
@@ -16,12 +14,7 @@ import {
 
 @Injectable()
 export class PasswordService implements IPasswordService {
-    constructor(
-        @Inject(PASSWORD_REPOSITORY)
-        private readonly passwordRepository: IPasswordRepository,
-        @Inject(CRYPTO)
-        private readonly crypto: Crypto,
-    ) {}
+    constructor(private readonly passwordRepository: IPasswordRepository, private readonly crypto: Crypto) {}
 
     public async getPasswords(clientId: string): Promise<GetPasswordsResponse> {
         // This can throw an exception but that's ok. If it does, we want the filters to handle it
@@ -74,10 +67,3 @@ export class PasswordService implements IPasswordService {
         };
     }
 }
-
-export const PASSWORD_SERVICE: InjectionToken = 'PasswordService';
-
-export default <ClassProvider>{
-    provide: PASSWORD_SERVICE,
-    useClass: PasswordService,
-};

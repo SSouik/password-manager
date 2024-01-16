@@ -3,8 +3,7 @@
 import { Controller, HttpCode, Get, Param, Inject, UseGuards, Post, Body, Delete, Put } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { AuthGuard } from '@password-manager:api:guards';
-import { PASSWORD_SERVICE } from '@password-manager:api:services/password/password.service';
-import { IPasswordService, PasswordManagerException } from '@password-manager:api:types';
+import { DependencyInjectionTokenEnum, IPasswordService, PasswordManagerException } from '@password-manager:api:types';
 import {
     CreatePasswordRequest,
     CreatePasswordResponse,
@@ -16,7 +15,9 @@ import {
 @Controller('clients/:clientId/passwords')
 @UseGuards(AuthGuard)
 export class PasswordsController {
-    constructor(@Inject(PASSWORD_SERVICE) private readonly passwordService: IPasswordService) {}
+    constructor(
+        @Inject(DependencyInjectionTokenEnum.PASSWORD_SERVICE) private readonly passwordService: IPasswordService,
+    ) {}
 
     @Get()
     @HttpCode(HttpStatus.OK)

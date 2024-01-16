@@ -1,8 +1,6 @@
 import { CanActivate, ExecutionContext, Inject } from '@nestjs/common';
 import { IJWTService } from '@password-manager:api:interfaces';
-import { LOGGER, LOG_MESSAGE_FACTORY } from '@password-manager:api:providers';
-import { JWT_SERVICE } from '@password-manager:api:services/jwt/jwt.service';
-import { PasswordManagerException } from '@password-manager:api:types';
+import { DependencyInjectionTokenEnum, PasswordManagerException } from '@password-manager:api:types';
 import { ILogger, ILogMessageFactory } from '@password-manager:logger';
 import { PasswordManagerErrorCodeEnum } from '@password-manager:types';
 import { Request } from 'express';
@@ -10,11 +8,11 @@ import { Observable } from 'rxjs';
 
 export class AuthGuard implements CanActivate {
     constructor(
-        @Inject(LOG_MESSAGE_FACTORY)
+        @Inject(DependencyInjectionTokenEnum.LOG_MESSAGE_FACTORY)
         private readonly logMessageFactory: ILogMessageFactory,
-        @Inject(LOGGER)
+        @Inject(DependencyInjectionTokenEnum.LOGGER)
         private readonly logger: ILogger,
-        @Inject(JWT_SERVICE)
+        @Inject(DependencyInjectionTokenEnum.JWT_SERVICE)
         private readonly jwtService: IJWTService,
     ) {}
 

@@ -1,11 +1,8 @@
 // Remove eslint override below once the remaining methods are implemented
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { DeleteCommandInput, QueryCommandInput, UpdateCommandInput } from '@aws-sdk/lib-dynamodb';
-import { ClassProvider, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
-import { InjectionToken } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { IPasswordRepository } from '@password-manager:api:interfaces';
-import { DYNAMODB_CLIENT, LOGGER } from '@password-manager:api:providers';
 import { PasswordInput, PasswordManagerException } from '@password-manager:api:types';
 import { IDynamoDBClient } from '@password-manager:dynamodb-client';
 import { ILogger } from '@password-manager:logger';
@@ -16,12 +13,7 @@ import { v4 as uuid } from 'uuid';
 export class PasswordRepository implements IPasswordRepository {
     private readonly TABLE_NAME = 'Password';
 
-    constructor(
-        @Inject(LOGGER)
-        private readonly logger: ILogger,
-        @Inject(DYNAMODB_CLIENT)
-        private readonly dynamoDBClient: IDynamoDBClient,
-    ) {}
+    constructor(private readonly logger: ILogger, private readonly dynamoDBClient: IDynamoDBClient) {}
 
     public async getPasswordById(passwordId: string): Promise<Password> {
         // Query DynamoDB by the passwordId to get a single password record.
@@ -249,10 +241,3 @@ export class PasswordRepository implements IPasswordRepository {
         }
     }
 }
-
-export const PASSWORD_REPOSITORY: InjectionToken = 'PasswordRepository';
-
-export default <ClassProvider>{
-    provide: PASSWORD_REPOSITORY,
-    useClass: PasswordRepository,
-};

@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Inject, NestMiddleware } from '@nestjs/common';
 import { AppConfig } from '@password-manager:api:config';
-import { IAppConfigService } from '@password-manager:api:interfaces';
-import { LOG_MESSAGE_FACTORY } from '@password-manager:api:providers';
-import { APP_CONFIG_SERVICE } from '@password-manager:api:services/config/app-config.service';
+import { DependencyInjectionTokenEnum, IConfigService } from '@password-manager:api:types';
 import { ILogMessageFactory, LogPropertyEnum } from '@password-manager:logger';
 import { Request, Response } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
@@ -12,9 +10,9 @@ import { v4 as uuid } from 'uuid';
 
 export class LogContextMiddleware implements NestMiddleware<Request, Response> {
     constructor(
-        @Inject(APP_CONFIG_SERVICE)
-        private readonly appConfigService: IAppConfigService<AppConfig>,
-        @Inject(LOG_MESSAGE_FACTORY)
+        @Inject(DependencyInjectionTokenEnum.CONFIG_SERVICE)
+        private readonly configService: IConfigService<AppConfig>,
+        @Inject(DependencyInjectionTokenEnum.LOG_MESSAGE_FACTORY)
         private readonly logMessageFactory: ILogMessageFactory,
     ) {}
 
@@ -28,7 +26,7 @@ export class LogContextMiddleware implements NestMiddleware<Request, Response> {
         const url = req.baseUrl;
         const method = req.method;
         const userAgent = req.headers['user-agent'];
-        const version = this.appConfigService.get('version');
+        const version = this.configService.get('version');
 
         // Add response headers
         res.setHeader('x-request-trace-id', traceId).setHeader('x-password-manager-version', version);

@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GetCommandInput, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
-import { ClassProvider, Inject, Injectable, InjectionToken } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { IClientRepository } from '@password-manager:api:interfaces';
-import { DYNAMODB_CLIENT, LOGGER } from '@password-manager:api:providers';
 import { ClientInput, PasswordManagerException } from '@password-manager:api:types';
 import { IDynamoDBClient } from '@password-manager:dynamodb-client';
 import { ILogger } from '@password-manager:logger';
@@ -12,12 +11,7 @@ import { Client, PasswordManagerErrorCodeEnum } from '@password-manager:types';
 export class ClientRepository implements IClientRepository {
     private readonly TABLE_NAME = 'Client';
 
-    constructor(
-        @Inject(LOGGER)
-        private readonly logger: ILogger,
-        @Inject(DYNAMODB_CLIENT)
-        private readonly dynamoDBClient: IDynamoDBClient,
-    ) {}
+    constructor(private readonly logger: ILogger, private readonly dynamoDBClient: IDynamoDBClient) {}
 
     public async getClientById(clientId: string): Promise<Client> {
         try {
@@ -157,10 +151,3 @@ export class ClientRepository implements IClientRepository {
         return Promise.reject(PasswordManagerException.notImplemented());
     }
 }
-
-export const CLIENT_REPOSITORY: InjectionToken = 'ClientRepository';
-
-export default <ClassProvider>{
-    provide: CLIENT_REPOSITORY,
-    useClass: ClientRepository,
-};

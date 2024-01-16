@@ -2,18 +2,18 @@ import { AppConfig, AppEnvironment } from '@password-manager:api:config';
 import { ApplicationConfig, IApplicationConfig } from '@password-manager:config';
 import { EnvironmentEnum } from '@password-manager:types';
 
-import { AppConfigService } from './app-config.service';
+import { ConfigService } from './config.service';
 
-describe('AppConfigService Tests', () => {
+describe('ConfigService Tests', () => {
     let mockApplicationConfig: IApplicationConfig<AppConfig, AppEnvironment>;
-    let service: AppConfigService;
+    let service: ConfigService;
 
     beforeEach(() => {
         mockApplicationConfig = new ApplicationConfig<AppConfig, AppEnvironment>(process.env);
         mockApplicationConfig.map('environment', 'ENVIRONMENT').withDefaultValue(EnvironmentEnum.Local);
         mockApplicationConfig.map('region', 'REGION').withDefaultValue('us-west-1');
 
-        service = new AppConfigService(mockApplicationConfig);
+        service = new ConfigService(mockApplicationConfig);
     });
 
     it('Gets the current app environment', () => {
