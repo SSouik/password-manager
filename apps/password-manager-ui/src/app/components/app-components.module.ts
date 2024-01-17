@@ -37,10 +37,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 
-import AppComponents from './index';
+import { BannerComponent } from './banner/banner.component';
+import { ButtonComponent } from './button/button.component';
+import { HeaderComponent } from './header/header.component';
+import { InputComponent } from './input/input.component';
 
 @NgModule({
-    declarations: [...AppComponents],
+    declarations: [BannerComponent, ButtonComponent, HeaderComponent, InputComponent],
     imports: [
         CommonModule,
         MatAutocompleteModule,
@@ -81,7 +84,10 @@ import AppComponents from './index';
         ReactiveFormsModule,
     ],
     exports: [
-        ...AppComponents,
+        BannerComponent,
+        ButtonComponent,
+        HeaderComponent,
+        InputComponent,
         MatAutocompleteModule,
         MatCheckboxModule,
         MatDatepickerModule,

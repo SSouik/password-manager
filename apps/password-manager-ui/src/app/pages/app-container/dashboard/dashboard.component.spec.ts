@@ -6,8 +6,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { Router, RouterModule } from '@angular/router';
 import { GetPasswordsResponse, UIUrlsEnum } from '@password-manager:types';
-import { BFFService } from '@password-manager:ui:services/bff/bff.service';
-import { BrowserStorageService } from '@password-manager:ui:services/browser-storage/browser-storage.service';
+import { BFFService, BrowserStorageService } from '@password-manager:ui:services';
 import { Observable, of } from 'rxjs';
 
 import { DashboardComponent } from './dashboard.component';

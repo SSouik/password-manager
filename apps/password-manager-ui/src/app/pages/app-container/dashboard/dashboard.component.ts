@@ -1,12 +1,15 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Inject, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { GetPasswordsResponse, Password, UIUrlsEnum } from '@password-manager:types';
-import { BFFService } from '@password-manager:ui:services/bff/bff.service';
-import { BrowserStorageService } from '@password-manager:ui:services/browser-storage/browser-storage.service';
-import { HeaderLinks } from '@password-manager:ui:types';
+import {
+    DependencyInjectionTokenEnum,
+    HeaderLinks,
+    IBFFService,
+    IBrowserStorageService,
+} from '@password-manager:ui:types';
 
 import PageConfig from './dashboard.component.config';
 
@@ -40,8 +43,10 @@ export class DashboardComponent implements OnInit {
     constructor(
         private readonly formBuilder: FormBuilder,
         private readonly router: Router,
-        private readonly bffService: BFFService,
-        private readonly browserStorageService: BrowserStorageService,
+        @Inject(DependencyInjectionTokenEnum.BFF_SERVICE)
+        private readonly bffService: IBFFService,
+        @Inject(DependencyInjectionTokenEnum.BROWSER_STORAGE_SERVICE)
+        private readonly browserStorageService: IBrowserStorageService,
     ) {
         this.page.username = this.browserStorageService.getItem('username') ?? '';
     }

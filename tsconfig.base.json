@@ -36,9 +36,12 @@
             "@password-manager:ui:components": ["apps/password-manager-ui/src/app/components/index.ts"],
             "@password-manager:ui:guards": ["apps/password-manager-ui/src/app/guards/index.ts"],
             "@password-manager:ui:pages": ["apps/password-manager-ui/src/app/pages/index.ts"],
-            "@password-manager:ui:pages:app-container": ["apps/password-manager-ui/src/app/pages/app-container/index.ts"],
+            "@password-manager:ui:pages:app-container": [
+                "apps/password-manager-ui/src/app/pages/app-container/index.ts"
+            ],
             "@password-manager:ui:pages:auth": ["apps/password-manager-ui/src/app/pages/auth/index.ts"],
             "@password-manager:ui:pages:registration": ["apps/password-manager-ui/src/app/pages/registration/index.ts"],
+            "@password-manager:ui:providers": ["apps/password-manager-ui/src/app/providers/index.ts"],
             "@password-manager:ui:services": ["apps/password-manager-ui/src/app/services/index.ts"],
             "@password-manager:ui:types": ["apps/password-manager-ui/src/app/types/index.ts"],
             "@password-manager:ui:validators": ["apps/password-manager-ui/src/app/validators/index.ts"]

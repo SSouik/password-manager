@@ -3,11 +3,10 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { AppComponentsModule } from '@password-manager:ui:components/app-components.module';
-import Guards from '@password-manager:ui:guards';
-import { AppContainerModule } from '@password-manager:ui:pages:app-container/app-container.module';
-import { AuthModule } from '@password-manager:ui:pages:auth/auth.module';
-import Services from '@password-manager:ui:services';
+import { AppComponentsModule } from '@password-manager:ui:components';
+import { AppContainerModule } from '@password-manager:ui:pages:app-container';
+import { AuthModule } from '@password-manager:ui:pages:auth';
+import Providers from '@password-manager:ui:providers';
 
 import { AppComponent } from './app.component';
 import AppRoutes from './app.routes';
@@ -23,7 +22,7 @@ import AppRoutes from './app.routes';
         BrowserAnimationsModule,
         HttpClientModule,
     ],
-    providers: [...Guards, ...Services],
+    providers: Providers,
     bootstrap: [AppComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

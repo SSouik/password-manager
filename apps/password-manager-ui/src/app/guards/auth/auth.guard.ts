@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { UIUrlsEnum } from '@password-manager:types';
-import { BrowserStorageService } from '@password-manager:ui:services';
+import { DependencyInjectionTokenEnum, IBrowserStorageService } from '@password-manager:ui:types';
 import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-    constructor(private readonly router: Router, private readonly browserStorageService: BrowserStorageService) {}
+    constructor(
+        private readonly router: Router,
+        @Inject(DependencyInjectionTokenEnum.BROWSER_STORAGE_SERVICE)
+        private readonly browserStorageService: IBrowserStorageService,
+    ) {}
 
     public canActivate(
         route: ActivatedRouteSnapshot,

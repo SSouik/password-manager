@@ -1,9 +1,9 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UIUrlsEnum } from '@password-manager:types';
-import { BFFService } from '@password-manager:ui:services/bff/bff.service';
+import { DependencyInjectionTokenEnum, IBFFService } from '@password-manager:ui:types';
 
 import PageConfig from './login.component.config';
 
@@ -26,7 +26,8 @@ export class LoginComponent implements OnInit {
     constructor(
         private readonly formBuilder: FormBuilder,
         private readonly router: Router,
-        private readonly bffService: BFFService,
+        @Inject(DependencyInjectionTokenEnum.BFF_SERVICE)
+        private readonly bffService: IBFFService,
     ) {}
 
     public ngOnInit(): void {

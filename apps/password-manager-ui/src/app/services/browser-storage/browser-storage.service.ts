@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Nullable } from '@password-manager:types';
-import { PasswordManagerStorage } from '@password-manager:ui:types';
+import { IBrowserStorageService, PasswordManagerStorage } from '@password-manager:ui:types';
 
 @Injectable({
     providedIn: 'root',
 })
-export class BrowserStorageService {
+export class BrowserStorageService implements IBrowserStorageService {
     public setItem<T extends keyof PasswordManagerStorage>(key: T, value: PasswordManagerStorage[T]): void {
         localStorage.setItem(key, JSON.stringify(value));
     }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { fakeAsync, flush } from '@angular/core/testing';
 import { GetPasswordsResponse, LoginResponse } from '@password-manager:types';
-import { BrowserStorageService } from '@password-manager:ui:services/browser-storage/browser-storage.service';
+import { BrowserStorageService } from '@password-manager:ui:services';
 import { of } from 'rxjs';
 
 import { BFFService } from './bff.service';

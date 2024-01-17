@@ -1,16 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { GetPasswordsResponse, LoginRequest, LoginResponse } from '@password-manager:types';
-import { BrowserStorageService } from '@password-manager:ui:services/browser-storage/browser-storage.service';
+import { DependencyInjectionTokenEnum, IBFFService, IBrowserStorageService } from '@password-manager:ui:types';
 import { Observable, switchMap, take, of } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
-export class BFFService {
+export class BFFService implements IBFFService {
     constructor(
         private readonly httpClient: HttpClient,
-        private readonly browserStorageService: BrowserStorageService,
+        @Inject(DependencyInjectionTokenEnum.BROWSER_STORAGE_SERVICE)
+        private readonly browserStorageService: IBrowserStorageService,
     ) {}
 
     public login(login: string, password: string): Observable<LoginResponse> {
