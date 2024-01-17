@@ -42,3 +42,6 @@ Thumbs.db
 
 # DynamoDB
 /db
+
+# NX
+.nx

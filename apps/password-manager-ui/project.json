@@ -48,6 +48,9 @@
         },
         "serve": {
             "executor": "@angular-devkit/build-angular:dev-server",
+            "options": {
+                "port": 4200
+            },
             "configurations": {
                 "development": {
                     "browserTarget": "password-manager-ui:build:development",

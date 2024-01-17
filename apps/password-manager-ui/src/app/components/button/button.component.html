@@ -1,7 +1,7 @@
 <div [ngSwitch]="type" [ngClass]="additionalClasses">
   <button
     *ngSwitchCase="'basic'"
-    class="pm--Button"
+    class="pm--Button-Container"
     [ngClass]="{
       'pm--BackgroundColor-White': color === 'basic'
     }"
@@ -14,7 +14,7 @@
   </button>
   <button
     *ngSwitchCase="'raised'"
-    class="pm--Button"
+    class="pm--Button-Container"
     [ngClass]="{
       'pm--BackgroundColor-White': color === 'basic'
     }"
@@ -27,7 +27,7 @@
   </button>
   <button
     *ngSwitchCase="'stroked'"
-    class="pm--Button"
+    class="pm--Button-Container"
     [ngClass]="{
       'pm--BackgroundColor-White': color === 'basic'
     }"
@@ -40,7 +40,7 @@
   </button>
   <button
     *ngSwitchCase="'flat'"
-    class="pm--Button"
+    class="pm--Button-Container"
     [ngClass]="{
       'pm--BackgroundColor-White': color === 'basic'
     }"
